@@ -23,23 +23,23 @@
 
 void si_gov(char* gov, int core)
 {
-  char corestr[4];
-  sprintf(corestr, "%i", core);
+	char corestr[4];
+	sprintf(corestr, "%i", core);
 
-  gchar* cmd = g_strconcat(util_get_prefix(), "/bin/trayfreq-set -g ", gov, " -c ", corestr,  NULL);
-  system(cmd);
-  g_free(cmd);
+	gchar* cmd = g_strconcat(util_get_prefix(), "/bin/trayfreq-set -g ", gov, " -c ", corestr,  NULL);
+	system(cmd);
+	g_free(cmd);
 }
 
 void si_freq(int freq, int core)
 {
-  char corestr[4];
-  sprintf(corestr, "%i", core);
+	char corestr[4];
+	sprintf(corestr, "%i", core);
 
-  char freqstr[13];
-  sprintf(freqstr, "%i", freq);
+	char freqstr[13];
+	sprintf(freqstr, "%i", freq);
 
-  gchar* cmd = g_strconcat(util_get_prefix(), "/bin/trayfreq-set -f ", freqstr, " -c ", corestr,  NULL);
-  system(cmd);
-  g_free(cmd);
+	gchar* cmd = g_strconcat(util_get_prefix(), "/bin/trayfreq-set -f ", freqstr, " -c ", corestr,  NULL);
+	system(cmd);
+	g_free(cmd);
 }

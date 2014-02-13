@@ -21,15 +21,15 @@ GList* wm_widgets;
 
 void wm_add_widget(GtkWidget* widget)
 {
-  wm_widgets = g_list_prepend(wm_widgets, widget);
+	wm_widgets = g_list_prepend(wm_widgets, widget);
 }
 
 void wm_show_widgets()
 {
-  GList* curr = g_list_last(wm_widgets);
-  while(curr)
-    {
-      gtk_widget_show(curr->data);
-      curr = g_list_previous(curr);
-    }
+	GList* curr = g_list_last(wm_widgets);
+	while(curr)
+	{
+		gtk_widget_show(curr->data);
+		curr = g_list_previous(curr);
+	}
 }

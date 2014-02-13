@@ -23,106 +23,98 @@
 
 static void set_freq_max(char* freq, char* core)
 {
-  char file_path[100];
-  sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_max_freq", core);
+	char file_path[100];
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_max_freq", core);
 
-  FILE* fd = fopen(file_path, "w");
-  fprintf(fd, freq);
-  fclose(fd);
+	FILE* fd = fopen(file_path, "w");
+	fprintf(fd, freq);
+	fclose(fd);
 }
 
 static void set_freq_min(char* freq, char* core)
 {
-  char file_path[100];
-  sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_min_freq", core);
+	char file_path[100];
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_min_freq", core);
 
-  FILE* fd = fopen(file_path, "w");
-  fprintf(fd, freq);
-  fclose(fd);
+	FILE* fd = fopen(file_path, "w");
+	fprintf(fd, freq);
+	fclose(fd);
 }
 
 static void set_speed(char* freq, char* core)
 {
-  char file_path[100];
-  sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_setspeed", core);
+	char file_path[100];
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_setspeed", core);
 
-  FILE* fd = fopen(file_path, "w");
-  fprintf(fd, freq);
-  fclose(fd);
+	FILE* fd = fopen(file_path, "w");
+	fprintf(fd, freq);
+	fclose(fd);
 }
 
 void set_gov(char* gov, char* core)
 {
-  char file_path[100];
-  sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", core);
+	char file_path[100];
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", core);
 
-  FILE* fd = fopen(file_path, "w");
-  fprintf(fd, gov);
-  fclose(fd);
+	FILE* fd = fopen(file_path, "w");
+	fprintf(fd, gov);
+	fclose(fd);
 }
 
 void set_freq(char* freq, char* core)
 {
-  set_gov("userspace", core);
-  set_speed(freq, core);
+	set_gov("userspace", core);
+	set_speed(freq, core);
 }
 
 int main(int argc, char *argv[])
 {
-  gc_init();
-  gf_init();
+	gc_init();
+	gf_init();
 
-  if(!argv[1])
-    printf("Use -g to set the governor or -f to set the frequency.\n");
-
-  else if(strcmp(argv[1], "-g") == 0)
-  {
-    if(!argv[2])
-      printf("Pass the governor to set after the -g.\n");
-    else
-    {
-      if(!argv[3])
-        printf("Use -c to set the core.\n");
-
-      else if(strcmp(argv[3], "-c") == 0)
-      {
-        if(!argv[4])
-          printf("Pass the core to set after the -c.\n");
-        else
-          set_gov(argv[2], argv[4]);
-      }
-
-      else
-        printf("Use -c to set the core.\n");
-    }
-  }
-
-  else if(strcmp(argv[1], "-f") == 0)
-  {
-    if(!argv[2])
-      printf("Pass the frequency to set after the -f.\n");
-    else
-    {
-      if(!argv[3])
-        printf("Use -c to set the core.\n");
-
-      else if(strcmp(argv[3], "-c") == 0)
-      {
-        if(!argv[4])
-          printf("Pass the core to set after the -c.\n");
-        else
-          set_freq(argv[2], argv[4]);
-      }
-
-      else
-        printf("Use -c to set the core.\n");
-    }
-  }
-
-  else
-  {
-    printf("Use -g to set the governor or -f to set the frequency.\n");
-  }
-
-  return 0;
+	if(!argv[1])
+	{
+		printf("Use -g to set the governor or -f to set the frequency.\n");
+	}
+	else if(strcmp(argv[1], "-g") == 0)
+	{
+		if(!argv[2])
+			printf("Pass the governor to set after the -g.\n");
+		else
+		{
+			if(!argv[3])
+				printf("Use -c to set the core.\n");
+			else if(strcmp(argv[3], "-c") == 0)
+			{
+				if(!argv[4])
+					printf("Pass the core to set after the -c.\n");
+				else
+					set_gov(argv[2], argv[4]);
+			} else
+				printf("Use -c to set the core.\n");
+		}
+	}
+	else if(strcmp(argv[1], "-f") == 0)
+	{
+		if(!argv[2])
+		{
+			printf("Pass the frequency to set after the -f.\n");
+		} else {
+			if(!argv[3])
+			{
+				printf("Use -c to set the core.\n");
+			} else if(strcmp(argv[3], "-c") == 0)
+			{
+				if(!argv[4])
+					printf("Pass the core to set after the -c.\n");
+				else
+					set_freq(argv[2], argv[4]);
+			} else {
+				printf("Use -c to set the core.\n");
+			}
+		}
+	} else {
+		printf("Use -g to set the governor or -f to set the frequency.\n");
+	}
+	return 0;
 }

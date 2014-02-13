@@ -34,27 +34,25 @@ static gboolean SHOW_BATTERY = TRUE;
 
 void config_init()
 {
-  struct config_file config;
-  gboolean home_config_exists = TRUE;
-  config.key_file = NULL;
+	struct config_file config;
+	gboolean home_config_exists = TRUE;
+	config.key_file = NULL;
 
-  gchar* home = getenv("HOME");
-  config.file_name = g_strconcat(home, "/.trayfreq.config", NULL);
-  FILE* fd = fopen(config.file_name, "r");
-  if(!fd)
-    {
-      g_free(config.file_name);
-      home_config_exists = FALSE;
-    }
-  else
-    {
-      fclose(fd);
+	gchar* home = getenv("HOME");
+	config.file_name = g_strconcat(home, "/.trayfreq.config", NULL);
+	FILE* fd = fopen(config.file_name, "r");
+	if(!fd)
+	{
+		g_free(config.file_name);
+		home_config_exists = FALSE;
+	} else {
+		fclose(fd);
     }
 
-  if(!home_config_exists)
-    config.file_name = g_strconcat(util_get_prefix(), "/share/trayfreq/trayfreq.config", NULL);
+	if(!home_config_exists)
+		config.file_name = g_strconcat(util_get_prefix(), "/share/trayfreq/trayfreq.config", NULL);
 
-  gboolean success = config_open(&config);
+	gboolean success = config_open(&config);
 
   if(!success)
     {

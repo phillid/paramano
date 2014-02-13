@@ -29,30 +29,29 @@ gint NUMBER_OF_AVAILABLE_GOVERNORS;
 
 void gg_init()
 {
-  gchar gov_string[500];
-
-  int i = 0;
-  int j = 0;
-  for(i = 0; i < gc_number(); ++i)
-    {
-      memset(gov_string, '\0', 500);
-      gg_available(i, gov_string, 500);
-
-      /* go through every governor in gov_string */
-      j = 0;
-      gchar* curr = &gov_string[0];
-      gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-      while(end_of_curr)
+	gchar gov_string[500];
+	int i = 0;
+	int j = 0;
+	for(i = 0; i < gc_number(); ++i)
 	{
-	  memset(AVAILABLE_GOVERNORS[i][j], '\0', 13);
-	  memmove(AVAILABLE_GOVERNORS[i][j], curr, end_of_curr - curr);
+		memset(gov_string, '\0', 500);
+		gg_available(i, gov_string, 500);
 
-	  curr = end_of_curr+1;
-	  end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-	  ++j;
+		/* go through every governor in gov_string */
+		j = 0;
+		gchar* curr = &gov_string[0];
+		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+		while(end_of_curr)
+		{
+		memset(AVAILABLE_GOVERNORS[i][j], '\0', 13);
+		memmove(AVAILABLE_GOVERNORS[i][j], curr, end_of_curr - curr);
+
+		curr = end_of_curr+1;
+		end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+		++j;
+		}
 	}
-    }
-  NUMBER_OF_AVAILABLE_GOVERNORS = j;
+	NUMBER_OF_AVAILABLE_GOVERNORS = j;
 }
 
 int gg_current(int core, char* out, int size)

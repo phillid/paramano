@@ -19,19 +19,19 @@
 
 gint util_compare_gdouble(gdouble a, gdouble b)
 {
-  gdouble diff = a - b;
-  if(diff < .0001)
-    return 0;
-  else if(diff > 0)
-    return 1;
-  else
-    return -1;
+	gdouble diff = a - b;
+	if(diff < .0001)
+	return 0;
+	else if(diff > 0)
+		return 1;
+	else
+		return -1;
 }
 
 const gchar* util_get_prefix()
 {
-  if(g_strcmp0(PREFIX, "NONE") == 0)
-    return "/usr/local";
-  else
-    return PREFIX;
+	if(g_strcmp0(PREFIX, "NONE") == 0)
+		return "/usr/local";
+	else
+		return PREFIX;
 }
