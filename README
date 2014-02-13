@@ -1,0 +1,6 @@
+To set the frequency or governor of the CPU, you must have root
+permissions.  To avoid having to run trayfreq as root since it
+constantly runs, when you install, the SUID bit of trayfreq-set is
+changed so that it is ran as root without needing a password.  To
+disable this, append --disable-setsuid when running ./configure
+and run trayfreq as root.
