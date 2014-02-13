@@ -24,7 +24,7 @@ trayfreq_set_SOURCES = trayfreq_set.c getfreq.c getcore.c
 
 
 all:
-	#$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
+	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
 	$(CC) -o trayfreq $(trayfreq_SOURCES) trayfreq_set_interface.c $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
 
 

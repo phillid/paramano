@@ -4,7 +4,8 @@ all:
 	make all --directory=./src/
 
 install:
-	install -D data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
+	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
+	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
 	install -D data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
 	install -D data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 
