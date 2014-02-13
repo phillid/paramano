@@ -25,28 +25,25 @@ int NUMBER_OF_CORES;
 
 static gboolean core_exists(int core)
 {
-  FILE* fd;
-  char path[80];
-  char corestr[4];
+	FILE* fd;
+	char path[80];
+	char corestr[4];
 
-  sprintf(corestr, "%i", core);
+	sprintf(corestr, "%i", core);
+	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_cur_freq", corestr);
 
-  sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_cur_freq", corestr);
-
-  if(!(fd = fopen(path, "r")))
-    return FALSE;
-
-  return TRUE;
+	return (gboolean)(fd = fopen(path, "r"));
 }
 
 void gc_init()
 {
-  NUMBER_OF_CORES = 0;
-  while(core_exists(NUMBER_OF_CORES))
-    ++NUMBER_OF_CORES;
+	NUMBER_OF_CORES = 0;
+	while(core_exists(++NUMBER_OF_CORES));
 }
 
+
+/* to do */
 int gc_number()
 {
-  return NUMBER_OF_CORES;
+	return NUMBER_OF_CORES;
 }

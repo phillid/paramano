@@ -56,52 +56,53 @@ void gg_init()
 
 int gg_current(int core, char* out, int size)
 {
-  FILE* fd;
-  char path[80];
-  char corestr[4];
+	FILE* fd;
+	char path[80];
+	char corestr[4];
 
-  sprintf(corestr, "%i", core);
+	sprintf(corestr, "%i", core);
 
-  sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", corestr);
 
-  if(!(fd = fopen(path, "r")))
-    return -1;
+	if(!(fd = fopen(path, "r")))
+		return -1;
 
-  fgets(out, size, fd);
+	fgets(out, size, fd);
 
-  /* remove newline at the end */
-  gchar* newline = g_strrstr(out, "\n");
-  *newline = '\0';
+	/* remove newline at the end */
+	gchar* newline = g_strrstr(out, "\n");
+	*newline = '\0';
 
-  fclose(fd);
-  return 0;
+	fclose(fd);
+	return 0;
 }
 
 int gg_available(int core, char* out, int size)
 {
-  FILE* fd;
-  char path[80];
-  char corestr[4];
+	FILE* fd;
+	char path[80];
+	char corestr[4];
 
-  sprintf(corestr, "%i", core);
+	sprintf(corestr, "%i", core);
 
-  sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_available_governors", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_available_governors", corestr);
 
-  if(!(fd = fopen(path, "r")))
-    return -1;
+	if(!(fd = fopen(path, "r")))
+		return -1;
 
-  fgets(out, size, fd);
+	fgets(out, size, fd);
 
-  fclose(fd);
-  return 0;
+	fclose(fd);
+	return 0;
 }
 
+/* to do */
 char* gg_gov(int core, int index)
 {
-  return AVAILABLE_GOVERNORS[core][index];
+	return AVAILABLE_GOVERNORS[core][index];
 }
 
 int gg_number()
 {
-  return NUMBER_OF_AVAILABLE_GOVERNORS;
+	return NUMBER_OF_AVAILABLE_GOVERNORS;
 }

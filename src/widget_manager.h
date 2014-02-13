@@ -21,8 +21,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 
-/* The Widget Manager will be a list of widgets.  The list will be
-   traversed from the tail to the head. */
+/* The Widget Manager will be a list of widgets.  The list will be traversed from the tail to the head. */
 
 void wm_add_widget(GtkWidget* widget);
 void wm_show_widgets();
