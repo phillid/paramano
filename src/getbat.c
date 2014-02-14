@@ -130,8 +130,6 @@ gboolean gb_init()
 	return TRUE;
 }
 
-/* To do: replace with '#define's */
-
 gint gb_current_rate()
 {
 	return get_int_value_from_file(CURRENT_PATH);

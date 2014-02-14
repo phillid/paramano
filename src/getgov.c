@@ -96,7 +96,6 @@ int gg_available(int core, char* out, int size)
 	return 0;
 }
 
-/* to do */
 char* gg_gov(int core, int index)
 {
 	return AVAILABLE_GOVERNORS[core][index];

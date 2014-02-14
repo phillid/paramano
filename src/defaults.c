@@ -23,9 +23,6 @@ gchar* default_prog = NULL;
 gchar* default_bat_gov = NULL;
 gchar* default_ac_gov = NULL;
 
-
-/* to do */
-
 gchar* def_get_gov()
 {
 	return default_gov;

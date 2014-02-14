@@ -27,11 +27,11 @@ gboolean gb_discharging();
 gboolean gb_charged();
 gboolean gb_charging();
 gint gb_number();
-gint gb_max_capacity();
-gint gb_warn_capacity();
-gint gb_low_capacity();
+//gint gb_max_capacity();
+//gint gb_warn_capacity();
+//gint gb_low_capacity();
 gint gb_percent();
-void gb_discharge_time(gchar* time);
-void gb_charge_time(gchar* time);
+//void gb_time(gchar* time);
+//void gb_charge_time(gchar* time);
 
 #endif
