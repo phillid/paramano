@@ -27,20 +27,29 @@ gint MAX_CAPACITY;
 gint WARN_CAPACITY;
 gint LOW_CAPACITY;
 
-gchar INFO_PATH[30];
-gchar STATE_PATH[30];
+//gchar INFO_PATH[30];
+gchar CHARGE_VALUE_PATH[40];
+gchar CHARGE_STATE_PATH[40];
+gchar CURRENT_PATH[40];
 
 static gint get_bat_num()
 {
 	FILE* fd;
-	gchar file[30];
+	gchar file[40];
 	gint i;
-	for(i = 0; i < 3; ++i)
+	for(i = 0; i < 3; i++)
 	{
-		memset(file, '\0', 30);
-		sprintf(file, "/proc/acpi/battery/BAT%i/info", i);
+		memset(file, '\0', 40);
+		sprintf(file, "/sys/class/power_supply/BAT%i/present", i);
+
 		if((fd = fopen(file, "r")) != NULL)
-		return i;
+		{
+			if (fgetc(fd) == '1')
+			{
+				fclose(fd);
+				return i;
+			}
+		}
 	}
 	return -1;
 }
@@ -56,7 +65,7 @@ static gint get_int(char* line)
 	return 1;
 }
 
-static gint get_int_value_from_file(const gchar* path, const gchar* label, int label_size)
+static gint get_int_value_from_file(const gchar* path)
 {
 	FILE* fd;
 	gchar buff[100];
@@ -65,14 +74,9 @@ static gint get_int_value_from_file(const gchar* path, const gchar* label, int l
 	if(!(fd = fopen(path, "r")))
 		return -1;
 
-	while(fgets(buff, 100, fd)!= NULL)
-	{
-		if(strncmp(label, buff, label_size) == 0)
-		{
-			value = get_int(buff);
-			break;
-		}
-	}
+	if (fgets(buff, 100, fd))
+		value = get_int(buff);
+
 	fclose(fd);
 	return value;
 }
@@ -100,13 +104,15 @@ static gboolean file_has_line(const gchar* path, const gchar* line)
 gboolean gb_init()
 {
 	BAT_NUM = get_bat_num();
-	sprintf(INFO_PATH, "/proc/acpi/battery/BAT%i/info", gb_number());
-	sprintf(STATE_PATH, "/proc/acpi/battery/BAT%i/state", gb_number());
+	//sprintf(INFO_PATH, "/proc/acpi/battery/BAT%i/info", gb_number());
+	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%i/capacity", gb_number());
+	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%i/status", gb_number());
+	sprintf(CURRENT_PATH, "/sys/class/power_supply/BAT%i/charge_now", gb_number());
 
 	FILE* fd;
 	gchar buff[100];
 
-	if(!(fd = fopen(INFO_PATH, "r")))
+	/*if(!(fd = fopen(INFO_PATH, "r")))
 		return FALSE;
 
 	while(fgets(buff, 100, fd)!= NULL)
@@ -120,44 +126,38 @@ gboolean gb_init()
 		else if(strncmp("present:                 no",buff, 27) == 0)
 			return FALSE;
 	}
-	fclose(fd);
+	fclose(fd);*/
 	return TRUE;
 }
 
 /* To do: replace with '#define's */
 
-gint gb_current_capacity()
-{
-	return get_int_value_from_file(STATE_PATH, "remaining capacity:", 19);
-}
-
 gint gb_current_rate()
 {
-	return get_int_value_from_file(STATE_PATH, "present rate:", 13);
+	return get_int_value_from_file(CURRENT_PATH);
+	return 0;
 }
 
 gboolean gb_discharging()
 {
-	return file_has_line(STATE_PATH, "discharging");
+	return file_has_line(CHARGE_STATE_PATH, "Discharging");
 }
 
 gboolean gb_charged()
 {
-	return file_has_line(STATE_PATH, "charged");
+	return file_has_line(CHARGE_STATE_PATH, "Full");
 }
 
 gboolean gb_charging()
 {
-	if(!file_has_line(STATE_PATH, "discharging") && !file_has_line(STATE_PATH, "charged"))
-		return TRUE;
-	return FALSE;
+	return file_has_line(CHARGE_STATE_PATH, "Charging");
 }
 
 gint gb_number()
 {
 	return BAT_NUM;
 }
-
+/*
 gint gb_max_capacity()
 {
 	return MAX_CAPACITY;
@@ -171,35 +171,39 @@ gint gb_warn_capacity()
 gint gb_low_capacity()
 {
 	return LOW_CAPACITY;
-}
+}*/
 
 gint gb_percent()
 {
+	return get_int_value_from_file(CHARGE_VALUE_PATH);
+	/*
 	int percent, max_capacity;
 	if ( (max_capacity = gb_max_capacity()) == 0 )
 		return 0;
 	percent = (gb_current_capacity() * 100) /  max_capacity;
 	if (percent > 100)
 		percent = 100;
-	return percent;
+	return percent;*/
 }
-
-void gb_discharge_time(gchar* time)
+/*
+void gb_time(gchar* time)
 {
-	float ftime = (float)gb_current_capacity() / (float)gb_current_rate();
-	float minutes = ((float)ftime - (int)ftime) * (float)60;
-	if(minutes < 10)
-		sprintf(time, "%i:0%i", (int)ftime, (int)minutes);
-	else
-		sprintf(time, "%i:%i", (int)ftime, (int)minutes);
+	float minutes = (float)gb_current_rate()/1000;
+
+	//float minutes = ftime/60;
+
+	//if(minutes < 10)
+		sprintf(time, "%i", (int)minutes);
+	//else
+	//	sprintf(time, "%i:%i", (int)ftime, (int)minutes);
 }
 
 void gb_charge_time(gchar* time)
 {
-	float ftime = ((float)gb_max_capacity() - (float)gb_current_capacity()) / (float)gb_current_rate();
+	float ftime = ((float)gb_max_capacity() - (float)gb_percent()) / (float)gb_current_rate();
 	float minutes = ((float)ftime - (int)ftime) * (float)60;
 	if(minutes < 10)
 		sprintf(time, "%i:0%i", (int)ftime, (int)minutes);
 	else
 		sprintf(time, "%i:%i", (int)ftime, (int)minutes);
-}
+}*/

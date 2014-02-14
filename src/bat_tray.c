@@ -38,29 +38,22 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	gchar msg[500];
 	memset(msg, '\0', 500);
 
-	//  printf("%i, %i, %i\n", gb_discharging(), gb_charging(), gb_charged());
+	//printf("dis: %i, char: %i, full: %i\n", gb_discharging(), gb_charging(), gb_charged());
 
 	if(gb_discharging())
 	{
 		gchar time[50];
 		memset(time, '\0', 50);
-		gb_discharge_time(time);
-		sprintf(msg, "Percent Remaining: %i\%\nTime Remaining: %s", gb_percent(), time);
-	}
-
-	else if(gb_charging())
-	{
+		sprintf(msg, "Discharging (%i%% left)", gb_percent());
+	} else if(gb_charging()) {
 		gchar time[50];
 		memset(time, '\0', 50);
-		gb_charge_time(time);
-		sprintf(msg, "Percent Charged: %i\%\nTime Remaining: %s", gb_percent(), time);
-	}
-
-	else if(gb_charged())
+		sprintf(msg, "Charging (%i%%)", gb_percent());
+	} else if(gb_charged()) {
 		sprintf(msg, "Fully Charged\nAC Plugged In");
-
-	else
-		sprintf(msg, "Error");
+	} else {
+		sprintf(msg, "Unknown Status");
+	}
 
 	bat_tray_set_tooltip(msg);
 	gtk_tooltip_set_text(tooltip, tooltip_text);
@@ -100,10 +93,11 @@ void bat_tray_update_icon_percent()
 		file = g_strconcat(util_get_prefix(), "/share/trayfreq/traybat-", adjusted_percent_string, "-charging.png", NULL);
 	}
 	else
+	{
 		file = g_strconcat(util_get_prefix(), "/share/trayfreq/traybat-charged.png", NULL);
+	}
 
 	gtk_status_icon_set_from_file(tray, file);
-	g_free(file);
 }
 
 static gboolean update_icon(gpointer user_data)
