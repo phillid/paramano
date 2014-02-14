@@ -31,7 +31,7 @@ gint util_compare_gdouble(gdouble a, gdouble b)
 const gchar* util_get_prefix()
 {
 	if(g_strcmp0(PREFIX, "NONE") == 0)
-		return "/usr/local";
+		return "/usr";
 	else
 		return PREFIX;
 }
