@@ -18,8 +18,10 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H 1
 
+#define PREFIX "NONE"
+
 #include <glib.h>
-#include "config.h"
+//#include "config.h"
 
 /* > 0 if a > b,  = 0 if a = b, < 0 if a < b*/
 gint util_compare_gdouble(gdouble a, gdouble b);

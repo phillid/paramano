@@ -103,6 +103,7 @@ void bat_tray_update_icon_percent()
 static gboolean update_icon(gpointer user_data)
 {
 	bat_tray_update_icon_percent();
+	return TRUE;
 }
 
 void bat_tray_init()
