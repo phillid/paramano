@@ -211,7 +211,6 @@ static void activate(GtkStatusIcon* statuc_icon,gpointer data)
 static gboolean update_icon(gpointer user_data)
 {
 	tray_update_icon_percent();
-	return 0;
 }
 
 void tray_init()
@@ -284,6 +283,7 @@ void tray_update_icon_percent()
 	gtk_status_icon_set_from_file(tray, file);
 
 	g_free(file);
+
 }
 
 void tray_show()
