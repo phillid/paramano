@@ -14,8 +14,8 @@ PACKAGE_VERSION = 0.2
 VERSION = 0.2
 
 
-#trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h trayfreq_set_interface.c trayfreq_set_interface.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
-trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
+trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h trayfreq_set_interface.c trayfreq_set_interface.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
+#trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
 
 trayfreq_CFLAGS = $(GTK_CFLAGS) $(GLIB_CFLAGS)
 
@@ -29,7 +29,7 @@ trayfreq_set_SOURCES = trayfreq_set.c getfreq.c getcore.c
 
 all:
 	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
-	$(CC) -o trayfreq $(trayfreq_SOURCES) trayfreq_set_interface.c $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
+	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables otherwise a system limit (for SysV at least) may be exceeded.
