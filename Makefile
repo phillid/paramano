@@ -3,6 +3,9 @@ INSTALL_PATH=/
 all:
 	make all --directory=./src/
 
+clean:
+	make clean --directory=./src/
+
 install:
 	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
 	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
