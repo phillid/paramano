@@ -16,6 +16,7 @@
  ************************************************************************/
 
 #include "bat_tray.h"
+#include "getbat.h"
 #include "utilities.h"
 
 #include <gtk/gtk.h>

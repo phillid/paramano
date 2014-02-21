@@ -21,6 +21,7 @@
 #include "getfreq.h"
 #include "getcore.h"
 #include "getbat.h"
+#include "getgov.h"
 #include "utilities.h"
 #include "config_file.h"
 #include "defaults.h"
