@@ -3,5 +3,5 @@ Version=1.0
 Encoding=UTF-8
 Name=trayfreq
 GenericName=trayfreq
-Exec=/usr/local/bin/trayfreq
+Exec=/usr/bin/trayfreq
 Type=Application

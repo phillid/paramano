@@ -17,7 +17,7 @@ VERSION = 0.2
 trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h trayfreq_set_interface.c trayfreq_set_interface.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
 #trayfreq_SOURCES = getcore.c getcore.h getfreq.c getfreq.h getgov.c getgov.h tray.c tray.h trayfreq.c utilities.c utilities.h widget_manager.c widget_manager.h config_file.c config_file.h defaults.c defaults.h getbat.c getbat.h bat_tray.c bat_tray.h
 
-trayfreq_CFLAGS = $(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall  -mfpmath=387
+trayfreq_CFLAGS = $(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -mfpmath=387
 
 trayfreq_LDFLAGS = $(GTK_LIBS) $(GLIB_LIBS) -lm
 
