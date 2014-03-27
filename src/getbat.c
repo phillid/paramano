@@ -174,14 +174,6 @@ gint gb_low_capacity()
 gint gb_percent()
 {
 	return get_int_value_from_file(CHARGE_VALUE_PATH);
-	/*
-	int percent, max_capacity;
-	if ( (max_capacity = gb_max_capacity()) == 0 )
-		return 0;
-	percent = (gb_current_capacity() * 100) /  max_capacity;
-	if (percent > 100)
-		percent = 100;
-	return percent;*/
 }
 /*
 void gb_time(gchar* time)

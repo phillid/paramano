@@ -258,22 +258,25 @@ void tray_set_tooltip(const gchar* msg)
 void tray_update_icon_percent()
 {
 	gulong max_frequency = gf_freqi(0, 0);
-
-	/* The percentange should only be 25, 50, 75, or 100, so we need to
-	round to one of these numbers. */
-	gint percent = (gf_current(0) * 100)/max_frequency;
 	gint adjusted_percent = 0;
-
-	if(percent == 100) {
-		adjusted_percent = 100;
-	} else if(percent >= 65.5) {
-		adjusted_percent = 75;
-	} else if(percent >= 37.5) {
-		adjusted_percent = 50;
-	} else if(percent >= 12.5) {
-		adjusted_percent = 25;
-	} else {
+	// If no governor, set percentage to 0. This if statement fixes an FPE a few lines down
+	if (max_frequency == 0)
+	{
 		adjusted_percent = 0;
+	} else {
+		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
+		gint percent = (gf_current(0) * 100)/max_frequency;
+		if(percent == 100) {
+			adjusted_percent = 100;
+		} else if(percent >= 65.5) {
+			adjusted_percent = 75;
+		} else if(percent >= 37.5) {
+			adjusted_percent = 50;
+		} else if(percent >= 12.5) {
+			adjusted_percent = 25;
+		} else {
+			adjusted_percent = 0;
+		}
 	}
 
 	/* convert the int to a string */
@@ -284,7 +287,6 @@ void tray_update_icon_percent()
 	gtk_status_icon_set_from_file(tray, file);
 
 	g_free(file);
-
 }
 
 void tray_show()

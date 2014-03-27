@@ -43,12 +43,12 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 	if(gb_discharging())
 	{
-		gchar time[50];
-		memset(time, '\0', 50);
+		//gchar time[50];
+		//memset(time, '\0', 50);
 		sprintf(msg, "Discharging (%i%% left)", gb_percent());
 	} else if(gb_charging()) {
-		gchar time[50];
-		memset(time, '\0', 50);
+		//gchar time[50];
+		//memset(time, '\0', 50);
 		sprintf(msg, "Charging (%i%%)", gb_percent());
 	} else if(gb_charged()) {
 		sprintf(msg, "Fully Charged\nAC Plugged In");
@@ -88,13 +88,10 @@ void bat_tray_update_icon_percent()
 	if(gb_discharging())
 	{
 		file = g_strconcat(util_get_prefix(), "/share/trayfreq/traybat-", adjusted_percent_string, ".png", NULL);
-	}
-	else if(gb_charging())
+	} else if(gb_charging())
 	{
 		file = g_strconcat(util_get_prefix(), "/share/trayfreq/traybat-", adjusted_percent_string, "-charging.png", NULL);
-	}
-	else
-	{
+	} else {
 		file = g_strconcat(util_get_prefix(), "/share/trayfreq/traybat-charged.png", NULL);
 	}
 

@@ -37,7 +37,10 @@ void gf_init()
 	for(i = 0; i < gc_number(); ++i)
 	{
 		memset(freq_string, '\0', 500);
-		gf_available(i, freq_string, 500);
+
+		// Get available governor freqs. If no governor, try next cpu
+		if (gf_available(i, freq_string, 500) == -1)
+			continue;
 
 		/* go through every frequency in freq_string */
 		j = 0;
@@ -89,7 +92,7 @@ int gf_available(int core, char* out, int size)
 	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_available_frequencies", corestr);
 
 	if(!(fd = fopen(path, "r")))
-	return -1;
+		return -1;
 
 	fgets(out, size, fd);
 
