@@ -17,7 +17,6 @@
  ************************************************************************/
 
 #include "bat_tray.h"
-#include "getbat.h"
 #include "../common.h"
 
 #include <gtk/gtk.h>
@@ -49,7 +48,7 @@ gchar tooltip_text[TOOLTIP_TEXT_SIZE];
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
 	gchar msg[TOOLTIP_TEXT_SIZE];
-
+	//memset(msg,0,TOOLTIP_TEXT_SIZE);
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
@@ -57,14 +56,14 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 			break;
 
 		case STATE_CHARGING:
-			break;
 			sprintf(msg, "Charging (%i%%)", get_bat_percent());
+			break;
 		case STATE_CHARGED:
 			sprintf(msg, "Fully charged");
 			break;
 
 		default:
-			sprintf(msg, "Warning: Unknown status");
+			sprintf(msg, "Unknown status");
 			break;
 	}
 

@@ -21,7 +21,6 @@
 #include "bat_tray/bat_tray.h"
 #include "freq_tray/getfreq.h"
 #include "freq_tray/getcore.h"
-#include "bat_tray/getbat.h"
 #include "freq_tray/getgov.h"
 #include "config_file.h"
 #include "defaults.h"
