@@ -16,15 +16,25 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef WIDGET_MANAGER_H
-#define WIDGET_MANAGER_H 1
+#ifndef BAT_TRAY_H
+#define BAT_TRAY_H 1
 
-#include <gtk/gtk.h>
 #include <glib.h>
 
-/* The Widget Manager will be a list of widgets.  The list will be traversed from the tail to the head. */
 
-void wm_add_widget(GtkWidget* widget);
-void wm_show_widgets();
+// already defined in bat_tray.c : #define gb_percent			get_int_value_from_file(CHARGE_VALUE_PATH);
 
-#endif
+#define STATE_CHARGING		0
+#define STATE_DISCHARGING	1
+#define STATE_CHARGED		2
+#define STATE_FULL			STATE_CHARGED
+#define STATE_UNKNOWN		3
+
+void bat_tray_init();
+void bat_tray_show();
+void bat_tray_hide();
+
+int get_battery_state();
+int get_bat_num();
+
+#endif /* ifndef BAT_TRAY_H */

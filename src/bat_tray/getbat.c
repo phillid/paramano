@@ -15,16 +15,16 @@
  * along with trayfreq-archlinux. If not, see                           *
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
+/*
+#include "getbat.h"
 
-#ifndef WIDGET_MANAGER_H
-#define WIDGET_MANAGER_H 1
-
-#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <glib.h>
 
-/* The Widget Manager will be a list of widgets.  The list will be traversed from the tail to the head. */
 
-void wm_add_widget(GtkWidget* widget);
-void wm_show_widgets();
 
-#endif
+
+//gchar CURRENT_PATH[512];
+*/

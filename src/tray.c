@@ -1,29 +1,29 @@
 /************************************************************************
- * This file is part of trayfreq.                                       *
+ * This file is part of trayfreq-archlinux.                             *
  *                                                                      *
- * trayfreq is free software; you can redistribute it and/or modify     *
- * it under the terms of the GNU General Public License as published    *
- * by the Free Software Foundation; either version 3 of the License, or *
- * (at your option) any later version.                                  *
+ * trayfreq-archlinux is free software; you can redistribute it and/or  *
+ * modify it under the terms of the GNU General Public License as       *
+ * published by the Free Software Foundation; either version 3 of the   *
+ * License, or (at your option) any later version.                      *
  *                                                                      *
- * trayfreq is distributed in the hope that it will be useful,	        *
+ * trayfreq-archlinux is distributed in the hope that it will be useful,*
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with trayfreq. If not, see <http://www.gnu.org/licenses/>.     *
+ * along with trayfreq-archlinux. If not, see                           *
+ * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
 #include "tray.h"
 #include "widget_manager.h"
-#include "getfreq.h"
-#include "utilities.h"
-#include "getcore.h"
-#include "getgov.h"
-#include "trayfreq_set_interface.h"
+#include "freq_tray/getfreq.h"
+#include "freq_tray/getcore.h"
+#include "freq_tray/getgov.h"
+#include "trayfreq_set/trayfreq_set_interface.h"
+#include "bat_tray/bat_tray.h"
 #include "defaults.h"
-#include "getbat.h"
 
 #include <gtk/gtk.h>
 #include <string.h>
@@ -33,8 +33,10 @@
 GtkStatusIcon* tray;
 #define TOOLTIP_TEXT_SIZE 500
 gchar tooltip_text[TOOLTIP_TEXT_SIZE];
+
+
 /* 0 = nothing, 1 = was charging, 2 = was discharging */
-int state = 0;
+//int state = 0;
 
 
 GtkWidget* menu;
@@ -64,7 +66,7 @@ static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 			si_gov(gov, i);
 	}
 }
-
+/*
 static gboolean governor_exists(gchar* governor)
 {
 	int i = 0;
@@ -74,7 +76,7 @@ static gboolean governor_exists(gchar* governor)
 			return TRUE;
 	}
 	return FALSE;
-}
+}*/
 
 static void remove_menu_item(GtkWidget* menu_item, gpointer data)
 {
@@ -157,25 +159,22 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	memset(msg, '\0', 500);
 	memset(current_governer, '\0', 20);
 
-	/* change governor based on battery state */
-	/* battery is discharging */
-	if ((state == 0 || state == 1) && gb_discharging ())
+	// Change governor based on battery state battery is discharging
+	if ( get_battery_state() ==  STATE_DISCHARGING )
 	{
-		state = 2;
-		if(def_get_bat_gov ())
+		if(_DEFAULT_BAT_GOV)
 		{
 			for(i = 0; i < gc_number(); ++i)
-				si_gov(def_get_bat_gov (), i);
+				si_gov(_DEFAULT_BAT_GOV, i);
 		}
 	}
 	/* battery is now charging (on ac) */
-	else if ((state == 0 || state == 2) && gb_charging ())
+	else if ( get_battery_state() ==  STATE_CHARGING )
 	{
-		state = 1;
-		if(def_get_ac_gov ())
+		if(_DEFAULT_AC_GOV)
 		{
 			for(i = 0; i < gc_number(); ++i)
-				si_gov(def_get_ac_gov (), i);
+				si_gov(_DEFAULT_AC_GOV, i);
 		}
 	}
 
@@ -203,9 +202,8 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 
 static void activate(GtkStatusIcon* statuc_icon,gpointer data)
 {
-	gchar* def_prog = def_get_prog();
-	if(def_prog)
-		g_spawn_command_line_async (def_prog, NULL);
+	if(_DEFAULT_PROG)
+		g_spawn_command_line_async(_DEFAULT_PROG, NULL);
 }
 
 static gboolean update_icon(gpointer user_data)
@@ -216,30 +214,28 @@ static gboolean update_icon(gpointer user_data)
 
 void tray_init()
 {
-	// set defaults
-	gchar* def_gov = def_get_gov();
+	// Set defaults
 	int i = 0;
-	if(def_gov)
+	if(_DEFAULT_GOV)
 	{
 		for(i = 0; i < gc_number(); ++i)
-		{
-			si_gov(def_gov, i);
-		}
+			si_gov(_DEFAULT_GOV, i);
+
 	} else {
 		for(i = 0; i < gc_number(); ++i)
 			si_gov("ondemand", i);
 	}
-	gchar* def_freq = def_get_freq();
-	if(def_freq)
+
+	if(_DEFAULT_FREQ)
 	{
 		for(i = 0; i < gc_number(); ++i)
 		{
-			si_freq(atoi(def_freq), i);
+			si_freq(atoi(_DEFAULT_FREQ), i);
 		}
 	}
 
 	tray = gtk_status_icon_new();
-	gchar* icon_file = g_strconcat(util_get_prefix(), "/share/trayfreq/cpufreq-0.png", NULL);
+	gchar* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
@@ -283,7 +279,7 @@ void tray_update_icon_percent()
 	gchar adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
 	sprintf(adjusted_percent_string, "%i", adjusted_percent);
 
-	gchar* file = g_strconcat(util_get_prefix(), "/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
+	gchar* file = g_strconcat("/usr/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
 	gtk_status_icon_set_from_file(tray, file);
 
 	g_free(file);

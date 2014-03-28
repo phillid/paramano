@@ -1,27 +1,28 @@
 /************************************************************************
- * This file is part of trayfreq.                                       *
+ * This file is part of trayfreq-archlinux.                             *
  *                                                                      *
- * trayfreq is free software; you can redistribute it and/or modify     *
- * it under the terms of the GNU General Public License as published    *
- * by the Free Software Foundation; either version 3 of the License, or *
- * (at your option) any later version.                                  *
+ * trayfreq-archlinux is free software; you can redistribute it and/or  *
+ * modify it under the terms of the GNU General Public License as       *
+ * published by the Free Software Foundation; either version 3 of the   *
+ * License, or (at your option) any later version.                      *
  *                                                                      *
- * trayfreq is distributed in the hope that it will be useful,	        *
+ * trayfreq-archlinux is distributed in the hope that it will be useful,*
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with trayfreq. If not, see <http://www.gnu.org/licenses/>.     *
+ * along with trayfreq-archlinux. If not, see                           *
+ * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "getfreq.h"
+#include "../freq_tray/getfreq.h"
 
-static void set_freq_max(char* freq, char* core)
+void set_freq_max(char* freq, char* core)
 {
 	char file_path[100];
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_max_freq", core);
@@ -31,7 +32,7 @@ static void set_freq_max(char* freq, char* core)
 	fclose(fd);
 }
 
-static void set_freq_min(char* freq, char* core)
+void set_freq_min(char* freq, char* core)
 {
 	char file_path[100];
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_min_freq", core);

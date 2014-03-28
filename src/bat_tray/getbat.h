@@ -16,15 +16,11 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef WIDGET_MANAGER_H
-#define WIDGET_MANAGER_H 1
+#ifndef GETBAT_H
+#define GETBAT_H 1
 
-#include <gtk/gtk.h>
 #include <glib.h>
 
-/* The Widget Manager will be a list of widgets.  The list will be traversed from the tail to the head. */
 
-void wm_add_widget(GtkWidget* widget);
-void wm_show_widgets();
 
 #endif
