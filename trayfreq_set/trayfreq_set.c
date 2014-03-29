@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "../freq_tray/getfreq.h"
+#include "../freq_tray/getcore.h"
 
 void set_freq_max(char* freq, char* core)
 {
