@@ -29,8 +29,11 @@ void set_freq_max(char* freq, char* core)
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_max_freq", core);
 
 	FILE* fd = fopen(file_path, "w");
-	fprintf(fd, freq);
-	fclose(fd);
+	if (fd)
+	{
+		fprintf(fd, freq);
+		fclose(fd);
+	}
 }
 
 void set_freq_min(char* freq, char* core)
@@ -39,8 +42,11 @@ void set_freq_min(char* freq, char* core)
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_min_freq", core);
 
 	FILE* fd = fopen(file_path, "w");
-	fprintf(fd, freq);
-	fclose(fd);
+	if (fd)
+	{
+		fprintf(fd, freq);
+		fclose(fd);
+	}
 }
 
 static void set_speed(char* freq, char* core)
@@ -49,8 +55,11 @@ static void set_speed(char* freq, char* core)
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_setspeed", core);
 
 	FILE* fd = fopen(file_path, "w");
-	fprintf(fd, freq);
-	fclose(fd);
+	if (fd)
+	{
+		fprintf(fd, freq);
+		fclose(fd);
+	}
 }
 
 void set_gov(char* gov, char* core)
@@ -59,8 +68,11 @@ void set_gov(char* gov, char* core)
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", core);
 
 	FILE* fd = fopen(file_path, "w");
-	fprintf(fd, gov);
-	fclose(fd);
+	if (fd)
+	{
+		fprintf(fd, gov);
+		fclose(fd);
+	}
 }
 
 void set_freq(char* freq, char* core)

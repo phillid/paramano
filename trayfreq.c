@@ -39,6 +39,8 @@ void config_init()
 	gboolean home_config_exists;
 	config.key_file = NULL;
 
+	printf("Battery governor: %s",_DEFAULT_BAT_GOV);
+
 	config.file_name = g_strconcat(getenv("HOME"), "/.trayfreq.config", NULL);
 
 	// Check if ~/.trayfreq.config exists
