@@ -23,6 +23,8 @@
 #include "../freq_tray/getfreq.h"
 #include "../freq_tray/getcore.h"
 
+#define ERRMSG "FAILED: Couldn't open %s for writing\n"
+
 void set_freq_max(char* freq, char* core)
 {
 	char file_path[100];
@@ -33,6 +35,8 @@ void set_freq_max(char* freq, char* core)
 	{
 		fprintf(fd, freq);
 		fclose(fd);
+	} else {
+		printf(ERRMSG,file_path);
 	}
 }
 
@@ -46,6 +50,8 @@ void set_freq_min(char* freq, char* core)
 	{
 		fprintf(fd, freq);
 		fclose(fd);
+	} else {
+		printf(ERRMSG,file_path);
 	}
 }
 
@@ -59,6 +65,8 @@ static void set_speed(char* freq, char* core)
 	{
 		fprintf(fd, freq);
 		fclose(fd);
+	} else {
+		printf(ERRMSG,file_path);
 	}
 }
 
@@ -72,6 +80,8 @@ void set_gov(char* gov, char* core)
 	{
 		fprintf(fd, gov);
 		fclose(fd);
+	} else {
+		printf(ERRMSG,file_path);
 	}
 }
 
