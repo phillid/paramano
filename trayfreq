@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+lang=$(locale | grep LANGUAGE | cut -d= -f2 | cut -d_ -f1)
+
+if [ lang = "fr" ]; then
+	trayfreq-fr $@
+else
+	trayfreq-en $@
+fi
