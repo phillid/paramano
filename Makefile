@@ -81,4 +81,8 @@ install:
 	install -D data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
 	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
+	install -Dm 755 trayfreq-en $(INSTALL_PATH)/usr/bin/trayfreq-en
+	install -Dm 755 trayfreq-set-en $(INSTALL_PATH)/usr/bin/trayfreq-set-en
+	install -Dm 755 trayfreq-fr $(INSTALL_PATH)/usr/bin/trayfreq-fr
+	install -Dm 755 trayfreq-set-fr $(INSTALL_PATH)/usr/bin/trayfreq-set-fr
 ########################################################################
