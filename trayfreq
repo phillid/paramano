@@ -2,7 +2,7 @@
 
 lang=$(locale | grep LANG | cut -d= -f2 | cut -d_ -f1)
 
-if [ lang = "fr" ]; then
+if [ x$lang = "xfr" ]; then
 	trayfreq-fr $@
 else
 	trayfreq-en $@
