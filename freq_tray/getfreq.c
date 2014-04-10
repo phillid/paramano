@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#include "string.h"
 #include "getfreq.h"
 #include "getcore.h"
 #include "math.h"
@@ -37,7 +38,7 @@ void gf_init()
 	int j = 0;
 	for(i = 0; i < gc_number(); ++i)
 	{
-		memset(freq_string, '\0', 500);
+		memset(freq_string, 0, 500);
 
 		// Get available governor freqs. If no governor, try next cpu
 		if (gf_available(i, freq_string, 500) == -1)
@@ -49,7 +50,7 @@ void gf_init()
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while(end_of_curr)
 		{
-			memset(AVAILABLE_FREQUENCIES[i][j], '\0', 13);
+			memset(AVAILABLE_FREQUENCIES[i][j], 0, 13);
 			memmove(AVAILABLE_FREQUENCIES[i][j], curr, end_of_curr - curr);
 
 			curr = end_of_curr+1;

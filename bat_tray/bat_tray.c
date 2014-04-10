@@ -16,6 +16,8 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+
+#include "../strings.h"
 #include "bat_tray.h"
 #include "../common.h"
 
@@ -25,7 +27,6 @@
 #include <stdlib.h>
 
 static GtkStatusIcon* tray;
-
 
 int _BAT_NUM;
 char CHARGE_VALUE_PATH[512];
@@ -52,18 +53,18 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
-			sprintf(msg, "Discharging (%i%% left)", get_bat_percent());
+			sprintf(msg, S_BAT_TRAY_C_BATTERY_DISCHARGING, get_bat_percent());
 			break;
 
 		case STATE_CHARGING:
-			sprintf(msg, "Charging (%i%%)", get_bat_percent());
+			sprintf(msg, S_BAT_TRAY_C_BATTERY_CHARGING, get_bat_percent());
 			break;
 		case STATE_CHARGED:
-			sprintf(msg, "Fully charged");
+			sprintf(msg, S_BAT_TRAY_C_BATTERY_FULL);
 			break;
 
 		default:
-			sprintf(msg, "Unknown status");
+			sprintf(msg, S_BAT_TRAY_C_BATTERY_UNKNOWN);
 			break;
 	}
 

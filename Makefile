@@ -42,28 +42,33 @@ trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 
 ########################################################################
 # Make entire suite
-all: trayfreq trayfreq-set
+all: trayfreq-en trayfreq-fr trayfreq-set-en trayfreq-set-fr
 ########################################################################
-
 
 ########################################################################
 # Make trayfreq-set program for setting governors
-trayfreq-set:
-	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
+trayfreq-set-en:
+	$(CC) -o trayfreq-set-en $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
+
+trayfreq-set-fr:
+	$(CC) -o trayfreq-set-fr $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS) -DLANG_FR
 ########################################################################
 
 
 ########################################################################
 # Make main trayfreq system tray program
-trayfreq:
-	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
+trayfreq-en:
+	$(CC) -o trayfreq-en $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
+
+trayfreq-fr:
+	$(CC) -o trayfreq-fr $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS) -DLANG_FR
 ########################################################################
 
 
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set
+	rm -f trayfreq-en trayfreq-set-en trayfreq-fr trayfreq-set-fr
 ########################################################################
 
 

@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#include "strings.h"
 #include "tray.h"
 #include "widget_manager.h"
 #include "freq_tray/getfreq.h"
@@ -130,7 +131,7 @@ static void tray_generate_menu()
 	gtk_menu_append(menu, seperator);
 
 	/* append the governors*/
-	for(i = 0; i < gg_number(); ++i)
+	for(i = 0; i < gg_number(); i++)
 	{
 		if(g_strcmp0(gg_gov(0, i), "userspace") == 0)
 		continue;
@@ -156,8 +157,8 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	gchar label[20];
 	int i = 0;
 
-	memset(msg, '\0', 500);
-	memset(current_governer, '\0', 20);
+	memset(msg, 0, 500);
+	memset(current_governer, 0, 20);
 
 	// Change governor based on battery state battery is discharging
 	if ( get_battery_state() ==  STATE_DISCHARGING )
@@ -179,13 +180,13 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	}
 
 	gg_current(0, current_governer, 20);
-	sprintf(msg, "%sGovernor: %s\n", msg, current_governer);
+	sprintf(msg+strlen(msg), S_TRAY_C_GOVERNOR, current_governer);
 
 	for(i = 0; i < gc_number(); ++i)
 	{
-		memset(label, '\0', 20);
+		memset(label, 0, 20);
 		gf_get_frequency_label(gf_current(i), label);
-		sprintf(msg, "%sCPU%i: %s%s", msg, i, label, i == gc_number()-1 ? "" : "\n");
+		sprintf(msg+strlen(msg), S_TRAY_C_CPU, i, label, i == gc_number()-1 ? "" : "\n");
 	}
 
 	tray_set_tooltip(msg);

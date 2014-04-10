@@ -1,4 +1,5 @@
 To do
-====
+=====
 
-* Hmm. Nothing. This can't be right...
+* Receive feedback on French translation
+* Clean up `trayfreq-set`'s `main()`

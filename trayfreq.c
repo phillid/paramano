@@ -16,6 +16,8 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#include "strings.h"
+
 #include "widget_manager.h"
 #include "tray.h"
 #include "bat_tray/bat_tray.h"
@@ -39,8 +41,6 @@ void config_init()
 	gboolean home_config_exists;
 	config.key_file = NULL;
 
-	printf("Battery governor: %s",_DEFAULT_BAT_GOV);
-
 	config.file_name = g_strconcat(getenv("HOME"), "/.trayfreq.config", NULL);
 
 	// Check if ~/.trayfreq.config exists
@@ -62,7 +62,7 @@ void config_init()
 
 	if(!success)
 	{
-		g_warning("Failed to open config files!\n");
+		g_warning(S_TRAYFREQ_C_CONFIG_FILE_ERROR);
 		return;
 	}
 
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 
 	if(!gtk_init_check(&argc, &argv))
 	{
-		g_error("Cannot initialize gtk: gtk_init_check returned FALSE.\nBailing.");
+		g_error(S_TRAYFREQ_C_GTK_ERROR);
 		return 1;
 	}
 

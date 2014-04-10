@@ -20,30 +20,43 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../strings.h"
 #include "../freq_tray/getfreq.h"
 #include "../freq_tray/getcore.h"
 
-#define ERRMSG "FAILED: Couldn't open %s for writing\n"
+char file_path[100];
 
-void set_freq_max(char* freq, char* core)
+
+void prepare_path(const char* file, const char* core)
 {
-	char file_path[100];
-	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_max_freq", core);
+	// Sanatise core to make sure there's not monkey business going on -- it's only an integer
+	int core_i = atoi(core);
 
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%d/cpufreq/%s", core_i, file);
+}
+
+void file_open_error()
+{
+	printf(S_TRAYFREQ_SET_C_FILE_OPEN_ERROR, file_path);
+}
+
+void set_freq_max(const char* freq, const char* core)
+{
+
+	prepare_path("scaling_max_freq",core);
 	FILE* fd = fopen(file_path, "w");
 	if (fd)
 	{
 		fprintf(fd, freq);
 		fclose(fd);
 	} else {
-		printf(ERRMSG,file_path);
+		file_open_error();
 	}
 }
 
 void set_freq_min(char* freq, char* core)
 {
-	char file_path[100];
-	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_min_freq", core);
+	prepare_path("scaling_min_freq",core);
 
 	FILE* fd = fopen(file_path, "w");
 	if (fd)
@@ -51,14 +64,13 @@ void set_freq_min(char* freq, char* core)
 		fprintf(fd, freq);
 		fclose(fd);
 	} else {
-		printf(ERRMSG,file_path);
+		file_open_error();
 	}
 }
 
 static void set_speed(char* freq, char* core)
 {
-	char file_path[100];
-	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_setspeed", core);
+	prepare_path("scaling_setspeed",core);
 
 	FILE* fd = fopen(file_path, "w");
 	if (fd)
@@ -66,14 +78,13 @@ static void set_speed(char* freq, char* core)
 		fprintf(fd, freq);
 		fclose(fd);
 	} else {
-		printf(ERRMSG,file_path);
+		file_open_error();
 	}
 }
 
 void set_gov(char* gov, char* core)
 {
-	char file_path[100];
-	sprintf(file_path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", core);
+	prepare_path("scaling_governor",core);
 
 	FILE* fd = fopen(file_path, "w");
 	if (fd)
@@ -81,7 +92,7 @@ void set_gov(char* gov, char* core)
 		fprintf(fd, gov);
 		fclose(fd);
 	} else {
-		printf(ERRMSG,file_path);
+		file_open_error();
 	}
 }
 
@@ -98,47 +109,43 @@ int main(int argc, char *argv[])
 
 	if(!argv[1])
 	{
-		printf("Use -g to set the governor or -f to set the frequency.\n");
-	}
-	else if(strcmp(argv[1], "-g") == 0)
-	{
+		printf(S_TRAYFREQ_SET_C_NO_ARGS);
+	} else if(strcmp(argv[1], "-g") == 0) {
 		if(!argv[2])
-			printf("Pass the governor to set after the -g.\n");
+			printf(S_TRAYFREQ_SET_C_SET_GOVERNOR_ARG);
 		else
 		{
 			if(!argv[3])
-				printf("Use -c to set the core.\n");
+				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 			else if(strcmp(argv[3], "-c") == 0)
 			{
 				if(!argv[4])
-					printf("Pass the core to set after the -c.\n");
+					printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 				else
 					set_gov(argv[2], argv[4]);
 			} else
-				printf("Use -c to set the core.\n");
+				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 		}
-	}
-	else if(strcmp(argv[1], "-f") == 0)
-	{
+	} else if(strcmp(argv[1], "-f") == 0) {
 		if(!argv[2])
 		{
-			printf("Pass the frequency to set after the -f.\n");
+			printf(S_TRAYFREQ_SET_C_SET_FREQUENCY_ARG);
 		} else {
 			if(!argv[3])
 			{
-				printf("Use -c to set the core.\n");
+				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 			} else if(strcmp(argv[3], "-c") == 0)
 			{
 				if(!argv[4])
-					printf("Pass the core to set after the -c.\n");
+					printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 				else
 					set_freq(argv[2], argv[4]);
 			} else {
-				printf("Use -c to set the core.\n");
+				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
 			}
 		}
 	} else {
-		printf("Use -g to set the governor or -f to set the frequency.\n");
+		printf(S_TRAYFREQ_SET_C_NO_ARGS);
 	}
 	return 0;
 }

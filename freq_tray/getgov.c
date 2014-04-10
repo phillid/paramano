@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#include "string.h"
 #include "getgov.h"
 #include "getcore.h"
 
