@@ -17,7 +17,6 @@
  ************************************************************************/
 
 
-#include "../strings.h"
 #include "bat_tray.h"
 #include "../common.h"
 
@@ -25,6 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libintl.h>
 
 static GtkStatusIcon* tray;
 
@@ -53,18 +53,18 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
-			sprintf(msg, S_BAT_TRAY_C_BATTERY_DISCHARGING, get_bat_percent());
+			sprintf(msg, _("Discharging (%i%%)"), get_bat_percent());
 			break;
 
 		case STATE_CHARGING:
-			sprintf(msg, S_BAT_TRAY_C_BATTERY_CHARGING, get_bat_percent());
+			sprintf(msg, _("Charging (%i%%)"), get_bat_percent());
 			break;
 		case STATE_CHARGED:
-			sprintf(msg, S_BAT_TRAY_C_BATTERY_FULL);
+			sprintf(msg, _("Fully charged") );
 			break;
 
 		default:
-			sprintf(msg, S_BAT_TRAY_C_BATTERY_UNKNOWN);
+			sprintf(msg, _("Unknown status") );
 			break;
 	}
 

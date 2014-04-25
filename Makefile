@@ -19,7 +19,7 @@ GTK_LIBS	=	-lgtk-x11-2.0 \
 				-lgobject-2.0
 
 
-trayfreq_CFLAGS			=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall
+trayfreq_CFLAGS			=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -D_=gettext
 trayfreq_LDFLAGS		=	$(GTK_LIBS) $(GLIB_LIBS) -lm
 trayfreq_SOURCES		=	freq_tray/getcore.c \
 							freq_tray/getfreq.c \
@@ -33,7 +33,7 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							bat_tray/bat_tray.c \
 							common.c
 
-trayfreq_set_CFLAGS		=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall
+trayfreq_set_CFLAGS		=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -D_=gettext
 trayfreq_set_LDFLAGS	=	$(GTK_LIBS) $(GLIB_LIBS) -lm
 trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 							freq_tray/getfreq.c \
@@ -42,33 +42,27 @@ trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 
 ########################################################################
 # Make entire suite
-all: trayfreq-en trayfreq-fr trayfreq-set-en trayfreq-set-fr
+all: trayfreq trayfreq-set
 ########################################################################
 
 ########################################################################
 # Make trayfreq-set program for setting governors
-trayfreq-set-en:
-	$(CC) -o trayfreq-set-en $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
-
-trayfreq-set-fr:
-	$(CC) -o trayfreq-set-fr $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS) -DLANG_FR
+trayfreq-set:
+	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
 ########################################################################
 
 
 ########################################################################
 # Make main trayfreq system tray program
-trayfreq-en:
-	$(CC) -o trayfreq-en $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
-
-trayfreq-fr:
-	$(CC) -o trayfreq-fr $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS) -DLANG_FR
+trayfreq:
+	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
 ########################################################################
 
 
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq-en trayfreq-set-en trayfreq-fr trayfreq-set-fr
+	rm -f trayfreq trayfreq-set
 ########################################################################
 
 
@@ -81,8 +75,5 @@ install:
 	install -D data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
 	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
-	install -Dm 755 trayfreq-en $(INSTALL_PATH)/usr/bin/trayfreq-en
-	install -Dm 755 trayfreq-set-en $(INSTALL_PATH)/usr/bin/trayfreq-set-en
-	install -Dm 755 trayfreq-fr $(INSTALL_PATH)/usr/bin/trayfreq-fr
-	install -Dm 755 trayfreq-set-fr $(INSTALL_PATH)/usr/bin/trayfreq-set-fr
+	ln -s /usr/share/licenses/common/GLPv3/license.txt $(INSTALL_PATH)/usr/share/trayfreq/LICENCE
 ########################################################################

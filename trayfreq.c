@@ -31,6 +31,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <libintl.h>
 
 static gboolean SHOW_BATTERY = TRUE;
 
@@ -62,7 +63,7 @@ void config_init()
 
 	if(!success)
 	{
-		g_warning(S_TRAYFREQ_C_CONFIG_FILE_ERROR);
+		g_warning(_("Failed to open config files!\n"));
 		return;
 	}
 
@@ -105,7 +106,7 @@ int main(int argc, char** argv)
 
 	if(!gtk_init_check(&argc, &argv))
 	{
-		g_error(S_TRAYFREQ_C_GTK_ERROR);
+		g_error(_("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
 	}
 

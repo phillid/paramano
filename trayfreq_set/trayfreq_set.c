@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libintl.h>
 
 #include "../strings.h"
 #include "../freq_tray/getfreq.h"
@@ -37,7 +38,7 @@ void prepare_path(const char* file, const char* core)
 
 void file_open_error()
 {
-	printf(S_TRAYFREQ_SET_C_FILE_OPEN_ERROR, file_path);
+	printf( _("FAILED: Couldn't open %s for writing\n") , file_path);
 }
 
 void set_freq_max(const char* freq, const char* core)
@@ -109,43 +110,43 @@ int main(int argc, char *argv[])
 
 	if(!argv[1])
 	{
-		printf(S_TRAYFREQ_SET_C_NO_ARGS);
+		printf( _("Use -g to set the governor or -f to set the frequency\n") );
 	} else if(strcmp(argv[1], "-g") == 0) {
 		if(!argv[2])
-			printf(S_TRAYFREQ_SET_C_SET_GOVERNOR_ARG);
+			printf( _("Pass the governor with -g\n") );
 		else
 		{
 			if(!argv[3])
-				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+				printf( _("Pass the core with -c\n") );
 			else if(strcmp(argv[3], "-c") == 0)
 			{
 				if(!argv[4])
-					printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+					printf( _("Pass the core with -c\n") );
 				else
 					set_gov(argv[2], argv[4]);
 			} else
-				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+				printf( _("Pass the core with -c\n") );
 		}
 	} else if(strcmp(argv[1], "-f") == 0) {
 		if(!argv[2])
 		{
-			printf(S_TRAYFREQ_SET_C_SET_FREQUENCY_ARG);
+			printf( _("Pass the frequency with -f\n") );
 		} else {
 			if(!argv[3])
 			{
-				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+				printf( _("Pass the core with -c\n") );
 			} else if(strcmp(argv[3], "-c") == 0)
 			{
 				if(!argv[4])
-					printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+					printf( _("Pass the core with -c\n") );
 				else
 					set_freq(argv[2], argv[4]);
 			} else {
-				printf(S_TRAYFREQ_SET_C_SET_CORE_ARG);
+				printf( _("Pass the core with -c\n") );
 			}
 		}
 	} else {
-		printf(S_TRAYFREQ_SET_C_NO_ARGS);
+		printf( _("Use -g to set the governor or -f to set the frequency\n") );
 	}
 	return 0;
 }

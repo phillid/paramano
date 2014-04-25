@@ -16,7 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "strings.h"
 #include "tray.h"
 #include "widget_manager.h"
 #include "freq_tray/getfreq.h"
@@ -30,6 +29,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libintl.h>
 
 GtkStatusIcon* tray;
 #define TOOLTIP_TEXT_SIZE 500
@@ -180,13 +180,13 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	}
 
 	gg_current(0, current_governer, 20);
-	sprintf(msg+strlen(msg), S_TRAY_C_GOVERNOR, current_governer);
+	sprintf(msg+strlen(msg), _("Governor: %s\n"), current_governer);
 
 	for(i = 0; i < gc_number(); ++i)
 	{
 		memset(label, 0, 20);
 		gf_get_frequency_label(gf_current(i), label);
-		sprintf(msg+strlen(msg), S_TRAY_C_CPU, i, label, i == gc_number()-1 ? "" : "\n");
+		sprintf(msg+strlen(msg), _("CPU%i: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
 	}
 
 	tray_set_tooltip(msg);
