@@ -71,8 +71,8 @@ clean:
 install:
 	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
 	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
-	install -D data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
-	install -D data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
+	install -Dm 644 data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
+	install -Dm 644 data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
 	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
 	ln -s /usr/share/licenses/common/GLPv3/license.txt $(INSTALL_PATH)/usr/share/trayfreq/LICENCE
