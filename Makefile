@@ -42,7 +42,7 @@ trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 
 ########################################################################
 # Make entire suite
-all: trayfreq trayfreq-set
+all: trayfreq trayfreq-set lang
 ########################################################################
 
 ########################################################################
@@ -58,11 +58,16 @@ trayfreq:
 	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
 ########################################################################
 
+########################################################################
+# Make language files
+lang:
+	msgfmt -c -o lang/fr.mo lang/fr.po
+########################################################################
 
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set
+	rm -f trayfreq trayfreq-set lang/*.mo
 ########################################################################
 
 
@@ -71,6 +76,9 @@ clean:
 install:
 	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
 	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
+
+	cp lang/fr.mo $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/trayfreq.mo
+
 	install -Dm 644 data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
 	install -Dm 644 data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq

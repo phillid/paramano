@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <libintl.h>
+#include <locale.h>
 
 static gboolean SHOW_BATTERY = TRUE;
 
@@ -102,7 +103,9 @@ void config_init()
 
 int main(int argc, char** argv)
 {
-	//gboolean gtk_init_success = gtk_init_check(&argc, &argv);
+	setlocale(LC_ALL, "");
+	bindtextdomain("trayfreq","/usr/share/locale");
+	textdomain("trayfreq");
 
 	if(!gtk_init_check(&argc, &argv))
 	{

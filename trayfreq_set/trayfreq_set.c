@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libintl.h>
+#include <locale.h>
 
 #include "../strings.h"
 #include "../freq_tray/getfreq.h"
@@ -105,6 +106,10 @@ void set_freq(char* freq, char* core)
 
 int main(int argc, char *argv[])
 {
+	setlocale(LC_ALL,"");
+	bindtextdomain("trayfreq","/usr/share/locale");
+	textdomain("trayfreq");
+
 	gc_init();
 	gf_init();
 
