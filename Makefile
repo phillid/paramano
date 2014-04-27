@@ -77,6 +77,7 @@ install:
 	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
 	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
 
+	mkdir -p $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/
 	cp lc/fr.mo $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/trayfreq.mo
 
 	install -Dm 644 data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
