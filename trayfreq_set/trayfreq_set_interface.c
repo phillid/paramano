@@ -25,13 +25,13 @@
 void si_gov(char* gov, int core)
 {
 	char cmd[256];
-	sprintf(cmd, "/usr/bin/sudo trayfreq-set -g %s -c %i",gov,core);
+	sprintf(cmd, "/usr/bin/trayfreq-set -g %s -c %i",gov,core);
 	system(cmd);
 }
 
 void si_freq(int freq, int core)
 {
 	char cmd[256];
-	sprintf(cmd, "/usr/bin/sudo trayfreq-set -f %i -c %i",freq,core);
+	sprintf(cmd, "/usr/bin/trayfreq-set -f %i -c %i",freq,core);
 	system(cmd);
 }
