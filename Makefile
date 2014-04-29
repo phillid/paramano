@@ -15,7 +15,7 @@ GTK_CFLAGS	=	-I/usr/include/gtk-2.0 \
 				-I/usr/include/gdk-pixbuf-2.0 \
 				-I/usr/include/atk-1.0
 
-GTK_LIBS	=	-lgtk-x11-2.0 \
+GTK_LIBS	=	-lgtk-3 \
 				-lgobject-2.0
 
 
