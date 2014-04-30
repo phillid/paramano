@@ -17,28 +17,11 @@
  ************************************************************************/
 
 #include "tray.h"
-#include "widget_manager.h"
-#include "freq_tray/getfreq.h"
-#include "freq_tray/getcore.h"
-#include "freq_tray/getgov.h"
-#include "trayfreq_set/trayfreq_set_interface.h"
-#include "bat_tray/bat_tray.h"
-#include "defaults.h"
 
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
+#define TOOLTIP_TEXT_SIZE 500
 
 GtkStatusIcon* tray;
-#define TOOLTIP_TEXT_SIZE 500
 gchar tooltip_text[TOOLTIP_TEXT_SIZE];
-
-
-/* 0 = nothing, 1 = was charging, 2 = was discharging */
-//int state = 0;
-
 
 GtkWidget* menu;
 GSList* menu_items;
@@ -105,8 +88,8 @@ static void tray_generate_menu()
 	int i = 0;
 
 	gchar current_governor[20];
-	memset(current_governor, '\0', 20);
-	gg_current(0, current_governor, 20);
+	memset(current_governor, '\0', sizeof(current_governor) );
+	gg_current(0, current_governor, sizeof(current_governor) );
 
 	gint current_frequency = gf_current(0);
 
@@ -152,39 +135,42 @@ static void tray_generate_menu()
 
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
-	gchar msg[500];
-	gchar current_governer[20];
+	gchar msg[TOOLTIP_TEXT_SIZE];
+	gchar current_governor[20];
 	gchar label[20];
 	int i = 0;
 
-	memset(msg, 0, 500);
-	memset(current_governer, 0, 20);
+	memset(msg, '\0', sizeof(msg));
+	memset(current_governor, '\0', sizeof(current_governor) );
 
-	// Change governor based on battery state battery is discharging
-	if ( get_battery_state() ==  STATE_DISCHARGING )
+
+	switch ( get_battery_state() )
 	{
-		if(_DEFAULT_BAT_GOV)
-		{
-			for(i = 0; i < gc_number(); ++i)
-				si_gov(_DEFAULT_BAT_GOV, i);
-		}
-	}
-	/* battery is now charging (on ac) */
-	else if ( get_battery_state() ==  STATE_CHARGING )
-	{
-		if(_DEFAULT_AC_GOV)
-		{
-			for(i = 0; i < gc_number(); ++i)
-				si_gov(_DEFAULT_AC_GOV, i);
-		}
+		case STATE_DISCHARGING:
+			if(_DEFAULT_BAT_GOV)
+			{
+				for(i = 0; i < gc_number(); ++i)
+					si_gov(_DEFAULT_BAT_GOV, i);
+			}
+			break;
+
+		case STATE_CHARGING:
+		case STATE_FULL:
+			if(_DEFAULT_AC_GOV)
+			{
+				for(i = 0; i < gc_number(); ++i)
+					si_gov(_DEFAULT_AC_GOV, i);
+			}
+
+			break;
 	}
 
-	gg_current(0, current_governer, 20);
-	sprintf(msg+strlen(msg), _("Governor: %s\n"), current_governer);
+	gg_current(0, current_governor, sizeof(current_governor) );
+	sprintf(msg+strlen(msg), _("Governor: %s\n"), current_governor);
 
 	for(i = 0; i < gc_number(); ++i)
 	{
-		memset(label, 0, 20);
+		memset(label, '\0', sizeof(label));
 		gf_get_frequency_label(gf_current(i), label);
 		sprintf(msg+strlen(msg), _("CPU%i: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
 	}
@@ -199,12 +185,6 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 {
 	tray_generate_menu();
 	gtk_menu_popup(GTK_MENU(menu),NULL,NULL,gtk_status_icon_position_menu,tray,button,activate_time);
-}
-
-static void activate(GtkStatusIcon* statuc_icon,gpointer data)
-{
-	if(_DEFAULT_PROG)
-		g_spawn_command_line_async(_DEFAULT_PROG, NULL);
 }
 
 static gboolean update_icon(gpointer user_data)
@@ -241,7 +221,6 @@ void tray_init()
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
-	g_signal_connect(G_OBJECT(tray), "activate", GTK_SIGNAL_FUNC(activate), NULL);
 	gtk_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
 }
