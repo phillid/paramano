@@ -34,8 +34,8 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							bat_tray/bat_tray.c \
 							common.c
 
-trayfreq_set_CFLAGS		=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -D_=gettext
-trayfreq_set_LDFLAGS	=	$(GTK_LIBS) $(GLIB_LIBS) -lm
+trayfreq_set_CFLAGS		=	$(GLIB_CFLAGS) -Wall -D_=gettext
+trayfreq_set_LDFLAGS	=	$(GLIB_LIBS) -lm
 trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 							freq_tray/getfreq.c \
 							freq_tray/getcore.c
