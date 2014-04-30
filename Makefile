@@ -4,19 +4,20 @@ MAKE = make
 CC = gcc
 INSTALL_PATH=/
 
-GLIB_CFLAGS	=	-I/usr/include/glib-2.0 \
-				-I/usr/lib/glib-2.0/include
-GLIB_LIBS	=	-lglib-2.0
 
-GTK_CFLAGS	=	-I/usr/include/gtk-2.0 \
-				-I/usr/lib/gtk-2.0/include \
-				-I/usr/include/pango-1.0 \
-				-I/usr/include/cairo \
-				-I/usr/include/gdk-pixbuf-2.0 \
-				-I/usr/include/atk-1.0
+GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
+							-I/usr/lib/glib-2.0/include
+GLIB_LIBS				=	-lglib-2.0
 
-GTK_LIBS	=	-lgtk-x11-2.0 \
-				-lgobject-2.0
+GTK_CFLAGS				=	-I/usr/include/gtk-2.0 \
+							-I/usr/lib/gtk-2.0/include \
+							-I/usr/include/pango-1.0 \
+							-I/usr/include/cairo \
+							-I/usr/include/gdk-pixbuf-2.0 \
+							-I/usr/include/atk-1.0
+
+GTK_LIBS				=	-lgtk-x11-2.0 \
+							-lgobject-2.0
 
 
 trayfreq_CFLAGS			=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -D_=gettext
