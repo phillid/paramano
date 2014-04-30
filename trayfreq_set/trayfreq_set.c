@@ -22,7 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include "../strings.h"
 #include "../freq_tray/getfreq.h"
 #include "../freq_tray/getcore.h"
 
