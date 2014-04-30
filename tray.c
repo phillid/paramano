@@ -221,7 +221,7 @@ void tray_init()
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
-	gtk_timeout_add(1000, update_icon, NULL);
+	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
 }
 
