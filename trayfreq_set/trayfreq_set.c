@@ -16,6 +16,9 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+
+// <TO DO> : move a lot of this to a .h
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,132 +28,118 @@
 #include "../freq_tray/getfreq.h"
 #include "../freq_tray/getcore.h"
 
-char file_path[100];
+#define FILE_PATH_STRING_SIZE 100
 
+#define ARG_CORE	0x1
+#define ARG_GOV		0x2
+#define ARG_FREQ	0x4
+typedef struct  {
+	char present;
+	char *core;
+	char *governor;
+	char *frequency;
+} argument_summary;
 
-void prepare_path(const char* file, const char* core)
+// </TO DO>
+
+char write_str_to_file(const char *file, const char *data, const char *core)
 {
-	// Sanatise core to make sure there's not monkey business going on
-	int core_i = atoi(core);
+	FILE *fd;
+	char file_path[FILE_PATH_STRING_SIZE];
 
-	sprintf(file_path, "/sys/devices/system/cpu/cpu%d/cpufreq/%s", core_i, file);
-}
+	// Prepare file path
+	memset(file_path, '\0', sizeof(file_path));
+	sprintf(file_path, "/sys/devices/system/cpu/cpu%d/cpufreq/%s", atoi(core), file );
 
-void file_open_error()
-{
+	// Try to open file and write data to it
+	if ( !(fd = fopen(file_path, "w")) )
+	{
+		fprintf(fd, data);
+		fclose(fd);
+		return 1;
+	}
+
+	// Fallthrough: File couldn't be opened for writing
 	printf( _("FAILED: Couldn't open %s for writing\n") , file_path);
+	return 0;
 }
 
-void set_freq_max(const char* freq, const char* core)
-{
 
-	prepare_path("scaling_max_freq",core);
-	FILE* fd = fopen(file_path, "w");
-	if (fd)
+#define set_freq_max(freq,core)		write_str_to_file("scaling_max_freq",freq,core)
+#define set_freq_min(freq,core)		write_str_to_file("scaling_min_freq",freq,core)
+#define set_speed(freq,core)		write_str_to_file("scaling_setspeed",freq,core)
+#define set_gov(gov,core)			write_str_to_file("scaling_governor",gov,core)
+#define set_freq(freq,core)			set_gov("userspace",core);set_speed(freq,core)
+
+void get_argument_summary(int argc, char **argv, argument_summary *argsum)
+{
+	int arg;
+
+	// Check for -{c,g,f} xyz
+	for ( arg = 1; arg < argc-1; arg+=2 )
 	{
-		fprintf(fd, freq);
-		fclose(fd);
-	} else {
-		file_open_error();
+		// Can't have empty argument
+		if ( strlen(argv[arg+1]) != 0 )
+		{
+			if ( strcmp(argv[arg], "-c") == 0 )
+			{
+				// Found -c with an arg
+				argsum->present |= ARG_CORE;
+				argsum->core = (char*)(argv[arg+1]);
+				continue;
+			}
+
+			if ( strcmp(argv[arg], "-f") == 0 )
+			{
+				// Found -f with an arg
+				argsum->present |= ARG_FREQ;
+				argsum->frequency = (char*)(argv[arg+1]);
+				continue;
+			}
+
+			if ( strcmp(argv[arg], "-g") == 0 )
+			{
+				// Found -g with an arg
+				argsum->present |= ARG_GOV;
+				argsum->governor = (char*)(argv[arg+1]);
+				//continue;
+			}
+		}
 	}
-}
-
-void set_freq_min(char* freq, char* core)
-{
-	prepare_path("scaling_min_freq",core);
-
-	FILE* fd = fopen(file_path, "w");
-	if (fd)
-	{
-		fprintf(fd, freq);
-		fclose(fd);
-	} else {
-		file_open_error();
-	}
-}
-
-static void set_speed(char* freq, char* core)
-{
-	prepare_path("scaling_setspeed",core);
-
-	FILE* fd = fopen(file_path, "w");
-	if (fd)
-	{
-		fprintf(fd, freq);
-		fclose(fd);
-	} else {
-		file_open_error();
-	}
-}
-
-void set_gov(char* gov, char* core)
-{
-	prepare_path("scaling_governor",core);
-
-	FILE* fd = fopen(file_path, "w");
-	if (fd)
-	{
-		fprintf(fd, gov);
-		fclose(fd);
-	} else {
-		file_open_error();
-	}
-}
-
-void set_freq(char* freq, char* core)
-{
-	set_gov("userspace", core);
-	set_speed(freq, core);
 }
 
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL,"");
+
+	// TO DO: Not portable
 	bindtextdomain("trayfreq","/usr/share/locale");
+
+	// TO DO: Needs to be #defined
 	textdomain("trayfreq");
 
 	gc_init();
 	gf_init();
 
-	if(!argv[1])
+	argument_summary args;
+	memset(&args, 0, sizeof(args));
+
+	// If unusual number of args, give up now
+	if (argc == 5)
 	{
-		printf( _("Use -g to set the governor or -f to set the frequency\n") );
-	} else if(strcmp(argv[1], "-g") == 0) {
-		if(!argv[2])
-			printf( _("Pass the governor with -g\n") );
-		else
+		get_argument_summary(argc, argv, &args);
+		
+		if ( args.present == ( ARG_CORE | ARG_GOV ) )
 		{
-			if(!argv[3])
-				printf( _("Pass the core with -c\n") );
-			else if(strcmp(argv[3], "-c") == 0)
-			{
-				if(!argv[4])
-					printf( _("Pass the core with -c\n") );
-				else
-					set_gov(argv[2], argv[4]);
-			} else
-				printf( _("Pass the core with -c\n") );
+			return set_gov(args.governor , args.core);
 		}
-	} else if(strcmp(argv[1], "-f") == 0) {
-		if(!argv[2])
+
+		if ( args.present == ( ARG_CORE | ARG_FREQ ) )
 		{
-			printf( _("Pass the frequency with -f\n") );
-		} else {
-			if(!argv[3])
-			{
-				printf( _("Pass the core with -c\n") );
-			} else if(strcmp(argv[3], "-c") == 0)
-			{
-				if(!argv[4])
-					printf( _("Pass the core with -c\n") );
-				else
-					set_freq(argv[2], argv[4]);
-			} else {
-				printf( _("Pass the core with -c\n") );
-			}
+			return set_freq(args.frequency , args.core);
 		}
-	} else {
-		printf( _("Use -g to set the governor or -f to set the frequency\n") );
 	}
-	return 0;
+	// Fall through to here if no valid argument combination
+	fprintf(stderr, _("%s {-f frequency|-g governor} -c core\n"), argv[0] );
+	return 1;
 }
