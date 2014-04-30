@@ -3,6 +3,7 @@
 MAKE = make
 CC = gcc
 INSTALL_PATH=/
+DEBUG=
 
 
 GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
@@ -48,14 +49,14 @@ all: trayfreq trayfreq-set lang
 ########################################################################
 # Make trayfreq-set program for setting governors
 trayfreq-set:
-	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS)  $(trayfreq_set_LDFLAGS)
+	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS) $(trayfreq_set_LDFLAGS) $(DEBUG)
 ########################################################################
 
 
 ########################################################################
 # Make main trayfreq system tray program
 trayfreq:
-	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS)  $(trayfreq_LDFLAGS)
+	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS) $(trayfreq_LDFLAGS) $(DEBUG)
 ########################################################################
 
 ########################################################################

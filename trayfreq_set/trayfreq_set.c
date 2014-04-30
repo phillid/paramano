@@ -52,15 +52,18 @@ char write_str_to_file(const char *file, const char *data, const char *core)
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%d/cpufreq/%s", atoi(core), file );
 
 	// Try to open file and write data to it
-	if ( !(fd = fopen(file_path, "w")) )
+	if ( (fd = fopen(file_path, "w")) != NULL )
 	{
+#ifdef DEBUG
+		printf("Writing '%s' to '%s'\n",data,file_path);
+#endif
 		fprintf(fd, data);
 		fclose(fd);
 		return 1;
 	}
 
 	// Fallthrough: File couldn't be opened for writing
-	printf( _("FAILED: Couldn't open %s for writing\n") , file_path);
+	fprintf(stderr, _("FAILED: Couldn't open %s for writing\n") , file_path);
 	return 0;
 }
 
@@ -69,7 +72,6 @@ char write_str_to_file(const char *file, const char *data, const char *core)
 #define set_freq_min(freq,core)		write_str_to_file("scaling_min_freq",freq,core)
 #define set_speed(freq,core)		write_str_to_file("scaling_setspeed",freq,core)
 #define set_gov(gov,core)			write_str_to_file("scaling_governor",gov,core)
-#define set_freq(freq,core)			set_gov("userspace",core);set_speed(freq,core)
 
 void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 {
@@ -83,6 +85,9 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 		{
 			if ( strcmp(argv[arg], "-c") == 0 )
 			{
+#ifdef DEBUG
+				printf("Found -c with arg '%s'\n",argv[arg+1]);
+#endif
 				// Found -c with an arg
 				argsum->present |= ARG_CORE;
 				argsum->core = (char*)(argv[arg+1]);
@@ -91,6 +96,10 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 
 			if ( strcmp(argv[arg], "-f") == 0 )
 			{
+#ifdef DEBUG
+				printf("Found -f with arg '%s'\n",argv[arg+1]);
+#endif
+
 				// Found -f with an arg
 				argsum->present |= ARG_FREQ;
 				argsum->frequency = (char*)(argv[arg+1]);
@@ -99,6 +108,9 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 
 			if ( strcmp(argv[arg], "-g") == 0 )
 			{
+#ifdef DEBUG
+				printf("Found -g with arg '%s'\n",argv[arg+1]);
+#endif
 				// Found -g with an arg
 				argsum->present |= ARG_GOV;
 				argsum->governor = (char*)(argv[arg+1]);
@@ -112,11 +124,16 @@ int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL,"");
 
+
 	// TO DO: Not portable
 	bindtextdomain("trayfreq","/usr/share/locale");
 
 	// TO DO: Needs to be #defined
 	textdomain("trayfreq");
+
+#ifdef DEBUG
+	printf("Set gettext up\n");
+#endif
 
 	gc_init();
 	gf_init();
@@ -128,17 +145,34 @@ int main(int argc, char *argv[])
 	if (argc == 5)
 	{
 		get_argument_summary(argc, argv, &args);
-		
+
+#ifdef DEBUG
+	printf("Correct number of command line arguments\n");
+	printf("-c: %s  -g: %s  -f: %s\n",	(args.present | ARG_CORE )? "Yes":"No",
+										(args.present | ARG_GOV  )? "Yes":"No",
+										(args.present | ARG_FREQ )? "Yes":"No" );
+	printf("Core: %s\nGov : %s\nFreq: %s\n",args.core,args.governor,args.frequency);
+#endif
+
 		if ( args.present == ( ARG_CORE | ARG_GOV ) )
 		{
+#ifdef DEBUG
+			printf("Changing governor\n");
+#endif
 			return set_gov(args.governor , args.core);
 		}
 
 		if ( args.present == ( ARG_CORE | ARG_FREQ ) )
 		{
-			return set_freq(args.frequency , args.core);
+#ifdef DEBUG
+			printf("Changing frequency\n");
+#endif
+			return set_gov("userspace", args.core) | set_speed(args.frequency, args.core);
 		}
 	}
+#ifdef DEBUG
+			printf("Fell through, showing command usage\n");
+#endif
 	// Fall through to here if no valid argument combination
 	fprintf(stderr, _("%s {-f frequency|-g governor} -c core\n"), argv[0] );
 	return 1;
