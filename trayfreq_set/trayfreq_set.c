@@ -31,7 +31,7 @@ char file_path[100];
 
 void prepare_path(const char* file, const char* core)
 {
-	// Sanatise core to make sure there's not monkey business going on -- it's only an integer
+	// Sanatise core to make sure there's not monkey business going on
 	int core_i = atoi(core);
 
 	sprintf(file_path, "/sys/devices/system/cpu/cpu%d/cpufreq/%s", core_i, file);

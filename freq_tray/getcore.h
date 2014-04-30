@@ -17,9 +17,9 @@
  ************************************************************************/
 
 #ifndef GETCORE_H
-#define GETCORE_H 1
+#define GETCORE_H
 
 void gc_init();
-int gc_number();
+int  gc_number();
 
 #endif

@@ -17,7 +17,7 @@
  ************************************************************************/
 
 #ifndef WIDGET_MANAGER_H
-#define WIDGET_MANAGER_H 1
+#define WIDGET_MANAGER_H
 
 #include <gtk/gtk.h>
 #include <glib.h>

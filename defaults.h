@@ -17,7 +17,7 @@
  ************************************************************************/
 
 #ifndef DEFAULTS_H
-#define DEFAULTS_H 1
+#define DEFAULTS_H
 
 #include <glib.h>
 

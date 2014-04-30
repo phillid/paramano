@@ -16,8 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "strings.h"
-
 #include "widget_manager.h"
 #include "tray.h"
 #include "bat_tray/bat_tray.h"
@@ -68,15 +66,11 @@ void config_init()
 		return;
 	}
 
-	gchar * def_prog = config_get_key(&config, "events", "activate");
 	gchar * def_gov = config_get_key(&config, "governor", "default");
 	gchar * def_freq = config_get_key(&config, "frequency", "default");
 	gchar * show_bat = config_get_key(&config, "battery", "show");
 	gchar * bat_gov = config_get_key (&config, "battery", "governor");
 	gchar * ac_gov = config_get_key (&config, "ac", "governor");
-
-	if(def_prog)
-		_DEFAULT_PROG = def_prog;
 
 	if(def_gov)
 		_DEFAULT_GOV = def_gov;
@@ -112,7 +106,6 @@ int main(int argc, char** argv)
 		g_error(_("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
 	}
-
 	config_init();
 	gc_init();
 	gg_init();

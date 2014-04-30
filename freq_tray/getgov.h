@@ -17,12 +17,12 @@
  ************************************************************************/
 
 #ifndef GETGOV_H
-#define GETGOV_H 1
+#define GETGOV_H
 
-void gg_init();
-int gg_current(int core, char* out, int size);
-int gg_available(int core, char* out, int size);
+void  gg_init();
+int   gg_current(int core, char* out, int size);
+int   gg_available(int core, char* out, int size);
 char* gg_gov(int core, int index);
-int gg_number();
+int   gg_number();
 
 #endif

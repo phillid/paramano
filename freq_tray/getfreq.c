@@ -16,7 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "string.h"
 #include "getfreq.h"
 #include "getcore.h"
 #include "math.h"

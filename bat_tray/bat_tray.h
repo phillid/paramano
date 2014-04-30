@@ -17,7 +17,7 @@
  ************************************************************************/
 
 #ifndef BAT_TRAY_H
-#define BAT_TRAY_H 1
+#define BAT_TRAY_H
 
 #include <glib.h>
 
@@ -33,8 +33,7 @@
 void bat_tray_init();
 void bat_tray_show();
 void bat_tray_hide();
-
-int get_battery_state();
-int get_bat_num();
+int  get_battery_state();
+int  get_bat_num();
 
 #endif /* ifndef BAT_TRAY_H */

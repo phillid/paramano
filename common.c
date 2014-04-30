@@ -18,16 +18,8 @@
 
 #include "common.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-#define TRUE true
-#define FALSE false
-
 /***********************************************************************
- * Gets integer value from file
+ * Gets integer value from first line in file
  **********************************************************************/
 int get_int_value_from_file(const char* filename)
 {
@@ -47,7 +39,7 @@ int get_int_value_from_file(const char* filename)
 
 
 /***********************************************************************
- * Return true/false if a file has specified line or not
+ * Return true/false if a file has specified line of text
  **********************************************************************/
 bool file_has_line(const char *filename, const char *line)
 {
@@ -71,14 +63,14 @@ bool file_has_line(const char *filename, const char *line)
 
 
 /***********************************************************************
- * Fetches first number from a string
+ * Fetches first number (ie the 35 of "35 123") from a
+ * string
  **********************************************************************/
 int get_int(const char* string)
 {
-	char numbers[] = "1234567890";
 	char* first_num;
 
-	first_num = strpbrk(string, numbers);
+	first_num = strpbrk(string, "0123456789");
 	if(first_num)
 		return atoi(first_num);
 

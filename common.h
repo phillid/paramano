@@ -17,12 +17,16 @@
  ************************************************************************/
 
 #ifndef COMMON_H
-#define COMMON_H 1
+#define COMMON_H
 
-#include <stdbool.h>
+#include "bool.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int get_int_value_from_file(const char* filename);
+
+int  get_int_value_from_file(const char* filename);
+int  get_int(const char* string);
 bool file_has_line(const char *filename, const char *line);
-int get_int(const char* string);
 
 #endif

@@ -17,7 +17,7 @@
  ************************************************************************/
 
 #ifndef TRAYFREQ_SET_INTERFACE_H
-#define TRAYFREQ_SET_INTERFACE_H 1
+#define TRAYFREQ_SET_INTERFACE_H
 
 void si_gov(char* gov, int core);
 void si_freq(int freq, int core);
