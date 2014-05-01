@@ -3,7 +3,14 @@
 MAKE = make
 CC = gcc
 INSTALL_PATH=/
-EXTRA_CFLAGS=
+
+ifdef DEBUG
+ EXTRA_CFLAGS+=-DDEBUG
+else
+ EXTRA_CFLAGS=
+endif
+
+
 
 GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
 							-I/usr/lib/glib-2.0/include
