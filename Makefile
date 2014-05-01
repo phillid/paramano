@@ -46,6 +46,7 @@ trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 all: trayfreq trayfreq-set lang
 ########################################################################
 
+
 ########################################################################
 # Make trayfreq-set program for setting governors
 trayfreq-set:
@@ -59,11 +60,13 @@ trayfreq:
 	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS) $(trayfreq_LDFLAGS) $(EXTRA_CFLAGS)
 ########################################################################
 
+
 ########################################################################
 # Make language files
 lang:
 	msgfmt -c -o lc/fr.mo lc/fr.po
 ########################################################################
+
 
 ########################################################################
 # Remove generated files
