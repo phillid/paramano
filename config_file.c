@@ -28,11 +28,13 @@ gboolean config_open(struct config_file* config_file)
 
 	debug("Creating new config_file->key_file\n");
 	config_file->key_file = g_key_file_new();
-
-	return g_key_file_load_from_file(	config_file->key_file,
+	gboolean success = g_key_file_load_from_file(
+										config_file->key_file,
 										config_file->file_name,
 										G_KEY_FILE_NONE, 
 										NULL);
+	debug("Returning %s\n",success? "TRUE" : "FALSE");
+	return success;
 }
 
 void config_close(struct config_file* config_file)
