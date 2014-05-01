@@ -15,14 +15,18 @@ make install
 
 Autostarting
 ------------
-`make install` will copy a .desktop file over to /etc/xdg/autostart, meaning that all xdg-compliant window managers should start it automatically when you log in.
-As far as I am aware, they start trayfreq as root, thus it is fully able to change the governor.
+`make install` will copy a .desktop file to /etc/xdg/autostart, meaning that all xdg-compliant window managers should start it automatically when Bob logs in.
+Bob's WM starts these programs as root, thus he is fully able to change the governor.
 
-Personally, I use a non-xdg-compliant WM (dwm) so trayfreq needs to be run with sudo in my xinitrc.
-To avoid having to enter my password each time the xinitrc is run, I added this rule to my `/etc/sudoers`:
+Alice uses a non-xdg-compliant WM (e.g. dwm)  so trayfreq is run as the user `alice`.
+She doesn't have permission to write to the files under `/sys/` so trayfreq can't change the governor.
+Alice needs to make trayfreq run `trayfreq-set` through sudo.
+This can be done in the configuration file.
+Then, she also needs to give herself passwordless permission to run `trayfreq-set` through sudo:
+
 
     # ... (/etc/sudoers
-	david ALL = NOPASSWD: /usr/bin/trayfreq
+	alice ALL = NOPASSWD: /usr/bin/trayfreq-set
 	# ...
 
 Simple.
