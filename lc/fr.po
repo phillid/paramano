@@ -1,86 +1,69 @@
-# French translations for PACKAGE package
-# Traductions françaises du paquet PACKAGE.
-# Copyright (C) 2014 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-#  <dbphillipsnz@gmail.com>, 2014.
+# French translation of strings for trayfreq-archlinux.
+# Copyright (C) David Phillips
+# This file is distributed under the same license as the trayfreq-archlinux package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: trayfreq 4\n"
+"Project-Id-Version: trayfreq-archlinux 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-27 12:49+1200\n"
-"PO-Revision-Date: 2014-04-27 12:49+1200\n"
-"Last-Translator:  <dbphillipsnz@gmail.com>\n"
-"Language-Team: French\n"
+"POT-Creation-Date: 2014-05-01 13:02+1200\n"
+"PO-Revision-Date: 2014-05-01 13:08+1200\n"
+"Last-Translator: David Phillips <dbphillipsnz@gmail.com>\n"
+"Language-Team: French <dbphillipsnz@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: tray.c:183
+#: tray.c:192
 #, c-format
 msgid "Governor: %s\n"
 msgstr "Profil: %s\n"
 
-#: tray.c:189
+#: tray.c:199
 #, c-format
 msgid "CPU%i: %s%s"
 msgstr "CPU%i: %s%s"
 
-#: trayfreq.c:67
+#: trayfreq.c:70
 msgid "Failed to open config files!\n"
-msgstr ""
+msgstr "Pouvais pas ouvrier les fichiers config !\n"
 
-#: trayfreq.c:112
+#: trayfreq.c:113
 msgid ""
 "GTK Error: gtk_init_check returned FALSE.\n"
 "Bailing."
-msgstr ""
+msgstr "Erreur: gtk_init_check a retourné FALSE.\n"
+"Je part"
 
-#: bat_tray/bat_tray.c:56
+#: bat_tray/bat_tray.c:57
 #, c-format
-msgid "Discharging (%i%%)"
-msgstr ""
+msgid "Discharging (%d%%)"
+msgstr "En décharge (%d%%)"
 
-#: bat_tray/bat_tray.c:60
+#: bat_tray/bat_tray.c:62
 #, c-format
-msgid "Charging (%i%%)"
-msgstr ""
-
-#: bat_tray/bat_tray.c:63
-#, c-format
-msgid "Fully charged"
-msgstr "Complétment chargée"
+msgid "Charging (%d%%)"
+msgstr "En charge (%d%%)"
 
 #: bat_tray/bat_tray.c:67
 #, c-format
-msgid "Unknown status"
-msgstr ""
+msgid "Fully charged"
+msgstr "Complétement chargée"
 
-#: trayfreq_set/trayfreq_set.c:42
+#: bat_tray/bat_tray.c:72
+#, c-format
+msgid "Unknown status"
+msgstr "Statut inconnu"
+
+#: trayfreq_set/trayfreq_set.c:65
 #, c-format
 msgid "FAILED: Couldn't open %s for writing\n"
-msgstr "ERREUR: Pouvais pas ecrit à %s\n"
+msgstr "ERREUR: Peut pas écrire à %s\n"
 
-#: trayfreq_set/trayfreq_set.c:118 trayfreq_set/trayfreq_set.c:154
+#: trayfreq_set/trayfreq_set.c:161
 #, c-format
-msgid "Use -g to set the governor or -f to set the frequency\n"
-msgstr "Utiliser -g pour activer les profils ou -f pour activer les fréquences\n"
-
-#: trayfreq_set/trayfreq_set.c:121
-#, c-format
-msgid "Pass the governor with -g\n"
-msgstr "Indiquer le profil avec un -c\n"
-
-#: trayfreq_set/trayfreq_set.c:125 trayfreq_set/trayfreq_set.c:129
-#: trayfreq_set/trayfreq_set.c:133 trayfreq_set/trayfreq_set.c:142
-#: trayfreq_set/trayfreq_set.c:146 trayfreq_set/trayfreq_set.c:150
-#, c-format
-msgid "Pass the core with -c\n"
-msgstr "Indiquer le core avec un -c\n"
-
-#: trayfreq_set/trayfreq_set.c:138
-#, c-format
-msgid "Pass the frequency with -f\n"
-msgstr "Indiquer la fréquence avec un -f\n"
+msgid "%s {-f frequency|-g governor} -c core\n"
+msgstr "%s {-f fréquence|-g profil} -c core\n"
