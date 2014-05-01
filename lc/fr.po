@@ -1,9 +1,8 @@
 # French translation of strings for trayfreq-archlinux.
 # Copyright (C) David Phillips
 # This file is distributed under the same license as the trayfreq-archlinux package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# David Phillips <dbphillipsnz@gmail.com>, 2014.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: trayfreq-archlinux 0.5\n"
@@ -27,11 +26,11 @@ msgstr "Profil: %s\n"
 msgid "CPU%i: %s%s"
 msgstr "CPU%i: %s%s"
 
-#: trayfreq.c:70
+#: trayfreq.c:69
 msgid "Failed to open config files!\n"
 msgstr "Pouvais pas ouvrier les fichiers config !\n"
 
-#: trayfreq.c:113
+#: trayfreq.c:105
 msgid ""
 "GTK Error: gtk_init_check returned FALSE.\n"
 "Bailing."
