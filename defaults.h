@@ -19,12 +19,13 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
-#include <glib.h>
+#include "bool.h"
 
 char* _DEFAULT_GOV;
 char* _DEFAULT_FREQ;
 char* _DEFAULT_PROG;
 char* _DEFAULT_BAT_GOV;
 char* _DEFAULT_AC_GOV;
+bool  _DEFAULT_USE_SUDO;
 
 #endif /* ifndef DEFAULTS_H */

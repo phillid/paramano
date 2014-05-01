@@ -18,20 +18,29 @@
 
 #include "trayfreq_set_interface.h"
 
-#include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void si_gov(char* gov, int core)
 {
 	char cmd[256];
-	sprintf(cmd, "/usr/bin/trayfreq-set -g %s -c %i",gov,core);
+	if (_DEFAULT_USE_SUDO)
+	{
+		sprintf(cmd, "sudo trayfreq-set -g %s -c %i",gov,core);
+	} else {
+		sprintf(cmd, "trayfreq-set -g %s -c %i",gov,core);
+	}
 	system(cmd);
 }
 
 void si_freq(int freq, int core)
 {
 	char cmd[256];
-	sprintf(cmd, "/usr/bin/trayfreq-set -f %i -c %i",freq,core);
+	if (_DEFAULT_USE_SUDO)
+	{
+		sprintf(cmd, "sudo trayfreq-set -f %i -c %i",freq,core);
+	} else {
+		sprintf(cmd, "trayfreq-set -f %i -c %i",freq,core);
+	}
 	system(cmd);
 }
