@@ -24,6 +24,7 @@
 #include "freq_tray/getgov.h"
 #include "config_file.h"
 #include "defaults.h"
+#include "debug.h"
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -43,14 +44,17 @@ void config_init()
 
 	config.file_name = g_strconcat(getenv("HOME"), "/.trayfreq.config", NULL);
 
+
 	// Check if ~/.trayfreq.config exists
 	if( (fd = fopen(config.file_name, "r")) )
 	{
 		// If file exists, close it, set param to TRUE
+		debug("Found '%s'\n",config.file_name);
 		fclose(fd);
 		home_config_exists = TRUE;
 	} else {
 		// If file didn't exist, it's not open (don't close it), free filename var, set param to FALSE
+		debug("Didn't find '%s'\n",config.file_name);
 		g_free(config.file_name);
 		home_config_exists = FALSE;
     }
@@ -62,6 +66,7 @@ void config_init()
 
 	if(!success)
 	{
+		debug("Couldn't open '%s' for reading\n",config.file_name);
 		g_warning(_("Failed to open config files!\n"));
 		return;
 	}
@@ -100,10 +105,12 @@ int main(int argc, char** argv)
 	setlocale(LC_ALL, "");
 	bindtextdomain("trayfreq","/usr/share/locale");
 	textdomain("trayfreq");
+	debug("Set gettext up\n");
 
 	if(!gtk_init_check(&argc, &argv))
 	{
-		g_error(_("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
+		debug("Couldn't start gtk\n");
+		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
 	}
 	config_init();
@@ -116,10 +123,13 @@ int main(int argc, char** argv)
 	// Show battery tray only if we're supposed to
 	if(SHOW_BATTERY)
 	{
+		debug("Showing battery info this time around\n");
 		bat_tray_init();
 		bat_tray_show();
 	}
+	debug("Passing control to Gtk\n");
 
 	gtk_main();
+	debug("Exiting main()\n");
 	return 0;
 }

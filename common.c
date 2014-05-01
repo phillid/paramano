@@ -71,8 +71,10 @@ int get_int(const char* string)
 	char* first_num;
 
 	first_num = strpbrk(string, "0123456789");
+	debug("first_num: '%s'\n",first_num);
 	if(first_num)
 		return atoi(first_num);
 
+	debug("first_num was 0, returning 1\n");
 	return 1;
 }

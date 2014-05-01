@@ -31,17 +31,21 @@ int NUMBER_OF_AVAILABLE_FREQUENCIES;
 
 void gf_init()
 {
+	// TO DO : get rid of magic constants
 	gchar freq_string[500];
 
 	int i = 0;
 	int j = 0;
 	for(i = 0; i < gc_number(); ++i)
 	{
-		memset(freq_string, 0, 500);
+		memset(freq_string, '\0', 500);
 
 		// Get available governor freqs. If no governor, try next cpu
 		if (gf_available(i, freq_string, 500) == -1)
+		{
+			debug("Couldn't find gov on core %d\n",i);
 			continue;
+		}
 
 		/* go through every frequency in freq_string */
 		j = 0;
@@ -49,7 +53,7 @@ void gf_init()
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while(end_of_curr)
 		{
-			memset(AVAILABLE_FREQUENCIES[i][j], 0, 13);
+			memset(AVAILABLE_FREQUENCIES[i][j], '\0', 13);
 			memmove(AVAILABLE_FREQUENCIES[i][j], curr, end_of_curr - curr);
 
 			curr = end_of_curr+1;
@@ -58,6 +62,7 @@ void gf_init()
 		}
 	}
 	NUMBER_OF_AVAILABLE_FREQUENCIES = j;
+	debug("Found %d frequencies\n",j);
 }
 
 int gf_current(int core)
@@ -65,20 +70,21 @@ int gf_current(int core)
 	FILE* fd;
 	char buff[13];
 	char path[80];
-	char corestr[4];
 	int freq;
 
-	sprintf(corestr, "%i", core);
-
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_cur_freq", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
 
 	if(!(fd = fopen(path, "r")))
-	return -1;
+	{
+		debug("Couldn't open '%s'\n",path);
+		return -1;
+	}
 
 	fgets(buff, 13, fd);
 
 	freq = atoi(buff);
 	fclose(fd);
+	debug("Found freq %d on core %d\n",freq,core);
 	return freq;
 }
 
@@ -86,14 +92,14 @@ int gf_available(int core, char* out, int size)
 {
 	FILE* fd;
 	char path[80];
-	char corestr[4];
 
-	sprintf(corestr, "%i", core);
-
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_available_frequencies", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_frequencies", core);
 
 	if(!(fd = fopen(path, "r")))
+	{
+		debug("Couldn't open '%s'\n",path);
 		return -1;
+	}
 
 	fgets(out, size, fd);
 
@@ -111,6 +117,8 @@ void gf_get_frequency_label(int freq, char* out)
 		sprintf(out, "%.2f GHz", freq/pow(10, i-1));
 	else
 		sprintf(out, "%.2d MHz", freq/1000);
+
+	debug("Prepared freq label '%s' for freq %d\n",out,freq);
 }
 
 char* gf_freqa(int core, int index)

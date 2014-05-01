@@ -53,21 +53,27 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
-			sprintf(msg, _("Discharging (%i%%)"), get_bat_percent());
+			debug("Discharging\n");
+			sprintf(msg, _("Discharging (%d%%)"), get_bat_percent());
 			break;
 
 		case STATE_CHARGING:
-			sprintf(msg, _("Charging (%i%%)"), get_bat_percent());
+			debug("Charging\n");
+			sprintf(msg, _("Charging (%d%%)"), get_bat_percent());
 			break;
+
 		case STATE_CHARGED:
+			debug("Charged\n");
 			sprintf(msg, _("Fully charged") );
 			break;
 
 		default:
+			debug("Unknown\n");
 			sprintf(msg, _("Unknown status") );
 			break;
 	}
 
+	debug("Setting tooltip text to '%s'\n",msg);
 	gtk_tooltip_set_text(tooltip, msg);
 
 	return TRUE;
@@ -84,6 +90,8 @@ static gboolean update_icon(gpointer user_data)
 	unsigned int adjusted_percent;
 	gchar adjusted_percent_string[4];
 
+
+	// TO DO: do this with rounding and divisio etc
 	if(percent > 90)
 		adjusted_percent=100;
 	else if(percent > 70)
@@ -97,7 +105,8 @@ static gboolean update_icon(gpointer user_data)
 	else
 		adjusted_percent=0;
 
-	sprintf(adjusted_percent_string, "%i", adjusted_percent);
+	debug("Rounded/adjusted percentage: %d\n",adjusted_percent);
+	sprintf(adjusted_percent_string, "%d", adjusted_percent);
 
 	switch ( get_battery_state() )
 	{
@@ -112,6 +121,8 @@ static gboolean update_icon(gpointer user_data)
 			icon_file = g_strconcat("/usr/share/trayfreq/traybat-charged.png", NULL);
 			break;
 	}
+
+	debug("Setting tray icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	return TRUE;
 }
@@ -125,11 +136,10 @@ void bat_tray_init()
 	_BAT_NUM = get_bat_num();
 
 	// Set up battery info filenames/paths
-	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%i/capacity", _BAT_NUM);
-	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%i/status", _BAT_NUM);
-	// NOT USED : sprintf(CURRENT_PATH, "/sys/class/power_supply/BAT%i/charge_now", _BAT_NUM);
+	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", _BAT_NUM);
+	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", _BAT_NUM);
 
-
+	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
 	gchar* icon_file = g_strconcat("/usr/share/trayfreq/traybat-charged.png", NULL);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -141,11 +151,13 @@ void bat_tray_init()
 
 void bat_tray_show()
 {
+	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
 void bat_tray_hide()
 {
+	debug("Hiding tray\n");
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 
@@ -156,14 +168,23 @@ void bat_tray_hide()
 int get_battery_state()
 {
 	if (file_has_line(CHARGE_STATE_PATH, "Discharging"))
+	{
+		debug("Battery discharging\n");
 		return STATE_DISCHARGING;
+	}
 
 	if (file_has_line(CHARGE_STATE_PATH, "Full"))
+	{
+		debug("Battery full\n");
 		return STATE_CHARGED;
+	}
 
 	if (file_has_line(CHARGE_STATE_PATH, "Charging"))
-		return STATE_CHARGING;
-
+	{
+		debug("Battery charging\n");
+		return STATE_CHARGING;	
+	}
+	debug("Fallthrough: unknown status\n");
 	return STATE_UNKNOWN;
 }
 
@@ -178,16 +199,19 @@ int get_bat_num()
 	unsigned int i;
 	for(i = 0; i < 3; i++)
 	{
-		sprintf(file, "/sys/class/power_supply/BAT%i/present", i);
-
+		sprintf(file, "/sys/class/power_supply/BAT%d/present", i);
+		debug("Attempting to open '%s'\n",file);
 		if( (fd = fopen(file, "r")) )
 		{
+			debug("Found battery %d\n",i);
 			if (fgetc(fd) == '1')
 			{
+				debug("Battery %d is present\n",i);
 				fclose(fd);
 				return i;
 			}
 		}
 	}
+	debug("Fallthrough: couldn't find battery\n");
 	return -1;
 }
