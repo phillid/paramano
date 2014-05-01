@@ -20,6 +20,7 @@
 #define COMMON_H
 
 #include "bool.h"
+#include "debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

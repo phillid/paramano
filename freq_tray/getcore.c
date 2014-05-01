@@ -22,17 +22,17 @@
 #include <stdlib.h>
 #include <glib.h>
 
-int NUMBER_OF_CORES;
+unsigned int NUMBER_OF_CORES;
 
-static gboolean core_exists(int core)
+static gboolean core_exists(unsigned int core)
 {
 	FILE* fd;
 	char path[80];
 	char corestr[4];
 
-	sprintf(corestr, "%i", core);
+	sprintf(corestr, "%d", core);
 	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_cur_freq", corestr);
-
+	debug("Checking if core %d exists by opening '%s'",core,path);
 	return (gboolean)(fd = fopen(path, "r"));
 }
 
@@ -40,6 +40,7 @@ void gc_init()
 {
 	NUMBER_OF_CORES = 0;
 	while(core_exists(++NUMBER_OF_CORES));
+	debug("Found %d cores\n",NUMBER_OF_CORES);
 }
 
 

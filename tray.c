@@ -29,6 +29,7 @@ GtkWidget* checked_menu_item;
 
 static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
+	debug("[checking in]\n");
 	if(gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
@@ -41,6 +42,7 @@ static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 
 static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
+	debug("[checking in]\n");
 	if(gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
@@ -64,11 +66,13 @@ static gboolean governor_exists(gchar* governor)
 
 static void remove_menu_item(GtkWidget* menu_item, gpointer data)
 {
+	debug("Destroying menu_item\n");
 	gtk_widget_destroy(menu_item);
 }
 
 static void tray_clear_menu()
 {
+	debug("Clearing the menu\n");
 	GtkContainer* cont = GTK_CONTAINER(menu);
 	gtk_container_foreach(cont, remove_menu_item, NULL);
 	menu_items = NULL;
@@ -76,6 +80,7 @@ static void tray_clear_menu()
 
 static void tray_init_menu()
 {
+	debug("Spawning new menu");
 	menu = gtk_menu_new();
 }
 
@@ -93,43 +98,59 @@ static void tray_generate_menu()
 
 	gint current_frequency = gf_current(0);
 
-	/* append the frequencies */
+	// Add available frequencies
 	for(i = 0; i < gf_number(); ++i)
 	{
 		memset(label, '\0', 20);
 		gf_get_frequency_label(gf_freqi(0, i), label);
+		debug("Got freq label '%s', i=%d\n",label,i);
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, label);
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
 		if(g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
+		{
+			debug("This freq is current freq, ticking radio button\n");
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
+		}
 
+		debug("Setting connection/callback\n");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
+		
+		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
 
-	/* append the seperator */
+	// Add a seperator
+	debug("Adding separator\n");
 	GtkWidget* seperator = gtk_separator_menu_item_new();
 	gtk_menu_append(menu, seperator);
 
-	/* append the governors*/
+	// Add available governors
 	for(i = 0; i < gg_number(); i++)
 	{
 		if(g_strcmp0(gg_gov(0, i), "userspace") == 0)
-		continue;
+		{
+			debug("Gov is userspace, not adding\n");
+			continue;
+		}
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, gg_gov(0, i));
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
 		if(g_strcmp0(gg_gov(0, i), current_governor) == 0)
 		{
+			debug("Governor is current one, ticking radio button\n");
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 		}
-
+		
+		debug("Adding callback");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(gov_menu_item_toggled), gg_gov(0, i));
+		
+		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
+	debug("Showing menu\n");
 	gtk_widget_show_all(menu);
 }
 
@@ -147,6 +168,7 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
+			debug("Discharging\n");
 			if(_DEFAULT_BAT_GOV)
 			{
 				for(i = 0; i < gc_number(); ++i)
@@ -156,6 +178,7 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 		case STATE_CHARGING:
 		case STATE_FULL:
+			debug("Charging/Full\n");
 			if(_DEFAULT_AC_GOV)
 			{
 				for(i = 0; i < gc_number(); ++i)
@@ -170,11 +193,13 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 	for(i = 0; i < gc_number(); ++i)
 	{
+		debug("Adding CPU%i's frequency\n",i);
 		memset(label, '\0', sizeof(label));
 		gf_get_frequency_label(gf_current(i), label);
 		sprintf(msg+strlen(msg), _("CPU%i: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
 	}
 
+	debug("Setting tooltip text\n");
 	tray_set_tooltip(msg);
 	gtk_tooltip_set_text(tooltip, tooltip_text);
 
@@ -183,12 +208,14 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_time,gpointer data)
 {
+	debug("Spawning popup menu\n");
 	tray_generate_menu();
 	gtk_menu_popup(GTK_MENU(menu),NULL,NULL,gtk_status_icon_position_menu,tray,button,activate_time);
 }
 
 static gboolean update_icon(gpointer user_data)
 {
+	debug("Updating icon\n");
 	tray_update_icon_percent();
 	return TRUE;
 }
@@ -210,23 +237,28 @@ void tray_init()
 	if(_DEFAULT_FREQ)
 	{
 		for(i = 0; i < gc_number(); ++i)
-		{
 			si_freq(atoi(_DEFAULT_FREQ), i);
-		}
 	}
 
 	tray = gtk_status_icon_new();
 	gchar* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
+
+	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
-	gtk_status_icon_set_has_tooltip (tray, TRUE);
+	gtk_status_icon_set_has_tooltip(tray, TRUE);
+
+	debug("Setting up callbacks\n");
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
+
+	debug("Adding timeout\n");
 	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
 }
 
 void tray_set_tooltip(const gchar* msg)
 {
+	debug("Setting up toolip var with text '%s'\n",msg);
 	memset(tooltip_text, '\0', TOOLTIP_TEXT_SIZE);
 	memmove(tooltip_text, msg, strlen(msg));
 }
@@ -255,11 +287,13 @@ void tray_update_icon_percent()
 		}
 	}
 
+	debug("Rounded/adjusted bat percentage: %d\n",adjusted_percent);
 	/* convert the int to a string */
 	gchar adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
 	sprintf(adjusted_percent_string, "%i", adjusted_percent);
 
 	gchar* file = g_strconcat("/usr/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
+	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
 	g_free(file);
@@ -267,11 +301,13 @@ void tray_update_icon_percent()
 
 void tray_show()
 {
+	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
 void tray_hide()
 {
+	debug("Hiding tray");
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 

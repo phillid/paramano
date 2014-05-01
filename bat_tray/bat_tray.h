@@ -20,9 +20,7 @@
 #define BAT_TRAY_H
 
 #include <glib.h>
-
-
-// already defined in bat_tray.c : #define gb_percent			get_int_value_from_file(CHARGE_VALUE_PATH);
+#include "../debug.h"
 
 #define STATE_CHARGING		0
 #define STATE_DISCHARGING	1

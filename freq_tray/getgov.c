@@ -39,18 +39,18 @@ void gg_init()
 		memset(gov_string, '\0', 500);
 		gg_available(i, gov_string, 500);
 
-		/* go through every governor in gov_string */
+		// go through every governor in gov_string
 		j = 0;
 		gchar* curr = &gov_string[0];
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while(end_of_curr)
 		{
-		memset(AVAILABLE_GOVERNORS[i][j], '\0', 13);
-		memmove(AVAILABLE_GOVERNORS[i][j], curr, end_of_curr - curr);
+			memset(AVAILABLE_GOVERNORS[i][j], '\0', 13);
+			memmove(AVAILABLE_GOVERNORS[i][j], curr, end_of_curr - curr);
 
-		curr = end_of_curr+1;
-		end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-		++j;
+			curr = end_of_curr+1;
+			end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+			++j;
 		}
 	}
 	NUMBER_OF_AVAILABLE_GOVERNORS = j;
@@ -67,13 +67,17 @@ int gg_current(int core, char* out, int size)
 	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", corestr);
 
 	if(!(fd = fopen(path, "r")))
+	{
+		debug("Couldn't open '%s'\n",path);
 		return -1;
+	}
 
 	fgets(out, size, fd);
-
-	/* remove newline at the end */
+	// Chomp
 	gchar* newline = g_strrstr(out, "\n");
 	*newline = '\0';
+
+	debug("Current gov for core %d is '%s'\n",core,out);
 
 	fclose(fd);
 	return 0;
@@ -83,14 +87,14 @@ int gg_available(int core, char* out, int size)
 {
 	FILE* fd;
 	char path[80];
-	char corestr[4];
 
-	sprintf(corestr, "%i", core);
-
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_available_governors", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
 
 	if(!(fd = fopen(path, "r")))
+	{
+		debug("Couldn't open '%s'\n",path);
 		return -1;
+	}
 
 	fgets(out, size, fd);
 
