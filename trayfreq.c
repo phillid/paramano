@@ -42,7 +42,7 @@ void config_init()
 	gboolean home_config_exists;
 	config.key_file = NULL;
 
-	config.file_name = g_strconcat(getenv("HOME"), "/.trayfreq.config", NULL);
+	config.file_name = g_strconcat(getenv("HOME"), "/.trayfreq.conf", NULL);
 
 
 	// Check if ~/.trayfreq.config exists
@@ -60,7 +60,7 @@ void config_init()
     }
 
 	if(!home_config_exists)
-		config.file_name = g_strconcat("/usr/share/trayfreq/trayfreq.config", NULL);
+		config.file_name = g_strconcat("/usr/share/trayfreq/trayfreq.conf", NULL);
 
 	gboolean success = config_open(&config);
 	if(!success)

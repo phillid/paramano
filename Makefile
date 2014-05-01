@@ -84,7 +84,7 @@ install:
 	mkdir -p $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/
 	cp lc/fr.mo $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/trayfreq.mo
 
-	install -Dm 644 data/trayfreq.config $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.config
+	install -Dm 644 data/trayfreq.conf $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.conf
 	install -Dm 644 data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
 	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
