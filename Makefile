@@ -39,7 +39,8 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							config_file.c \
 							defaults.c \
 							bat_tray/bat_tray.c \
-							common.c
+							common.c \
+							reload.c
 
 trayfreq_set_CFLAGS		=	$(GLIB_CFLAGS) -Wall -D_=gettext
 trayfreq_set_LDFLAGS	=	$(GLIB_LIBS) -lm
