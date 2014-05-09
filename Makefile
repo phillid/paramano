@@ -77,7 +77,7 @@ lang:
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set lang/*.mo
+	rm -f trayfreq trayfreq-set lc/*.mo
 ########################################################################
 
 
