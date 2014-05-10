@@ -3,10 +3,21 @@
 MAKE = make
 CC = gcc
 INSTALL_PATH=/
+PREFIX=/usr
+BINDIR=$(PREFIX)/bin
+SUDO=/usr/bin/sudo
+TRAYFREQ_SET=$(BINDIR)/trayfreq-set
+LOCALE_DIR=$(PREFIX)/share/locale/
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
 endif
+
+EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
+				-DBINDIR=\"$(BINDIR)\" \
+				-DSUDO=\"$(SUDO)\" \
+				-DTRAYFREQ_SET=\"$(TRAYFREQ_SET)\" \
+				-DLOCALE_DIR=\"$(LOCALE_DIR)\"
 
 
 DEPS = 	bat_tray.h \
@@ -119,18 +130,19 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
-	mkdir -p $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/
-	mkdir -p $(INSTALL_PATH)/etc/
+	mkdir -p $(PREFIX)/share/trayfreq/
+	mkdir -p $(LOCALE_DIR)/fr/LC_MESSAGES/
+	mkdir -p $(PREFIX)/etc/
 
-	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
-	cp lc/fr.mo $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/trayfreq.mo
+	cp data/*.png $(PREFIX)/share/trayfreq/
+	cp lc/fr.mo $(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
 
-	install -Dm 644 data/trayfreq.conf $(INSTALL_PATH)/etc/trayfreq.conf
-	install -Dm 644 data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
-	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
-	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
+	install -Dm 644 data/trayfreq.conf $(PREFIX)/etc/trayfreq.conf
+	install -Dm 644 data/trayfreq.desktop $(PREFIX)/etc/xdg/autostart/trayfreq.desktop
 
-	ln -s /usr/share/licenses/common/GLPv3/license.txt $(INSTALL_PATH)/usr/share/trayfreq/LICENCE
-	ln -s ../../../etc/trayfreq.conf $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.conf
+	install -Dm 755 trayfreq $(BINDIR)/trayfreq
+	install -Dm 755 trayfreq-set $(BINDIR)/trayfreq-set
+
+	ln -s ../licenses/common/GLPv3/license.txt $(PREFIX)/share/trayfreq/LICENCE
+	ln -s ../../../etc/trayfreq.conf $(PREFIX)/share/trayfreq/trayfreq.conf
 ########################################################################

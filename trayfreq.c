@@ -37,7 +37,7 @@
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "");
-	bindtextdomain("trayfreq","/usr/share/locale");
+	bindtextdomain("trayfreq",LOCALE_DIR);
 	textdomain("trayfreq");
 	debug("Set gettext up\n");
 
