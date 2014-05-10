@@ -131,7 +131,7 @@ clean:
 # Install entire suite
 install:
 	mkdir -p $(PREFIX)/usr/share/trayfreq/
-	mkdir -p $(LOCALE_DIR)/fr/LC_MESSAGES/
+	mkdir -p $(PREFIX)/$(LOCALE_DIR)/fr/LC_MESSAGES/
 	mkdir -p $(PREFIX)/etc/
 
 	cp data/*.png $(PREFIX)/usr/share/trayfreq/
