@@ -16,7 +16,16 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#include "reload.h"
+
 void reload_config()
 {
-	printf("USR1\n");
+	config_init();
+	if (_DEFAULT_SHOW_BATTERY)
+	{
+		bat_tray_hide();
+		bat_tray_show();
+	} else {
+		bat_tray_hide();
+	}
 }

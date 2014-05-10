@@ -19,7 +19,7 @@
 #ifndef GETCORE_H
 #define GETCORE_H
 
-#include "../debug.h"
+#include "debug.h"
 
 void gc_init();
 int  gc_number();
