@@ -36,6 +36,7 @@
 #include <libintl.h>
 
 
+void     tray_set_defaults();
 void     tray_init();
 void     tray_set_tooltip(const gchar* msg);
 void     tray_update_icon_percent();
