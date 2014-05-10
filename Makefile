@@ -24,23 +24,21 @@ DEPS = 	bat_tray.h \
 		trayfreq_set_interface.h 
 
 
-GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
-							-I/usr/lib/glib-2.0/include
-GLIB_LIBS				=	-lglib-2.0
-
-GTK_CFLAGS				=	-I/usr/include/gtk-2.0 \
+trayfreq_CFLAGS			=	-I/usr/include/gtk-2.0 \
 							-I/usr/lib/gtk-2.0/include \
 							-I/usr/include/pango-1.0 \
 							-I/usr/include/cairo \
 							-I/usr/include/gdk-pixbuf-2.0 \
-							-I/usr/include/atk-1.0
+							-I/usr/include/atk-1.0 \
+							-I/usr/include/glib-2.0 \
+							-I/usr/lib/glib-2.0/include \
+							-Wall \
+							-D_=gettext
 
-GTK_LIBS	=	-lgtk-3 \
-				-lgobject-2.0
+trayfreq_LDFLAGS		=	-lgtk-3 \
+							-lgobject-2.0 \
+							-lglib-2.0
 
-
-trayfreq_CFLAGS			=	$(GTK_CFLAGS) $(GLIB_CFLAGS) -Wall -D_=gettext
-trayfreq_LDFLAGS		=	$(GTK_LIBS) $(GLIB_LIBS) -lm
 trayfreq_SOURCES		=	freq_tray/getcore.c \
 							freq_tray/getfreq.c \
 							freq_tray/getgov.c \
@@ -53,8 +51,11 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							common.c \
 							reload.c
 
-trayfreq_set_CFLAGS		=	$(GLIB_CFLAGS) -Wall -D_=gettext
-trayfreq_set_LDFLAGS	=	$(GLIB_LIBS) -lm
+trayfreq_set_CFLAGS		=	-Wall \
+							-D_=gettext
+
+trayfreq_set_LDFLAGS	=	-lglib-2.0
+
 trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 							freq_tray/getfreq.c \
 							freq_tray/getcore.c
