@@ -10,11 +10,15 @@ Due to KISS, I don't tend to use ./configure scripts for relatively small progra
 Instead, it's up to the user to check they have the right libraries.
 The sort of parameters you might pass to a ./configure can instead be passed to make.
 
-Important Note
---------------
+---
+
+**Important Note**
+
 Note that any parameters set here will be compiled into the programs.
 If you're installing to a temporary directory (e.g. building a package for a package manager) then don't set the prefix to the temporary directory as this will become hard-coded into the programs.
 Instead, set this when calling `make install`.
+
+---
 
 Here's a list:
 
