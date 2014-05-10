@@ -130,11 +130,11 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(PREFIX)/share/trayfreq/
+	mkdir -p $(PREFIX)/usr/share/trayfreq/
 	mkdir -p $(LOCALE_DIR)/fr/LC_MESSAGES/
 	mkdir -p $(PREFIX)/etc/
 
-	cp data/*.png $(PREFIX)/share/trayfreq/
+	cp data/*.png $(PREFIX)/usr/share/trayfreq/
 	cp lc/fr.mo $(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
 
 	install -Dm 644 data/trayfreq.conf $(PREFIX)/etc/trayfreq.conf
@@ -143,6 +143,6 @@ install:
 	install -Dm 755 trayfreq $(BINDIR)/trayfreq
 	install -Dm 755 trayfreq-set $(BINDIR)/trayfreq-set
 
-	ln -s ../licenses/common/GLPv3/license.txt $(PREFIX)/share/trayfreq/LICENCE
-	ln -s ../../../etc/trayfreq.conf $(PREFIX)/share/trayfreq/trayfreq.conf
+	ln -s ../licenses/common/GLPv3/license.txt $(PREFIX)/usr/share/trayfreq/LICENCE
+	ln -s ../../../etc/trayfreq.conf $(PREFIX)/usr/share/trayfreq/trayfreq.conf
 ########################################################################
