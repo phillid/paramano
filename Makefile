@@ -2,12 +2,11 @@
 
 MAKE = make
 CC = gcc
-INSTALL_PATH=/
 PREFIX=/usr
 BINDIR=$(PREFIX)/bin
 SUDO=/usr/bin/sudo
 TRAYFREQ_SET=$(BINDIR)/trayfreq-set
-LOCALE_DIR=/share/locale/
+LOCALE_DIR=$(PREFIX)/share/locale/
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
