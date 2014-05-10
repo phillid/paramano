@@ -113,7 +113,7 @@ trayfreq-set: \
 
 
 ########################################################################
-# Make language files
+# Make language file(s)
 lang:
 	msgfmt -c -o lc/fr.mo lc/fr.po
 ########################################################################
@@ -129,9 +129,9 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(PREFIX)/usr/share/trayfreq/
-	mkdir -p $(PREFIX)/$(LOCALE_DIR)/fr/LC_MESSAGES/
-	mkdir -p $(PREFIX)/etc/
+	#mkdir -p $(PREFIX)/usr/share/trayfreq/
+	#mkdir -p $(PREFIX)/$(LOCALE_DIR)/fr/LC_MESSAGES/
+	#mkdir -p $(PREFIX)/etc/xdg/autostart/
 
 	cp data/*.png $(PREFIX)/usr/share/trayfreq/
 	cp lc/fr.mo $(PREFIX)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
