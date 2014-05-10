@@ -17,8 +17,6 @@
  ************************************************************************/
 
 
-// <TO DO> : move a lot of this to a .h
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,8 +38,6 @@ typedef struct  {
 	char *governor;
 	char *frequency;
 } argument_summary;
-
-// </TO DO>
 
 char write_str_to_file(const char *file, const char *data, const char *core)
 {
@@ -115,12 +111,7 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL,"");
-
-
-	// TO DO: Not portable
-	bindtextdomain("trayfreq","/usr/share/locale");
-
-	// TO DO: Needs to be #defined
+	bindtextdomain("trayfreq",LOCALE_DIR);
 	textdomain("trayfreq");
 
 	debug("Set gettext up\n");

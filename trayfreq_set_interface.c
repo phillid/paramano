@@ -28,9 +28,9 @@ void si_gov(char* gov, int core)
 	char cmd[256];
 	if (_DEFAULT_USE_SUDO)
 	{
-		sprintf(cmd, "sudo trayfreq-set -g %s -c %i",gov,core);
+		sprintf(cmd, SUDO" "TRAYFREQ_SET" -g %s -c %i",gov,core);
 	} else {
-		sprintf(cmd, "trayfreq-set -g %s -c %i",gov,core);
+		sprintf(cmd, TRAYFREQ_SET" -g %s -c %i",gov,core);
 	}
 	debug("Running '%s'\n",cmd);
 	system(cmd);
@@ -41,9 +41,9 @@ void si_freq(int freq, int core)
 	char cmd[256];
 	if (_DEFAULT_USE_SUDO)
 	{
-		sprintf(cmd, "sudo trayfreq-set -f %i -c %i",freq,core);
+		sprintf(cmd, SUDO" "TRAYFREQ_SET" -f %i -c %i",freq,core);
 	} else {
-		sprintf(cmd, "trayfreq-set -f %i -c %i",freq,core);
+		sprintf(cmd, TRAYFREQ_SET" -f %i -c %i",freq,core);
 	}
 	debug("Running '%s'\n",cmd);
 	system(cmd);
