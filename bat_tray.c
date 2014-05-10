@@ -18,7 +18,6 @@
 
 
 #include "bat_tray.h"
-#include "../common.h"
 
 #include <gtk/gtk.h>
 #include <string.h>

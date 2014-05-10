@@ -26,6 +26,7 @@ char* _DEFAULT_FREQ;
 char* _DEFAULT_PROG;
 char* _DEFAULT_BAT_GOV;
 char* _DEFAULT_AC_GOV;
+bool  _DEFAULT_SHOW_BATTERY;
 bool  _DEFAULT_USE_SUDO;
 
 #endif /* ifndef DEFAULTS_H */

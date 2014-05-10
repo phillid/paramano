@@ -22,11 +22,11 @@
 #include <glib.h>
 
 #include "widget_manager.h"
-#include "freq_tray/getfreq.h"
-#include "freq_tray/getcore.h"
-#include "freq_tray/getgov.h"
-#include "trayfreq_set/trayfreq_set_interface.h"
-#include "bat_tray/bat_tray.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "getgov.h"
+#include "trayfreq_set_interface.h"
+#include "bat_tray.h"
 #include "defaults.h"
 
 #include <gtk/gtk.h>
