@@ -21,8 +21,8 @@ DEPS = 	bat_tray.h \
 		reload.h \
 		trayfreq.h \
 		tray.h \
-		trayfreq_set_interface.h \
-		widget_manager.h
+		trayfreq_set_interface.h 
+#		widget_manager.h
 
 
 GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \

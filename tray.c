@@ -18,10 +18,26 @@
 
 #include "tray.h"
 
+//#include "widget_manager.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "getgov.h"
+#include "trayfreq_set_interface.h"
+#include "bat_tray.h"
+#include "defaults.h"
+
+#include <glib.h>
+#include <gtk/gtk.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <libintl.h>
+
+
 #define TOOLTIP_TEXT_SIZE 500
 
 GtkStatusIcon* tray;
-gchar tooltip_text[TOOLTIP_TEXT_SIZE];
+char tooltip_text[TOOLTIP_TEXT_SIZE];
 
 GtkWidget* menu;
 GSList* menu_items;
@@ -46,7 +62,7 @@ static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 	if(gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
-		gchar* gov = (gchar*)data;
+		char* gov = (char*)data;
 		int i = 0;
 		for(i = 0; i < gc_number(); ++i)
 			si_gov(gov, i);
@@ -89,10 +105,10 @@ static void tray_generate_menu()
 	tray_clear_menu();
 	gg_init();
 
-	gchar label[20];
+	char label[20];
 	int i = 0;
 
-	gchar current_governor[20];
+	char current_governor[20];
 	memset(current_governor, '\0', sizeof(current_governor) );
 	gg_current(0, current_governor, sizeof(current_governor) );
 
@@ -156,9 +172,9 @@ static void tray_generate_menu()
 
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
-	gchar msg[TOOLTIP_TEXT_SIZE];
-	gchar current_governor[20];
-	gchar label[20];
+	char msg[TOOLTIP_TEXT_SIZE];
+	char current_governor[20];
+	char label[20];
 	int i = 0;
 
 	memset(msg, '\0', sizeof(msg));
@@ -246,7 +262,7 @@ void tray_init()
 {
 	tray_set_defaults();
 	tray = gtk_status_icon_new();
-	gchar* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
+	char* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
 
 	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -261,7 +277,7 @@ void tray_init()
 	tray_init_menu();
 }
 
-void tray_set_tooltip(const gchar* msg)
+void tray_set_tooltip(const char* msg)
 {
 	debug("Setting up toolip var with text '%s'\n",msg);
 	memset(tooltip_text, '\0', TOOLTIP_TEXT_SIZE);
@@ -294,10 +310,10 @@ void tray_update_icon_percent()
 
 	debug("Rounded/adjusted bat percentage: %d\n",adjusted_percent);
 	/* convert the int to a string */
-	gchar adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
+	char adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
 	sprintf(adjusted_percent_string, "%i", adjusted_percent);
 
-	gchar* file = g_strconcat("/usr/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
+	char* file = g_strconcat("/usr/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
@@ -316,12 +332,12 @@ void tray_hide()
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 
-gboolean tray_visible()
+bool tray_visible()
 {
 	return gtk_status_icon_get_visible(tray);
 }
 
-gboolean tray_embedded()
+bool tray_embedded()
 {
 	return gtk_status_icon_is_embedded(tray);
 }

@@ -19,25 +19,6 @@
 #ifndef TRAYFREQ_H
 #define TRAYFREQ_H
 
-#include "widget_manager.h"
-#include "tray.h"
-#include "bat_tray.h"
-#include "getfreq.h"
-#include "getcore.h"
-#include "getgov.h"
-#include "config_file.h"
-#include "reload.h"
-#include "defaults.h"
-#include "debug.h"
-
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <libintl.h>
-#include <locale.h>
-
 void config_init();
-//int main(int argc, char** argv);
 
 #endif

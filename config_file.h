@@ -19,7 +19,6 @@
 #ifndef CONFIG_FILE_H
 #define CONFIG_FILE_H
 
-#include "debug.h"
 #include <glib.h>
 
 struct config_file

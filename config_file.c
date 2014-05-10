@@ -17,6 +17,7 @@
  ************************************************************************/
 
 #include "config_file.h"
+#include "debug.h"
 
 gboolean config_open(struct config_file* config_file)
 {

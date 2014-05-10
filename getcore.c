@@ -43,8 +43,6 @@ void gc_init()
 	debug("Found %d cores\n",NUMBER_OF_CORES);
 }
 
-
-/* to do */
 int gc_number()
 {
 	return NUMBER_OF_CORES;
