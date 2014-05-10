@@ -7,7 +7,7 @@ PREFIX=/usr
 BINDIR=$(PREFIX)/bin
 SUDO=/usr/bin/sudo
 TRAYFREQ_SET=$(BINDIR)/trayfreq-set
-LOCALE_DIR=$(PREFIX)/share/locale/
+LOCALE_DIR=/share/locale/
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
@@ -135,7 +135,7 @@ install:
 	mkdir -p $(PREFIX)/etc/
 
 	cp data/*.png $(PREFIX)/usr/share/trayfreq/
-	cp lc/fr.mo $(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
+	cp lc/fr.mo $(PREFIX)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
 
 	install -Dm 644 data/trayfreq.conf $(PREFIX)/etc/trayfreq.conf
 	install -Dm 644 data/trayfreq.desktop $(PREFIX)/etc/xdg/autostart/trayfreq.desktop
