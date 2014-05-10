@@ -22,7 +22,6 @@ DEPS = 	bat_tray.h \
 		trayfreq.h \
 		tray.h \
 		trayfreq_set_interface.h 
-#		widget_manager.h
 
 
 GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
@@ -47,7 +46,6 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							freq_tray/getgov.c \
 							tray.c \
 							trayfreq.c \
-							widget_manager.c \
 							trayfreq_set/trayfreq_set_interface.c \
 							config_file.c \
 							defaults.c \
@@ -80,8 +78,7 @@ trayfreq:	bat_tray.o \
 			reload.o \
 			trayfreq.o \
 			tray.o \
-			trayfreq_set_interface.o \
-			widget_manager.o
+			trayfreq_set_interface.o
 	$(CC) -o $@ $? $(trayfreq_LDFLAGS)
 
 ########################################################################
