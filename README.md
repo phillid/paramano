@@ -1,8 +1,18 @@
 What?
 =====
 
-This is a fork of trayfreq which is intended to work on modern Archlinux systems (it'll probably work on other systems too).
+This is a fork of trayfreq, intended to work on modern Linux systems.
+The original trayfreq wasn't compatible with Archlinux, due to the migration away from a `/proc/acpi` directory.
+I forked the project and got it working again.
 
+Personally, I don't test on any Linux distributions apart from Archlinux, but I see no reason it shouldn't work.
+
+
+Runtime Dependencies
+--------------------
+
+* gtk3
+* sudo
 
 Building
 ========
@@ -66,8 +76,6 @@ This will prefix **all** paths with `/path/to/package/temp/dir` while installing
 LOCALE_DIR has to be overridden due to the stripping of `/usr/` from it when manually setting a prefix.
 **Check the command lines as they go past.**
 Now's the time to check that everything's going to go in the right place.
-
-----------------------------------
 
 Autostarting
 ------------
