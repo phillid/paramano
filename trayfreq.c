@@ -52,6 +52,10 @@ void config_init()
 		g_warning(_("Failed to open config files!\n"));
 		return;
 	}
+
+	// Reset defaults to default values
+	defaults_init();
+
 	_DEFAULT_GOV		= config_get_key(&config, "governor", "default");
 	_DEFAULT_FREQ		= config_get_key(&config, "frequency", "default");
 	_DEFAULT_BAT_GOV	= config_get_key(&config, "battery", "governor");

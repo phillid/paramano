@@ -164,30 +164,6 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	memset(msg, '\0', sizeof(msg));
 	memset(current_governor, '\0', sizeof(current_governor) );
 
-
-	switch ( get_battery_state() )
-	{
-		case STATE_DISCHARGING:
-			debug("Discharging\n");
-			if(_DEFAULT_BAT_GOV)
-			{
-				for(i = 0; i < gc_number(); ++i)
-					si_gov(_DEFAULT_BAT_GOV, i);
-			}
-			break;
-
-		case STATE_CHARGING:
-		case STATE_FULL:
-			debug("Charging/Full\n");
-			if(_DEFAULT_AC_GOV)
-			{
-				for(i = 0; i < gc_number(); ++i)
-					si_gov(_DEFAULT_AC_GOV, i);
-			}
-
-			break;
-	}
-
 	gg_current(0, current_governor, sizeof(current_governor) );
 	sprintf(msg+strlen(msg), _("Governor: %s\n"), current_governor);
 
@@ -215,12 +191,36 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 
 static gboolean update_icon(gpointer user_data)
 {
+	int i;
+	switch ( get_battery_state() )
+	{
+		case STATE_DISCHARGING:
+			debug("Discharging\n");
+			if(_DEFAULT_BAT_GOV)
+			{
+				for(i = 0; i < gc_number(); ++i)
+					si_gov(_DEFAULT_BAT_GOV, i);
+			}
+			break;
+
+		case STATE_CHARGING:
+		case STATE_FULL:
+			debug("Charging/Full\n");
+			if(_DEFAULT_AC_GOV)
+			{
+				for(i = 0; i < gc_number(); ++i)
+					si_gov(_DEFAULT_AC_GOV, i);
+			}
+
+			break;
+	}
+
 	debug("Updating icon\n");
 	tray_update_icon_percent();
 	return TRUE;
 }
 
-void tray_init()
+void tray_set_defaults()
 {
 	// Set defaults
 	int i = 0;
@@ -240,6 +240,11 @@ void tray_init()
 			si_freq(atoi(_DEFAULT_FREQ), i);
 	}
 
+}
+
+void tray_init()
+{
+	tray_set_defaults();
 	tray = gtk_status_icon_new();
 	gchar* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
 
@@ -268,7 +273,7 @@ void tray_update_icon_percent()
 	gulong max_frequency = gf_freqi(0, 0);
 	gint adjusted_percent = 0;
 	// If no governor, set percentage to 0. This if statement fixes an FPE a few lines down
-	if (max_frequency == 0)
+	if (gg_number() == 0)
 	{
 		adjusted_percent = 0;
 	} else {

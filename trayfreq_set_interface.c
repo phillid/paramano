@@ -18,6 +18,8 @@
 
 #include "trayfreq_set_interface.h"
 
+#include "debug.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +32,7 @@ void si_gov(char* gov, int core)
 	} else {
 		sprintf(cmd, "trayfreq-set -g %s -c %i",gov,core);
 	}
+	debug("Running '%s'\n",cmd);
 	system(cmd);
 }
 
@@ -42,5 +45,6 @@ void si_freq(int freq, int core)
 	} else {
 		sprintf(cmd, "trayfreq-set -f %i -c %i",freq,core);
 	}
+	debug("Running '%s'\n",cmd);
 	system(cmd);
 }
