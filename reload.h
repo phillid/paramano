@@ -18,10 +18,6 @@
 
 #ifndef RELOAD_H
 #define RELOAD_H
-#include "trayfreq.h"
-#include "defaults.h"
-#include "bat_tray.h"
-#include <stdio.h>
 
 void reload_config();
 #endif

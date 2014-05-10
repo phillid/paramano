@@ -20,11 +20,6 @@
 #define COMMON_H
 
 #include "bool.h"
-#include "debug.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 int  get_int_value_from_file(const char* filename);
 int  get_int(const char* string);

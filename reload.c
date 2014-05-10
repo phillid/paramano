@@ -17,6 +17,12 @@
  ************************************************************************/
 
 #include "reload.h"
+#include "bat_tray.h"
+#include "tray.h"
+#include "trayfreq.h"
+#include "defaults.h"
+#include "debug.h"
+#include <stdio.h>
 
 void reload_config()
 {

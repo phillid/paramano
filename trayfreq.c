@@ -18,6 +18,69 @@
 
 #include "trayfreq.h"
 
+//#include "widget_manager.h"
+#include "tray.h"
+#include "bat_tray.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "getgov.h"
+#include "config_file.h"
+#include "reload.h"
+#include "defaults.h"
+#include "debug.h"
+
+#include <gtk/gtk.h>
+//#include <glib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <libintl.h>
+#include <locale.h>
+
+int main(int argc, char** argv)
+{
+	setlocale(LC_ALL, "");
+	bindtextdomain("trayfreq","/usr/share/locale");
+	textdomain("trayfreq");
+	debug("Set gettext up\n");
+
+	if(!gtk_init_check(&argc, &argv))
+	{
+		debug("Couldn't start gtk\n");
+		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
+		return 1;
+	}
+
+	struct sigaction sig_act;
+	sig_act.sa_handler = reload_config;
+	sig_act.sa_flags = 0;
+	sigemptyset(&sig_act.sa_mask);
+
+	if (sigaction(SIGUSR1, &sig_act, NULL) == -1)
+	{
+		debug("WARN: Couldn't set sigaction for SIGUSR1\n");
+	}
+	config_init();
+	gc_init();
+	gg_init();
+	gf_init();
+	tray_init();
+	tray_show();
+
+	// Show battery tray only if we're supposed to
+	if(_DEFAULT_SHOW_BATTERY)
+	{
+		debug("Showing battery info this time around\n");
+		bat_tray_init();
+		bat_tray_show();
+	}
+
+	debug("Passing control to Gtk\n");
+
+	gtk_main();
+	debug("Exiting main()\n");
+	return 0;
+}
+
 void config_init()
 {
 	struct config_file config;
@@ -79,47 +142,3 @@ void config_init()
 	config_close(&config);
 }
 
-int main(int argc, char** argv)
-{
-	setlocale(LC_ALL, "");
-	bindtextdomain("trayfreq","/usr/share/locale");
-	textdomain("trayfreq");
-	debug("Set gettext up\n");
-
-	if(!gtk_init_check(&argc, &argv))
-	{
-		debug("Couldn't start gtk\n");
-		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
-		return 1;
-	}
-
-	struct sigaction sig_act;
-	sig_act.sa_handler = reload_config;
-	sig_act.sa_flags = 0;
-	sigemptyset(&sig_act.sa_mask);
-
-	if (sigaction(SIGUSR1, &sig_act, NULL) == -1)
-	{
-		debug("WARN: Couldn't set sigaction for SIGUSR1\n");
-	}
-	config_init();
-	gc_init();
-	gg_init();
-	gf_init();
-	tray_init();
-	tray_show();
-
-	// Show battery tray only if we're supposed to
-	if(_DEFAULT_SHOW_BATTERY)
-	{
-		debug("Showing battery info this time around\n");
-		bat_tray_init();
-		bat_tray_show();
-	}
-
-	debug("Passing control to Gtk\n");
-
-	gtk_main();
-	debug("Exiting main()\n");
-	return 0;
-}

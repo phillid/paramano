@@ -19,7 +19,7 @@
 #include "trayfreq_set_interface.h"
 
 #include "debug.h"
-
+#include "defaults.h"
 #include <stdio.h>
 #include <stdlib.h>
 

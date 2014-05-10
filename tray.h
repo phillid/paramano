@@ -19,30 +19,15 @@
 #ifndef TRAY_H
 #define TRAY_H
 
-#include <glib.h>
+#include "bool.h"
 
-#include "widget_manager.h"
-#include "getfreq.h"
-#include "getcore.h"
-#include "getgov.h"
-#include "trayfreq_set_interface.h"
-#include "bat_tray.h"
-#include "defaults.h"
-
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-
-
-void     tray_set_defaults();
-void     tray_init();
-void     tray_set_tooltip(const gchar* msg);
-void     tray_update_icon_percent();
-void     tray_show();
-void     tray_hide();
-gboolean tray_visible();
-gboolean tray_embedded();
+void	tray_set_defaults();
+void	tray_init();
+void	tray_set_tooltip(const char* msg);
+void	tray_update_icon_percent();
+void	tray_show();
+void	tray_hide();
+bool	tray_visible();
+bool	tray_embedded();
 
 #endif

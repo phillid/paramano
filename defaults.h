@@ -19,8 +19,8 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
-#include "bool.h"
-#include <stdlib.h>
+#include "bool.h" /* boolean types */
+#include <stdlib.h> /* NULL */
 
 char* _DEFAULT_GOV;
 char* _DEFAULT_FREQ;

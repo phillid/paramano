@@ -20,10 +20,10 @@
 #include "bat_tray.h"
 
 #include <gtk/gtk.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <libintl.h>
+#include "debug.h"
+#include "common.h"
+
 
 static GtkStatusIcon* tray;
 

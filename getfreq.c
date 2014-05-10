@@ -18,7 +18,6 @@
 
 #include "getfreq.h"
 #include "getcore.h"
-#include "math.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -109,12 +108,8 @@ int gf_available(int core, char* out, int size)
 
 void gf_get_frequency_label(int freq, char* out)
 {
-	int i = 0;
-	while(freq/pow(10, i) >= 1)
-	  ++i;
-
-	if(i == 7)
-		sprintf(out, "%.2f GHz", freq/pow(10, i-1));
+	if(freq >= 1000000) // >= 1 million KHz (1GHz)
+		sprintf(out, "%.2f GHz", ((float)freq/1000000) );
 	else
 		sprintf(out, "%.2d MHz", freq/1000);
 
