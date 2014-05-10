@@ -6,10 +6,23 @@ INSTALL_PATH=/
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
-else
- EXTRA_CFLAGS=
 endif
 
+
+DEPS = 	bat_tray.h \
+		bool.h \
+		common.h \
+		config_file.h \
+		debug.h \
+		defaults.h \
+		getcore.h \
+		getfreq.h \
+		getgov.h \
+		reload.h \
+		trayfreq.h \
+		tray.h \
+		trayfreq_set_interface.h \
+		widget_manager.h
 
 
 GLIB_CFLAGS				=	-I/usr/include/glib-2.0 \
@@ -38,7 +51,8 @@ trayfreq_SOURCES		=	freq_tray/getcore.c \
 							config_file.c \
 							defaults.c \
 							bat_tray/bat_tray.c \
-							common.c
+							common.c \
+							reload.c
 
 trayfreq_set_CFLAGS		=	$(GLIB_CFLAGS) -Wall -D_=gettext
 trayfreq_set_LDFLAGS	=	$(GLIB_LIBS) -lm
@@ -54,17 +68,39 @@ all: trayfreq trayfreq-set lang
 
 
 ########################################################################
-# Make trayfreq-set program for setting governors
-trayfreq-set:
-	$(CC) -o trayfreq-set $(trayfreq_set_SOURCES) $(trayfreq_set_CFLAGS) $(trayfreq_set_LDFLAGS) $(EXTRA_CFLAGS)
-########################################################################
-
-
-########################################################################
 # Make main trayfreq system tray program
-trayfreq:
-	$(CC) -o trayfreq $(trayfreq_SOURCES) $(trayfreq_CFLAGS) $(trayfreq_LDFLAGS) $(EXTRA_CFLAGS)
+trayfreq:	bat_tray.o \
+			common.o \
+			config_file.o \
+			defaults.o \
+			getcore.o \
+			getfreq.o \
+			getgov.o \
+			reload.o \
+			trayfreq.o \
+			tray.o \
+			trayfreq_set_interface.o \
+			widget_manager.o
+	$(CC) -o $@ $? $(trayfreq_LDFLAGS)
+
 ########################################################################
+# Make trayfreq-set utility
+trayfreq-set: \
+			trayfreq_set.o \
+			getcore.o \
+			getfreq.o \
+			getgov.o
+
+	$(CC) -o $@ $? $(trayfreq_set_LDFLAGS)
+########################################################################
+
+
+
+########################################################################
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(trayfreq_CFLAGS) $(EXTRA_CFLAGS)
+########################################################################
+
 
 
 ########################################################################
@@ -77,7 +113,7 @@ lang:
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set lc/*.mo
+	rm -f trayfreq trayfreq-set *.o lc/*.mo
 ########################################################################
 
 
@@ -85,14 +121,17 @@ clean:
 # Install entire suite
 install:
 	mkdir -p $(INSTALL_PATH)/usr/share/trayfreq/
-	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
-
 	mkdir -p $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/
+	mkdir -p $(INSTALL_PATH)/etc/
+
+	cp data/*.png $(INSTALL_PATH)/usr/share/trayfreq/
 	cp lc/fr.mo $(INSTALL_PATH)/usr/share/locale/fr/LC_MESSAGES/trayfreq.mo
 
-	install -Dm 644 data/trayfreq.conf $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.conf
+	install -Dm 644 data/trayfreq.conf $(INSTALL_PATH)/etc/trayfreq.conf
 	install -Dm 644 data/trayfreq.desktop $(INSTALL_PATH)/etc/xdg/autostart/trayfreq.desktop
 	install -Dm 755 trayfreq $(INSTALL_PATH)/usr/bin/trayfreq
 	install -Dm 755 trayfreq-set $(INSTALL_PATH)/usr/bin/trayfreq-set
+
 	ln -s /usr/share/licenses/common/GLPv3/license.txt $(INSTALL_PATH)/usr/share/trayfreq/LICENCE
+	ln -s ../../../etc/trayfreq.conf $(INSTALL_PATH)/usr/share/trayfreq/trayfreq.conf
 ########################################################################

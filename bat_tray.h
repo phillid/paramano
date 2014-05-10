@@ -20,7 +20,8 @@
 #define BAT_TRAY_H
 
 #include <glib.h>
-#include "../debug.h"
+#include "debug.h"
+#include "common.h"
 
 #define STATE_CHARGING		0
 #define STATE_DISCHARGING	1

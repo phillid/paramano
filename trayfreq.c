@@ -16,24 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "widget_manager.h"
-#include "tray.h"
-#include "bat_tray/bat_tray.h"
-#include "freq_tray/getfreq.h"
-#include "freq_tray/getcore.h"
-#include "freq_tray/getgov.h"
-#include "config_file.h"
-#include "defaults.h"
-#include "debug.h"
-
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <libintl.h>
-#include <locale.h>
-
-static gboolean SHOW_BATTERY = TRUE;
+#include "trayfreq.h"
 
 void config_init()
 {
@@ -69,6 +52,10 @@ void config_init()
 		g_warning(_("Failed to open config files!\n"));
 		return;
 	}
+
+	// Reset defaults to default values
+	defaults_init();
+
 	_DEFAULT_GOV		= config_get_key(&config, "governor", "default");
 	_DEFAULT_FREQ		= config_get_key(&config, "frequency", "default");
 	_DEFAULT_BAT_GOV	= config_get_key(&config, "battery", "governor");
@@ -76,12 +63,12 @@ void config_init()
 
 	char* temp = config_get_key(&config, "battery", "show");
 	if (temp)
-		SHOW_BATTERY	= ( temp[0] == '1' );
+		_DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
 	
 	temp = config_get_key(&config, "extra", "sudo");
 	if (temp)
 	{
-		_DEFAULT_USE_SUDO	= ( temp[0] == '1' );
+		_DEFAULT_USE_SUDO = ( temp[0] == '1' );
 		debug("woo\n");
 	}
 	
@@ -105,6 +92,16 @@ int main(int argc, char** argv)
 		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
 	}
+
+	struct sigaction sig_act;
+	sig_act.sa_handler = reload_config;
+	sig_act.sa_flags = 0;
+	sigemptyset(&sig_act.sa_mask);
+
+	if (sigaction(SIGUSR1, &sig_act, NULL) == -1)
+	{
+		debug("WARN: Couldn't set sigaction for SIGUSR1\n");
+	}
 	config_init();
 	gc_init();
 	gg_init();
@@ -113,12 +110,13 @@ int main(int argc, char** argv)
 	tray_show();
 
 	// Show battery tray only if we're supposed to
-	if(SHOW_BATTERY)
+	if(_DEFAULT_SHOW_BATTERY)
 	{
 		debug("Showing battery info this time around\n");
 		bat_tray_init();
 		bat_tray_show();
 	}
+
 	debug("Passing control to Gtk\n");
 
 	gtk_main();

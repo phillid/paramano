@@ -25,9 +25,9 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include "../freq_tray/getfreq.h"
-#include "../freq_tray/getcore.h"
-#include "../debug.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "debug.h"
 
 #define FILE_PATH_STRING_SIZE 100
 

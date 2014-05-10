@@ -16,23 +16,35 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "defaults.h"
+#include "trayfreq_set_interface.h"
 
-char* _DEFAULT_GOV;
-char* _DEFAULT_FREQ;
-char* _DEFAULT_PROG;
-char* _DEFAULT_BAT_GOV;
-char* _DEFAULT_AC_GOV;
-bool  _DEFAULT_SHOW_BATTERY = TRUE;
-bool  _DEFAULT_USE_SUDO	= FALSE;
+#include "debug.h"
 
-void defaults_init()
+#include <stdio.h>
+#include <stdlib.h>
+
+void si_gov(char* gov, int core)
 {
-	_DEFAULT_GOV			= NULL;
-	_DEFAULT_FREQ			= NULL;
-	_DEFAULT_PROG			= NULL;
-	_DEFAULT_BAT_GOV		= NULL;
-	_DEFAULT_AC_GOV			= NULL;
-	_DEFAULT_SHOW_BATTERY	= TRUE;
-	_DEFAULT_USE_SUDO		= FALSE;	
+	char cmd[256];
+	if (_DEFAULT_USE_SUDO)
+	{
+		sprintf(cmd, "sudo trayfreq-set -g %s -c %i",gov,core);
+	} else {
+		sprintf(cmd, "trayfreq-set -g %s -c %i",gov,core);
+	}
+	debug("Running '%s'\n",cmd);
+	system(cmd);
+}
+
+void si_freq(int freq, int core)
+{
+	char cmd[256];
+	if (_DEFAULT_USE_SUDO)
+	{
+		sprintf(cmd, "sudo trayfreq-set -f %i -c %i",freq,core);
+	} else {
+		sprintf(cmd, "trayfreq-set -f %i -c %i",freq,core);
+	}
+	debug("Running '%s'\n",cmd);
+	system(cmd);
 }

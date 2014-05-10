@@ -16,31 +16,12 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "trayfreq_set_interface.h"
+#ifndef GETCORE_H
+#define GETCORE_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "debug.h"
 
-void si_gov(char* gov, int core)
-{
-	char cmd[256];
-	if (_DEFAULT_USE_SUDO)
-	{
-		sprintf(cmd, "sudo trayfreq-set -g %s -c %i",gov,core);
-	} else {
-		sprintf(cmd, "trayfreq-set -g %s -c %i",gov,core);
-	}
-	system(cmd);
-}
+void gc_init();
+int  gc_number();
 
-void si_freq(int freq, int core)
-{
-	char cmd[256];
-	if (_DEFAULT_USE_SUDO)
-	{
-		sprintf(cmd, "sudo trayfreq-set -f %i -c %i",freq,core);
-	} else {
-		sprintf(cmd, "trayfreq-set -f %i -c %i",freq,core);
-	}
-	system(cmd);
-}
+#endif

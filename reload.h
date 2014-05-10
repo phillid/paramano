@@ -16,23 +16,12 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#ifndef RELOAD_H
+#define RELOAD_H
+#include "trayfreq.h"
 #include "defaults.h"
+#include "bat_tray.h"
+#include <stdio.h>
 
-char* _DEFAULT_GOV;
-char* _DEFAULT_FREQ;
-char* _DEFAULT_PROG;
-char* _DEFAULT_BAT_GOV;
-char* _DEFAULT_AC_GOV;
-bool  _DEFAULT_SHOW_BATTERY = TRUE;
-bool  _DEFAULT_USE_SUDO	= FALSE;
-
-void defaults_init()
-{
-	_DEFAULT_GOV			= NULL;
-	_DEFAULT_FREQ			= NULL;
-	_DEFAULT_PROG			= NULL;
-	_DEFAULT_BAT_GOV		= NULL;
-	_DEFAULT_AC_GOV			= NULL;
-	_DEFAULT_SHOW_BATTERY	= TRUE;
-	_DEFAULT_USE_SUDO		= FALSE;	
-}
+void reload_config();
+#endif

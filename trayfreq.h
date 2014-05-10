@@ -16,23 +16,28 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
+#ifndef TRAYFREQ_H
+#define TRAYFREQ_H
+
+#include "widget_manager.h"
+#include "tray.h"
+#include "bat_tray.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "getgov.h"
+#include "config_file.h"
+#include "reload.h"
 #include "defaults.h"
+#include "debug.h"
 
-char* _DEFAULT_GOV;
-char* _DEFAULT_FREQ;
-char* _DEFAULT_PROG;
-char* _DEFAULT_BAT_GOV;
-char* _DEFAULT_AC_GOV;
-bool  _DEFAULT_SHOW_BATTERY = TRUE;
-bool  _DEFAULT_USE_SUDO	= FALSE;
+#include <gtk/gtk.h>
+#include <glib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <libintl.h>
+#include <locale.h>
 
-void defaults_init()
-{
-	_DEFAULT_GOV			= NULL;
-	_DEFAULT_FREQ			= NULL;
-	_DEFAULT_PROG			= NULL;
-	_DEFAULT_BAT_GOV		= NULL;
-	_DEFAULT_AC_GOV			= NULL;
-	_DEFAULT_SHOW_BATTERY	= TRUE;
-	_DEFAULT_USE_SUDO		= FALSE;	
-}
+void config_init();
+//int main(int argc, char** argv);
+
+#endif
