@@ -140,8 +140,8 @@ install:
 	install -Dm 644 data/trayfreq.conf $(PREFIX)/etc/trayfreq.conf
 	install -Dm 644 data/trayfreq.desktop $(PREFIX)/etc/xdg/autostart/trayfreq.desktop
 
-	install -Dm 755 trayfreq $(BINDIR)/trayfreq
-	install -Dm 755 trayfreq-set $(BINDIR)/trayfreq-set
+	install -Dm 755 trayfreq $(PREFIX)/$(BINDIR)/trayfreq
+	install -Dm 755 trayfreq-set $(PREFIX)/$(BINDIR)/trayfreq-set
 
 	ln -s ../licenses/common/GLPv3/license.txt $(PREFIX)/usr/share/trayfreq/LICENCE
 	ln -s ../../../etc/trayfreq.conf $(PREFIX)/usr/share/trayfreq/trayfreq.conf
