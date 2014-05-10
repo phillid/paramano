@@ -18,7 +18,6 @@
 
 #include "trayfreq.h"
 
-//#include "widget_manager.h"
 #include "tray.h"
 #include "bat_tray.h"
 #include "getfreq.h"
@@ -30,7 +29,6 @@
 #include "debug.h"
 
 #include <gtk/gtk.h>
-//#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <libintl.h>
