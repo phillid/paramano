@@ -129,19 +129,19 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	#mkdir -p $(PREFIX)/usr/share/trayfreq/
-	#mkdir -p $(PREFIX)/$(LOCALE_DIR)/fr/LC_MESSAGES/
-	#mkdir -p $(PREFIX)/etc/xdg/autostart/
+	mkdir -p $(DESTDIR)/usr/share/trayfreq/
+	#mkdir -p $(DESTDIR)/$(LOCALE_DIR)/fr/LC_MESSAGES/
+	#mkdir -p $(DESTDIR)/etc/xdg/autostart/
 
-	cp data/*.png $(PREFIX)/usr/share/trayfreq/
-	cp lc/fr.mo $(PREFIX)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
+	cp data/*.png $(DESTDIR)/usr/share/trayfreq/
+	install -Dm 644 lc/fr.mo $(DESTDIR)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
 
-	install -Dm 644 data/trayfreq.conf $(PREFIX)/etc/trayfreq.conf
-	install -Dm 644 data/trayfreq.desktop $(PREFIX)/etc/xdg/autostart/trayfreq.desktop
+	install -Dm 644 data/trayfreq.conf $(DESTDIR)/etc/trayfreq.conf
+	install -Dm 644 data/trayfreq.desktop $(DESTDIR)/etc/xdg/autostart/trayfreq.desktop
 
-	install -Dm 755 trayfreq $(PREFIX)/$(BINDIR)/trayfreq
-	install -Dm 755 trayfreq-set $(PREFIX)/$(BINDIR)/trayfreq-set
+	install -Dm 755 trayfreq $(DESTDIR)/$(BINDIR)/trayfreq
+	install -Dm 755 trayfreq-set $(DESTDIR)/$(BINDIR)/trayfreq-set
 
-	ln -s ../licenses/common/GLPv3/license.txt $(PREFIX)/usr/share/trayfreq/LICENCE
-	ln -s ../../../etc/trayfreq.conf $(PREFIX)/usr/share/trayfreq/trayfreq.conf
+	ln -s ../licenses/common/GLPv3/license.txt $(DESTDIR)/usr/share/trayfreq/LICENCE
+	ln -s ../../../etc/trayfreq.conf $(DESTDIR)/usr/share/trayfreq/trayfreq.conf
 ########################################################################
