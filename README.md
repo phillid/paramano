@@ -69,3 +69,7 @@ Then, she also needs to give herself passwordless permission to run `trayfreq-se
 	# ...
 
 Simple.
+
+Screenshots 'n' Stuff
+=====================
+See the [official page](http://batchbin.ueuo.com/projects/trayfreq-archlinux) for screenshots
