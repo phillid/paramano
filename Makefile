@@ -141,6 +141,7 @@ clean:
 ########################################################################
 # Install entire suite
 install:
+	mkdir -p $(DESTDIR)/$(SHAREDIR)/trayfreq/
 	cp -r themes $(DESTDIR)/$(SHAREDIR)/trayfreq/
 
 	install -Dm 644 lc/fr.mo $(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/trayfreq.mo
