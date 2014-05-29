@@ -77,7 +77,7 @@ trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
 
 ########################################################################
 # Make entire suite
-all: trayfreq trayfreq-set lang
+all: trayfreq trayfreq-set lang trayfreq.conf
 ########################################################################
 
 
@@ -124,7 +124,7 @@ lang:
 
 ########################################################################
 # Prepare template config file
-config:
+trayfreq.conf:
 	sed	-e 's:SHAREDIR:$(SHAREDIR):g' \
 		-e 's:TRAYFREQ_CONF:$(TRAYFREQ_CONF):g' \
 		trayfreq.conf.src > trayfreq.conf
@@ -141,16 +141,16 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	install -Dm 755 data/themes $(DESTDIR)/usr/share/trayfreq/
+	install -Dm 755 themes $(DESTDIR)/$(SHAREDIR)/trayfreq/themes
 
-	install -Dm 644 lc/fr.mo $(DESTDIR)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
+	install -Dm 644 lc/fr.mo $(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/trayfreq.mo
 
-	install -Dm 644 data/trayfreq.conf $(DESTDIR)/etc/trayfreq.conf
-	install -Dm 644 data/trayfreq.desktop $(DESTDIR)/etc/xdg/autostart/trayfreq.desktop
+	install -Dm 644 trayfreq.conf $(DESTDIR)/etc/trayfreq.conf
+	install -Dm 644 trayfreq.desktop $(DESTDIR)/etc/xdg/autostart/trayfreq.desktop
 
 	install -Dm 755 trayfreq $(DESTDIR)/$(BINDIR)/trayfreq
 	install -Dm 755 trayfreq-set $(DESTDIR)/$(BINDIR)/trayfreq-set
 
-	ln -s ../licenses/common/GLPv3/license.txt $(DESTDIR)/usr/share/trayfreq/LICENCE
-	ln -s ../../../etc/trayfreq.conf $(DESTDIR)/usr/share/trayfreq/trayfreq.conf
+	ln -s ../licenses/common/GLPv3/license.txt $(DESTDIR)/$(SHAREDIR)/trayfreq/LICENCE
+	ln -s ../../../etc/trayfreq.conf $(DESTDIR)/$(SHAREDIR)/trayfreq/trayfreq.conf
 ########################################################################
