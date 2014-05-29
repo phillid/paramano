@@ -272,7 +272,7 @@ void tray_init()
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
 
 	debug("Adding timeout\n");
-	g_timeout_add(5000, update_icon, NULL);
+	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
 }
 
