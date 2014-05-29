@@ -4,9 +4,12 @@ MAKE = make
 CC = gcc
 PREFIX=/usr
 BINDIR=$(PREFIX)/bin
+SHAREDIR=$(PREFIX)/share
+LOCALEDIR=$(SHAREDIR)/locale/
+
 SUDO=/usr/bin/sudo
 TRAYFREQ_SET=$(BINDIR)/trayfreq-set
-LOCALE_DIR=$(PREFIX)/share/locale/
+TRAYFREQ_CONF=/etc/trayfreq.conf
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
@@ -16,7 +19,8 @@ EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 				-DBINDIR=\"$(BINDIR)\" \
 				-DSUDO=\"$(SUDO)\" \
 				-DTRAYFREQ_SET=\"$(TRAYFREQ_SET)\" \
-				-DLOCALE_DIR=\"$(LOCALE_DIR)\"
+				-DLOCALEDIR=\"$(LOCALEDIR)\" \
+				-DSHAREDIR=\"$(SHAREDIR)\"
 
 
 DEPS = 	bat_tray.h \
@@ -111,7 +115,6 @@ trayfreq-set: \
 ########################################################################
 
 
-
 ########################################################################
 # Make language file(s)
 lang:
@@ -120,20 +123,26 @@ lang:
 
 
 ########################################################################
+# Prepare template config file
+config:
+	sed	-e 's:SHAREDIR:$(SHAREDIR):g' \
+		-e 's:TRAYFREQ_CONF:$(TRAYFREQ_CONF):g' \
+		trayfreq.conf.src > trayfreq.conf
+########################################################################
+	
+
+########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set *.o lc/*.mo
+	rm -f trayfreq trayfreq-set *.o lc/*.mo trayfreq.conf
 ########################################################################
 
 
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(DESTDIR)/usr/share/trayfreq/
-	#mkdir -p $(DESTDIR)/$(LOCALE_DIR)/fr/LC_MESSAGES/
-	#mkdir -p $(DESTDIR)/etc/xdg/autostart/
+	install -Dm 755 data/themes $(DESTDIR)/usr/share/trayfreq/
 
-	cp data/*.png $(DESTDIR)/usr/share/trayfreq/
 	install -Dm 644 lc/fr.mo $(DESTDIR)$(LOCALE_DIR)/fr/LC_MESSAGES/trayfreq.mo
 
 	install -Dm 644 data/trayfreq.conf $(DESTDIR)/etc/trayfreq.conf
