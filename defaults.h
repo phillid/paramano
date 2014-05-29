@@ -29,6 +29,7 @@ char* _DEFAULT_BAT_GOV;
 char* _DEFAULT_AC_GOV;
 bool  _DEFAULT_SHOW_BATTERY;
 bool  _DEFAULT_USE_SUDO;
+char  _DEFAULT_THEME[2048];
 
 
 void defaults_init();

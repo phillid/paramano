@@ -33,11 +33,12 @@
 #include <stdio.h>
 #include <libintl.h>
 #include <locale.h>
+#include <string.h>
 
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "");
-	bindtextdomain("trayfreq",LOCALE_DIR);
+	bindtextdomain("trayfreq",LOCALEDIR);
 	textdomain("trayfreq");
 	debug("Set gettext up\n");
 
@@ -130,9 +131,15 @@ void config_init()
 	if (temp)
 	{
 		_DEFAULT_USE_SUDO = ( temp[0] == '1' );
-		debug("woo\n");
 	}
-	
+
+	temp = config_get_key(&config, "extra", "theme");
+	if (temp && strlen(temp) < sizeof(_DEFAULT_THEME) )
+	{
+		sprintf(_DEFAULT_THEME, "%s", temp);
+	}
+
+	debug("Using theme %s\n",_DEFAULT_THEME);
 
 	debug("%s sudo\n",_DEFAULT_USE_SUDO? "Using" : "Not using");
 

@@ -23,6 +23,7 @@
 #include <libintl.h>
 #include "debug.h"
 #include "common.h"
+#include "defaults.h"
 
 
 static GtkStatusIcon* tray;
@@ -34,8 +35,10 @@ char CHARGE_STATE_PATH[512];
 /***********************************************************************
  * Return the battery level percentage
  **********************************************************************/
-//#define get_bat_percent()	get_int_value_from_file(CHARGE_VALUE_PATH);
-int get_bat_percent(){return get_int_value_from_file(CHARGE_VALUE_PATH); }
+int get_bat_percent()
+{
+	return get_int_value_from_file(CHARGE_VALUE_PATH);
+}
 
 
 #define TOOLTIP_TEXT_SIZE 128
@@ -110,14 +113,14 @@ static gboolean update_icon(gpointer user_data)
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			icon_file = g_strconcat("/usr/share/trayfreq/traybat-", adjusted_percent_string, ".png", NULL);
+			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", adjusted_percent_string, ".png", NULL);
 			break;
 		case STATE_CHARGING:
-			icon_file = g_strconcat("/usr/share/trayfreq/traybat-", adjusted_percent_string, "-charging.png", NULL);
+			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", adjusted_percent_string, "-charging.png", NULL);
 			break;
 
 		default:
-			icon_file = g_strconcat("/usr/share/trayfreq/traybat-charged.png", NULL);
+			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
 			break;
 	}
 
@@ -140,7 +143,7 @@ void bat_tray_init()
 
 	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
-	gchar* icon_file = g_strconcat("/usr/share/trayfreq/traybat-charged.png", NULL);
+	gchar* icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);

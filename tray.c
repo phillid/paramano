@@ -18,7 +18,6 @@
 
 #include "tray.h"
 
-//#include "widget_manager.h"
 #include "getfreq.h"
 #include "getcore.h"
 #include "getgov.h"
@@ -262,7 +261,7 @@ void tray_init()
 {
 	tray_set_defaults();
 	tray = gtk_status_icon_new();
-	char* icon_file = g_strconcat("/usr/share/trayfreq/cpufreq-0.png", NULL);
+	char* icon_file = g_strconcat(_DEFAULT_THEME, "/cpufreq-0.png", NULL);
 
 	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -313,7 +312,7 @@ void tray_update_icon_percent()
 	char adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
 	sprintf(adjusted_percent_string, "%i", adjusted_percent);
 
-	char* file = g_strconcat("/usr/share/trayfreq/cpufreq-", adjusted_percent_string, ".png", NULL);
+	char* file = g_strconcat(_DEFAULT_THEME, "/cpufreq-", adjusted_percent_string, ".png", NULL);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
