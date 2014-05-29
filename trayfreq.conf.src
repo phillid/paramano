@@ -1,0 +1,46 @@
+#
+# Begin TRAYFREQ_CONF
+#
+# Template config file for trayfreq-archlinux
+#
+
+[battery]
+## Uncomment to hide battery icon -- useful for desktop PCs
+## Set to anything (or leave unset/commented out) to show battery icon
+# show=0
+
+## Name of the governor to use for all cores when on battery power
+## Get a space-separated list of available governors from
+## /sys/devices/system/cpu/cpu{{CORE_NUMBER}}/cpufreq/scaling_available_governors
+# governor=powersave
+
+[ac]
+## Governor to use for all core while on AC power
+## Often set to a performance or non-power-saving governor
+# governor=ondemand
+
+[governor]
+## Governor to set all cores to when trayfreq starts
+# default=ondemand
+
+
+[frequency]
+## The frequency to set the CPU to when trayfreq starts
+## Get a space-separated list of available frequencies from
+## /sys/devices/system/cpu/cpu{{CORE_NUMBER}}/cpufreq/scaling_available_frequencies
+# default=800000
+
+
+[extra]
+## Uncomment to make trayfreq run trayfreq-set through sudo.
+## Useful if your WM doesn't run trayfreq as root, but you'll have to give the user
+## trayfreq is run as passwordless sudo access to `trayfreq-set`
+# sudo=1
+
+## If you're arty, you can put together your own theme and point trayfreq to it
+# theme=SHAREDIR/trayfreq/themes/some-theme/
+
+
+#
+# End TRAYFREQ_CONF
+#
