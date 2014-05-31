@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <libintl.h>
 #include <locale.h>
 
@@ -125,6 +126,11 @@ int main(int argc, char *argv[])
 	// If unusual number of args, give up now
 	if (argc == 5)
 	{
+
+		debug ("Checking UID\n");
+		if (getuid() != 0)
+			fprintf(stderr,"Warning: running as UID %d, not 0\n",getuid() );
+
 		get_argument_summary(argc, argv, &args);
 
 		debug("Correct number of command line arguments\n");
