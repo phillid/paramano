@@ -21,7 +21,7 @@
 #include "tray.h"
 #include "trayfreq.h"
 #include "defaults.h"
-#include "debug.h"
+#include "common.h"
 #include <stdio.h>
 
 void reload_config()

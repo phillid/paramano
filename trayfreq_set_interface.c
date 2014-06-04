@@ -18,33 +18,33 @@
 
 #include "trayfreq_set_interface.h"
 
-#include "debug.h"
-#include "defaults.h"
+#include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void si_gov(char* gov, int core)
 {
 	char cmd[256];
-	if (_DEFAULT_USE_SUDO)
+	if (getuid() != ROOT_UID)
 	{
 		sprintf(cmd, SUDO" "TRAYFREQ_SET" -g %s -c %i",gov,core);
 	} else {
 		sprintf(cmd, TRAYFREQ_SET" -g %s -c %i",gov,core);
 	}
-	debug("Running '%s'\n",cmd);
+	info("Running '%s'\n",cmd);
 	system(cmd);
 }
 
 void si_freq(int freq, int core)
 {
 	char cmd[256];
-	if (_DEFAULT_USE_SUDO)
+	if (getuid() != ROOT_UID)
 	{
 		sprintf(cmd, SUDO" "TRAYFREQ_SET" -f %i -c %i",freq,core);
 	} else {
 		sprintf(cmd, TRAYFREQ_SET" -f %i -c %i",freq,core);
 	}
-	debug("Running '%s'\n",cmd);
+	info("Running '%s'\n",cmd);
 	system(cmd);
 }

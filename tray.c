@@ -24,6 +24,7 @@
 #include "trayfreq_set_interface.h"
 #include "bat_tray.h"
 #include "defaults.h"
+#include "common.h"
 
 #include <glib.h>
 #include <gtk/gtk.h>

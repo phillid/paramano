@@ -26,10 +26,11 @@
 #include "config_file.h"
 #include "reload.h"
 #include "defaults.h"
-#include "debug.h"
+#include "common.h"
 
 #include <gtk/gtk.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <libintl.h>
 #include <locale.h>
@@ -127,11 +128,7 @@ void config_init()
 	if (temp)
 		_DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
 	
-	temp = config_get_key(&config, "extra", "sudo");
-	if (temp)
-	{
-		_DEFAULT_USE_SUDO = ( temp[0] == '1' );
-	}
+	info("Running as UID %d and GID %d\n", getuid(), getgid());
 
 	temp = config_get_key(&config, "extra", "theme");
 	if (temp && strlen(temp) < sizeof(_DEFAULT_THEME) )
@@ -140,8 +137,6 @@ void config_init()
 	}
 
 	debug("Using theme %s\n",_DEFAULT_THEME);
-
-	debug("%s sudo\n",_DEFAULT_USE_SUDO? "Using" : "Not using");
 
 	g_free(config.file_name);
 	config_close(&config);

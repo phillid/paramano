@@ -18,8 +18,6 @@
 
 #include "common.h"
 
-#include "debug.h" /* debug() */
-
 #include <stdio.h> /* fopen, fgets, printf */
 #include <stdlib.h> /* atoi */
 #include <string.h> /* lots of functions */

@@ -32,11 +32,6 @@
 
 
 [extra]
-## Uncomment to make trayfreq run trayfreq-set through sudo.
-## Useful if your WM doesn't run trayfreq as root, but you'll have to give the user
-## trayfreq is run as passwordless sudo access to `trayfreq-set`
-# sudo=1
-
 ## If you're arty, you can put together your own theme and point trayfreq to it
 # theme=SHAREDIR/trayfreq/themes/some-theme/
 

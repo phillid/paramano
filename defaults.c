@@ -26,7 +26,6 @@ char* _DEFAULT_PROG;
 char* _DEFAULT_BAT_GOV;
 char* _DEFAULT_AC_GOV;
 bool  _DEFAULT_SHOW_BATTERY = TRUE;
-bool  _DEFAULT_USE_SUDO	= FALSE;
 char _DEFAULT_THEME[2048]; // to do : make dynamic with malloc
 
 void defaults_init()
@@ -37,6 +36,5 @@ void defaults_init()
 	_DEFAULT_BAT_GOV		= NULL;
 	_DEFAULT_AC_GOV			= NULL;
 	_DEFAULT_SHOW_BATTERY	= TRUE;
-	_DEFAULT_USE_SUDO		= FALSE;
 	sprintf (_DEFAULT_THEME, SHAREDIR"/trayfreq/themes/default");
 }

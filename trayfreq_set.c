@@ -26,7 +26,7 @@
 
 #include "getfreq.h"
 #include "getcore.h"
-#include "debug.h"
+#include "common.h"
 
 #define FILE_PATH_STRING_SIZE 100
 
