@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
 	if (sigaction(SIGUSR1, &sig_act, NULL) == -1)
 	{
-		debug("WARN: Couldn't set sigaction for SIGUSR1\n");
+		debug("Couldn't set sigaction for SIGUSR1\n");
 	}
 	config_init();
 	gc_init();
@@ -106,7 +106,7 @@ void config_init()
     }
 
 	if(!home_config_exists)
-		config.file_name = g_strconcat("/usr/share/trayfreq/trayfreq.conf", NULL);
+		config.file_name = g_strconcat(TRAYFREQ_CONF, NULL);
 
 	gboolean success = config_open(&config);
 	if(!success)
@@ -128,7 +128,7 @@ void config_init()
 	if (temp)
 		_DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
 	
-	info("Running as UID %d and GID %d\n", getuid(), getgid());
+	info("UID: %d   GID: %d\n", getuid(), getgid());
 
 	temp = config_get_key(&config, "extra", "theme");
 	if (temp && strlen(temp) < sizeof(_DEFAULT_THEME) )

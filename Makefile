@@ -28,6 +28,7 @@ EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 				-DBINDIR=\"$(BINDIR)\" \
 				-DSUDO=\"$(SUDO)\" \
 				-DTRAYFREQ_SET=\"$(TRAYFREQ_SET)\" \
+				-DTRAYFREQ_CONF=\"$(TRAYFREQ_CONF)\" \
 				-DLOCALEDIR=\"$(LOCALEDIR)\" \
 				-DSHAREDIR=\"$(SHAREDIR)\" \
 				-DROOT_UID=$(ROOT_UID)
@@ -46,25 +47,20 @@ DEPS = 	bat_tray.h \
 		tray.h \
 		trayfreq_set_interface.h 
 
-trayfreq_CFLAGS			=	-I/usr/include/gtk-2.0 \
-							-I/usr/lib/gtk-2.0/include \
-							-I/usr/include/pango-1.0 \
-							-I/usr/include/cairo \
-							-I/usr/include/gdk-pixbuf-2.0 \
-							-I/usr/include/atk-1.0 \
-							-I/usr/include/glib-2.0 \
-							-I/usr/lib/glib-2.0/include \
-							-Wall \
-							-D_=gettext
+CFLAGS	=	-I/usr/include/gtk-2.0 \
+			-I/usr/lib/gtk-2.0/include \
+			-I/usr/include/pango-1.0 \
+			-I/usr/include/cairo \
+			-I/usr/include/gdk-pixbuf-2.0 \
+			-I/usr/include/atk-1.0 \
+			-I/usr/include/glib-2.0 \
+			-I/usr/lib/glib-2.0/include \
+			-Wall \
+			-D_=gettext
 
-trayfreq_LDFLAGS		=	-lgtk-3 \
-							-lgobject-2.0 \
-							-lglib-2.0
-
-trayfreq_set_CFLAGS		=	-Wall \
-							-D_=gettext
-
-trayfreq_set_LDFLAGS	=	-lglib-2.0
+LDFLAGS	=	-lgtk-3 \
+			-lgobject-2.0 \
+			-lglib-2.0
 
 ########################################################################
 # Make entire suite
@@ -85,7 +81,7 @@ trayfreq:	bat_tray.o \
 			trayfreq.o \
 			tray.o \
 			trayfreq_set_interface.o
-	$(CC) -o $@ $? $(trayfreq_LDFLAGS)
+	$(CC) -o $@ $? $(LDFLAGS)
 
 ########################################################################
 # Make trayfreq-set utility
@@ -95,13 +91,13 @@ trayfreq-set: \
 			getfreq.o \
 			getgov.o
 
-	$(CC) -o $@ $? $(trayfreq_set_LDFLAGS)
+	$(CC) -o $@ $? $(LDFLAGS)
 ########################################################################
 
 
 ########################################################################
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(trayfreq_CFLAGS) $(EXTRA_CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(EXTRA_CFLAGS)
 ########################################################################
 
 
