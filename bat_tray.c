@@ -21,7 +21,6 @@
 
 #include <gtk/gtk.h>
 #include <libintl.h>
-#include "debug.h"
 #include "common.h"
 #include "defaults.h"
 

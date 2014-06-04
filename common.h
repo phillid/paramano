@@ -25,4 +25,24 @@ int  get_int_value_from_file(const char* filename);
 int  get_int(const char* string);
 bool file_has_line(const char *filename, const char *line);
 
+#include <stdio.h>
+// <ew> Stringification of line number
+#define STRING2(x) #x
+#define STRING(x) STRING2(x)
+#define STR_LINE STRING(__LINE__)
+// </ew>
+
+
+#ifdef DEBUG
+/*
+ Make debug macros into empty space if debug mode's not enabled.
+ Otherwise, make debug macro calls into appropriate printf()s
+*/
+ #define debug(...)	printf("DEBUG: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
+#else
+ #define debug(...);
+#endif
+
+#define info(...)	printf("INFO: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
+
 #endif

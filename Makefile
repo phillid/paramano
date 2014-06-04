@@ -1,15 +1,24 @@
 # Tabsize: 4
 
+# Build utils
 MAKE = make
 CC = gcc
+
+# Directories
 PREFIX=/usr
 BINDIR=$(PREFIX)/bin
+SYSCONFDIR=/etc
 SHAREDIR=$(PREFIX)/share
-LOCALEDIR=$(SHAREDIR)/locale/
+LOCALEDIR=$(SHAREDIR)/locale
 
-SUDO=/usr/bin/sudo
+# External program/support programs
+SUDO=$(BINDIR)/sudo
 TRAYFREQ_SET=$(BINDIR)/trayfreq-set
-TRAYFREQ_CONF=/etc/trayfreq.conf
+
+# Misc
+TRAYFREQ_CONF=$(SYSCONFDIR)/trayfreq.conf
+ROOT_UID=0
+
 
 ifdef DEBUG
  EXTRA_CFLAGS+=-DDEBUG
@@ -20,14 +29,14 @@ EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 				-DSUDO=\"$(SUDO)\" \
 				-DTRAYFREQ_SET=\"$(TRAYFREQ_SET)\" \
 				-DLOCALEDIR=\"$(LOCALEDIR)\" \
-				-DSHAREDIR=\"$(SHAREDIR)\"
+				-DSHAREDIR=\"$(SHAREDIR)\" \
+				-DROOT_UID=$(ROOT_UID)
 
 
 DEPS = 	bat_tray.h \
 		bool.h \
 		common.h \
 		config_file.h \
-		debug.h \
 		defaults.h \
 		getcore.h \
 		getfreq.h \
@@ -36,7 +45,6 @@ DEPS = 	bat_tray.h \
 		trayfreq.h \
 		tray.h \
 		trayfreq_set_interface.h 
-
 
 trayfreq_CFLAGS			=	-I/usr/include/gtk-2.0 \
 							-I/usr/lib/gtk-2.0/include \
@@ -53,27 +61,10 @@ trayfreq_LDFLAGS		=	-lgtk-3 \
 							-lgobject-2.0 \
 							-lglib-2.0
 
-trayfreq_SOURCES		=	freq_tray/getcore.c \
-							freq_tray/getfreq.c \
-							freq_tray/getgov.c \
-							tray.c \
-							trayfreq.c \
-							trayfreq_set/trayfreq_set_interface.c \
-							config_file.c \
-							defaults.c \
-							bat_tray/bat_tray.c \
-							common.c \
-							reload.c
-
 trayfreq_set_CFLAGS		=	-Wall \
 							-D_=gettext
 
 trayfreq_set_LDFLAGS	=	-lglib-2.0
-
-trayfreq_set_SOURCES	=	trayfreq_set/trayfreq_set.c \
-							freq_tray/getfreq.c \
-							freq_tray/getcore.c
-
 
 ########################################################################
 # Make entire suite
@@ -106,7 +97,6 @@ trayfreq-set: \
 
 	$(CC) -o $@ $? $(trayfreq_set_LDFLAGS)
 ########################################################################
-
 
 
 ########################################################################
