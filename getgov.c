@@ -27,45 +27,47 @@
 #include <glib.h>
 
 /* [CORE][GOVERNOR NUMBER] */
-gchar AVAILABLE_GOVERNORS[999][50][13];
-gint NUMBER_OF_AVAILABLE_GOVERNORS;
+char governors[999][50][13];
+int total_governors;
 
+/***********************************************************************
+ * Grab all available governors
+ **********************************************************************/
 void gg_init()
 {
 	gchar gov_string[500];
 	int i = 0;
-	int j = 0;
+	total_governors = 0;
 	for(i = 0; i < gc_number(); ++i)
 	{
-		memset(gov_string, '\0', 500);
-		gg_available(i, gov_string, 500);
+		memset(gov_string, '\0', sizeof(gov_string) );
+		gg_available(i, gov_string, sizeof(gov_string) );
 
 		// go through every governor in gov_string
-		j = 0;
-		gchar* curr = &gov_string[0];
+		gchar* curr = (char*)&gov_string;
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while(end_of_curr)
 		{
-			memset(AVAILABLE_GOVERNORS[i][j], '\0', 13);
-			memmove(AVAILABLE_GOVERNORS[i][j], curr, end_of_curr - curr);
+			memset(governors[i][total_governors], '\0', 13);
+			memmove(governors[i][total_governors], curr, end_of_curr - curr);
 
 			curr = end_of_curr+1;
 			end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-			++j;
+			total_governors++;
 		}
 	}
-	NUMBER_OF_AVAILABLE_GOVERNORS = j;
 }
 
+
+/***********************************************************************
+ * Populate out with current governor for core
+ **********************************************************************/
 int gg_current(int core, char* out, int size)
 {
 	FILE* fd;
-	char path[80];
-	char corestr[4];
+	char path[FILE_PATH_SIZE];
 
-	sprintf(corestr, "%i", core);
-
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_governor", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
 
 	if(!(fd = fopen(path, "r")))
 	{
@@ -84,6 +86,10 @@ int gg_current(int core, char* out, int size)
 	return 0;
 }
 
+
+/***********************************************************************
+ * Populate out with number of available cores
+ **********************************************************************/
 int gg_available(int core, char* out, int size)
 {
 	FILE* fd;
@@ -103,12 +109,19 @@ int gg_available(int core, char* out, int size)
 	return 0;
 }
 
+
+/***********************************************************************
+ * Return pointer to name of gov
+ **********************************************************************/
 char* gg_gov(int core, int index)
 {
-	return AVAILABLE_GOVERNORS[core][index];
+	return governors[core][index];
 }
 
+/***********************************************************************
+ * Return total number of governors
+ **********************************************************************/
 int gg_number()
 {
-	return NUMBER_OF_AVAILABLE_GOVERNORS;
+	return total_governors;
 }

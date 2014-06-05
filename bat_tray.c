@@ -27,9 +27,9 @@
 
 static GtkStatusIcon* tray;
 
-int _BAT_NUM;
-char CHARGE_VALUE_PATH[512];
-char CHARGE_STATE_PATH[512];
+int bat_num; // Shortcoming: we only detect one battery
+char CHARGE_VALUE_PATH[FILE_PATH_SIZE];
+char CHARGE_STATE_PATH[FILE_PATH_SIZE];
 
 /***********************************************************************
  * Return the battery level percentage
@@ -41,7 +41,7 @@ int get_bat_percent()
 
 
 #define TOOLTIP_TEXT_SIZE 128
-gchar tooltip_text[TOOLTIP_TEXT_SIZE];
+char tooltip_text[TOOLTIP_TEXT_SIZE];
 
 
 /***********************************************************************
@@ -49,8 +49,8 @@ gchar tooltip_text[TOOLTIP_TEXT_SIZE];
  **********************************************************************/
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
-	gchar msg[TOOLTIP_TEXT_SIZE];
-	//memset(msg,0,TOOLTIP_TEXT_SIZE);
+	char msg[TOOLTIP_TEXT_SIZE];
+
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
@@ -77,45 +77,32 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	debug("Setting tooltip text to '%s'\n",msg);
 	gtk_tooltip_set_text(tooltip, msg);
 
-	return TRUE;
+	return true;
 }
 
 
 /***********************************************************************
  * Updates the battery tray icon based upon battery percent
  **********************************************************************/
-static gboolean update_icon(gpointer user_data)
+gboolean update_icon(gpointer user_data)
 {
-	gchar* icon_file;
-	unsigned int percent = get_bat_percent();
-	unsigned int adjusted_percent;
-	gchar adjusted_percent_string[4];
+	char *icon_file;
+	char percent_string[4]; // worst case scenario 100 + \0
+	unsigned int rounded;
 
+	rounded = 20* (int)((get_bat_percent()+10)/20); // Round percentage to 0, 20, 40, 60, 80 or 100
 
-	// TO DO: do this with rounding and divisio etc
-	if(percent > 90)
-		adjusted_percent=100;
-	else if(percent > 70)
-		adjusted_percent=80;
-	else if(percent > 50)
-		adjusted_percent=60;
-	else if(percent > 30)
-		adjusted_percent=40;
-	else if(percent > 10)
-		adjusted_percent=20;
-	else
-		adjusted_percent=0;
-
-	debug("Rounded/adjusted percentage: %d\n",adjusted_percent);
-	sprintf(adjusted_percent_string, "%d", adjusted_percent);
+	debug("Rounded/adjusted percentage: %d\n",rounded);
+	sprintf(percent_string, "%d", rounded);
 
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", adjusted_percent_string, ".png", NULL);
+			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", percent_string, ".png", NULL);
 			break;
+
 		case STATE_CHARGING:
-			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", adjusted_percent_string, "-charging.png", NULL);
+			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", percent_string, "-charging.png", NULL);
 			break;
 
 		default:
@@ -125,24 +112,26 @@ static gboolean update_icon(gpointer user_data)
 
 	debug("Setting tray icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
-	return TRUE;
+	return true;
 }
 
 
 
-
+/***********************************************************************
+ * Initialise the tray and related variables
+ **********************************************************************/
 void bat_tray_init()
 {
 	// Get the battery number, store it for later
-	_BAT_NUM = get_bat_num();
+	bat_num = get_bat_num();
 
 	// Set up battery info filenames/paths
-	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", _BAT_NUM);
-	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", _BAT_NUM);
+	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", bat_num);
+	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", bat_num);
 
 	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
-	gchar* icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
+	char* icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
@@ -150,12 +139,19 @@ void bat_tray_init()
 }
 
 
+/***********************************************************************
+ * Show the battery tray
+ **********************************************************************/
 void bat_tray_show()
 {
 	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
+
+/***********************************************************************
+ * Hide the battery tray
+ **********************************************************************/
 void bat_tray_hide()
 {
 	debug("Hiding tray\n");

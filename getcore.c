@@ -24,9 +24,13 @@
 #include <stdlib.h>
 #include <glib.h>
 
-unsigned int NUMBER_OF_CORES;
+unsigned int cores;
 
-static gboolean core_exists(unsigned int core)
+
+/***********************************************************************
+ * Return true/false if specified core num exists
+ **********************************************************************/
+bool core_exists(unsigned int core)
 {
 	FILE* fd;
 	char path[80];
@@ -38,14 +42,22 @@ static gboolean core_exists(unsigned int core)
 	return (gboolean)(fd = fopen(path, "r"));
 }
 
+
+/***********************************************************************
+ * Initialise surrounding variables
+ **********************************************************************/
 void gc_init()
 {
-	NUMBER_OF_CORES = 0;
-	while(core_exists(++NUMBER_OF_CORES));
-	debug("Found %d cores\n",NUMBER_OF_CORES);
+	cores = 0;
+	while(core_exists(++cores));
+	debug("Found %d cores\n",cores);
 }
 
+
+/***********************************************************************
+ * Return number of cores
+ **********************************************************************/
 int gc_number()
 {
-	return NUMBER_OF_CORES;
+	return cores;
 }

@@ -29,13 +29,17 @@
 #include "common.h"
 
 #include <gtk/gtk.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
+#include <unistd.h>		// getuid, getgid
+#include <stdio.h>		// printf, FILE, fopen, etc
+#include <string.h>		// strlen
+	
+#include <libintl.h>	// gettext
+#include <locale.h>		// LC_ALL etc
 
+
+/***********************************************************************
+ * Main
+ **********************************************************************/
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "");
@@ -81,6 +85,10 @@ int main(int argc, char** argv)
 	return 0;
 }
 
+
+/***********************************************************************
+ * Load config
+ **********************************************************************/
 void config_init()
 {
 	struct config_file config;

@@ -19,7 +19,7 @@
 #ifndef DEFAULTS_H
 #define DEFAULTS_H
 
-#include "bool.h" /* boolean types */
+#include <stdbool.h> /* boolean types */
 #include <stdlib.h> /* NULL */
 
 char* _DEFAULT_GOV;

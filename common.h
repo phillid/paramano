@@ -19,7 +19,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "bool.h"
+#include <stdbool.h>
 
 int  get_int_value_from_file(const char* filename);
 int  get_int(const char* string);
@@ -44,5 +44,5 @@ bool file_has_line(const char *filename, const char *line);
 #endif
 
 #define info(...)	printf("INFO: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
-
+#define FILE_PATH_SIZE 2048
 #endif

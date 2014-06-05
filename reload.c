@@ -24,17 +24,22 @@
 #include "common.h"
 #include <stdio.h>
 
+
+/***********************************************************************
+ * Catches the USR1 sig. Reloads the configuration files and applies any
+ * new changes/config etc
+ ************************************************************************/
 void reload_config()
 {
 	debug("Reloading config\n");
+
+	// Reload config
 	config_init();
-	if (_DEFAULT_SHOW_BATTERY)
-	{
-		//bat_tray_hide();
-		bat_tray_show();
-	} else {
-		bat_tray_hide();
-	}
+
+	// Hide battery icon if told to
+	_DEFAULT_SHOW_BATTERY? bat_tray_show() : bat_tray_hide();
+
+	// Update governor and frequency defaults
 	debug("Re-init freq tray\n");
 	tray_set_defaults();
 }
