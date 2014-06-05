@@ -19,7 +19,7 @@
 #ifndef TRAY_H
 #define TRAY_H
 
-#include "bool.h"
+#include <stdbool.h>
 
 void	tray_set_defaults();
 void	tray_init();

@@ -43,6 +43,10 @@ GtkWidget* menu;
 GSList* menu_items;
 GtkWidget* checked_menu_item;
 
+
+/***********************************************************************
+ * Handler for when freq is chosen
+ **********************************************************************/
 static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
 	debug("[checking in]\n");
@@ -56,6 +60,10 @@ static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 	}
 }
 
+
+/***********************************************************************
+ * Handler for when governor is chosen
+ **********************************************************************/
 static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
 	debug("[checking in]\n");
@@ -80,12 +88,20 @@ static gboolean governor_exists(gchar* governor)
 	return FALSE;
 }*/
 
+
+/***********************************************************************
+ * Destroy a menu item
+ **********************************************************************/
 static void remove_menu_item(GtkWidget* menu_item, gpointer data)
 {
 	debug("Destroying menu_item\n");
 	gtk_widget_destroy(menu_item);
 }
 
+
+/***********************************************************************
+ * Remove all items in menu
+ **********************************************************************/
 static void tray_clear_menu()
 {
 	debug("Clearing the menu\n");
@@ -94,12 +110,19 @@ static void tray_clear_menu()
 	menu_items = NULL;
 }
 
+
+/***********************************************************************
+ * Create new instance of gtk_tray_new for gov/freq tray
+ **********************************************************************/
 static void tray_init_menu()
 {
 	debug("Spawning new menu");
 	menu = gtk_menu_new();
 }
 
+/***********************************************************************
+ * Populate gtk menu object with all the entries
+ **********************************************************************/
 static void tray_generate_menu()
 {
 	tray_clear_menu();
@@ -170,6 +193,9 @@ static void tray_generate_menu()
 	gtk_widget_show_all(menu);
 }
 
+/***********************************************************************
+ * Refresh the tooltip message
+ **********************************************************************/
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
 	char msg[TOOLTIP_TEXT_SIZE];
@@ -198,6 +224,10 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 	return TRUE;
 }
 
+
+/***********************************************************************
+ * Handler for spawning the popup/context menu
+ **********************************************************************/
 static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_time,gpointer data)
 {
 	debug("Spawning popup menu\n");
@@ -205,6 +235,10 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 	gtk_menu_popup(GTK_MENU(menu),NULL,NULL,gtk_status_icon_position_menu,tray,button,activate_time);
 }
 
+
+/***********************************************************************
+ * Update the freq/gov tray icon
+ **********************************************************************/
 static gboolean update_icon(gpointer user_data)
 {
 	int i;
@@ -236,6 +270,10 @@ static gboolean update_icon(gpointer user_data)
 	return TRUE;
 }
 
+
+/***********************************************************************
+ * Apply default gov/freq for current situation
+ **********************************************************************/
 void tray_set_defaults()
 {
 	// Set defaults
@@ -258,6 +296,10 @@ void tray_set_defaults()
 
 }
 
+
+/***********************************************************************
+ * Start the tray icon thingy
+ **********************************************************************/
 void tray_init()
 {
 	tray_set_defaults();
@@ -277,6 +319,10 @@ void tray_init()
 	tray_init_menu();
 }
 
+
+/***********************************************************************
+ * Set the tooltip message
+ **********************************************************************/
 void tray_set_tooltip(const char* msg)
 {
 	debug("Setting up toolip var with text '%s'\n",msg);
@@ -284,6 +330,9 @@ void tray_set_tooltip(const char* msg)
 	memmove(tooltip_text, msg, strlen(msg));
 }
 
+/**********************************************************************
+ * Set icon based on current freq/governor
+ **********************************************************************/
 void tray_update_icon_percent()
 {
 	gulong max_frequency = gf_freqi(0, 0);
@@ -294,6 +343,7 @@ void tray_update_icon_percent()
 		adjusted_percent = 0;
 	} else {
 		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
+		// TO DO: round instead of lots of ifs
 		gint percent = (gf_current(0) * 100)/max_frequency;
 		if(percent == 100) {
 			adjusted_percent = 100;
@@ -320,23 +370,37 @@ void tray_update_icon_percent()
 	g_free(file);
 }
 
+
+/***********************************************************************
+ * Show the tray
+ **********************************************************************/
 void tray_show()
 {
 	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
+/***********************************************************************
+ * Hide the tray
+ **********************************************************************/
 void tray_hide()
 {
 	debug("Hiding tray");
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 
+
+/***********************************************************************
+ * Return bool for visiblity of tray
+ **********************************************************************/
 bool tray_visible()
 {
 	return gtk_status_icon_get_visible(tray);
 }
 
+/***********************************************************************
+ * Return bool for embeddedness of tray
+ **********************************************************************/
 bool tray_embedded()
 {
 	return gtk_status_icon_is_embedded(tray);

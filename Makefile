@@ -35,7 +35,6 @@ EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 
 
 DEPS = 	bat_tray.h \
-		bool.h \
 		common.h \
 		config_file.h \
 		defaults.h \
@@ -61,7 +60,6 @@ CFLAGS	=	-I/usr/include/gtk-2.0 \
 LDFLAGS	=	-lgtk-3 \
 			-lgobject-2.0 \
 			-lglib-2.0
-
 ########################################################################
 # Make entire suite
 all: trayfreq trayfreq-set lang trayfreq.conf

@@ -26,45 +26,50 @@
 #include <glib.h>
 
 /* [CORE][FREQUENCY NUMBER] */
-char AVAILABLE_FREQUENCIES[999][50][13];
-int NUMBER_OF_AVAILABLE_FREQUENCIES;
+char freqs[999][50][13];
+int total_freqs;
 
+
+/***********************************************************************
+ * Initialise surrounding variables, get available freqs etc
+ **********************************************************************/
 void gf_init()
 {
-	// TO DO : get rid of magic constants
 	gchar freq_string[500];
 
 	int i = 0;
-	int j = 0;
-	for(i = 0; i < gc_number(); ++i)
+	for(i = 0; i < gc_number(); i++)
 	{
-		memset(freq_string, '\0', 500);
+		memset(freq_string, '\0', sizeof(freq_string) );
 
 		// Get available governor freqs. If no governor, try next cpu
-		if (gf_available(i, freq_string, 500) == -1)
+		if (gf_available(i, freq_string, sizeof(freq_string) ) == -1)
 		{
 			debug("Couldn't find gov on core %d\n",i);
 			continue;
 		}
 
-		/* go through every frequency in freq_string */
-		j = 0;
+		// freq_string is a space separated list of freqs so
+		// iterate over each frequency in freq_string
 		gchar* curr = &freq_string[0];
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while(end_of_curr)
 		{
-			memset(AVAILABLE_FREQUENCIES[i][j], '\0', 13);
-			memmove(AVAILABLE_FREQUENCIES[i][j], curr, end_of_curr - curr);
+			// TO DO : get rid of magic constants
+			memset(freqs[i][total_freqs], '\0', 13); // TO DO: get rid of magic constant 13
+			memmove(freqs[i][total_freqs], curr, end_of_curr - curr);
 
 			curr = end_of_curr+1;
 			end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-			++j;
+			total_freqs++;
 		}
 	}
-	NUMBER_OF_AVAILABLE_FREQUENCIES = j;
-	debug("Found %d frequencies\n",j);
+	debug("Found %d frequencies\n",total_freqs);
 }
 
+/***********************************************************************
+ * Return current frequency for core
+ **********************************************************************/
 int gf_current(int core)
 {
 	FILE* fd;
@@ -88,6 +93,10 @@ int gf_current(int core)
 	return freq;
 }
 
+
+/***********************************************************************
+ * Populate out with available frequencies for core
+ **********************************************************************/
 int gf_available(int core, char* out, int size)
 {
 	FILE* fd;
@@ -107,6 +116,9 @@ int gf_available(int core, char* out, int size)
 	return 0;
 }
 
+/***********************************************************************
+ * Populate out with a formatted, units-added freq label for freq
+ **********************************************************************/
 void gf_get_frequency_label(int freq, char* out)
 {
 	if(freq >= 1000000) // >= 1 million KHz (1GHz)
@@ -117,17 +129,26 @@ void gf_get_frequency_label(int freq, char* out)
 	debug("Prepared freq label '%s' for freq %d\n",out,freq);
 }
 
+/***********************************************************************
+ * Return freq value at index for core, as a string
+ **********************************************************************/
 char* gf_freqa(int core, int index)
 {
-	return AVAILABLE_FREQUENCIES[core][index];
+	return freqs[core][index];
 }
 
+/***********************************************************************
+ * Return freq value at index for core, as an int
+ **********************************************************************/
 int gf_freqi(int core, int index)
 {
 	return atoi(gf_freqa(core, index));
 }
 
+/***********************************************************************
+ * Return total number of frequencies
+ **********************************************************************/
 int gf_number()
 {
-	return NUMBER_OF_AVAILABLE_FREQUENCIES;
+	return total_freqs;
 }

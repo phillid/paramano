@@ -23,7 +23,7 @@
 #include <string.h> /* lots of functions */
 
 /***********************************************************************
- * Gets integer value from first line in file
+ * Return integer value from first line in file
  **********************************************************************/
 int get_int_value_from_file(const char* filename)
 {
@@ -34,7 +34,7 @@ int get_int_value_from_file(const char* filename)
 	if(!(fd = fopen(filename, "r")))
 		return -1;
 
-	if (fgets(buffer, 100, fd))
+	if (fgets(buffer, sizeof(buffer), fd))
 		value = get_int(buffer);
 
 	fclose(fd);
@@ -51,18 +51,18 @@ bool file_has_line(const char *filename, const char *line)
 	char buffer[512];
 
 	if (!(fd = fopen(filename, "r")))
-		return FALSE;
+		return false;
 
 	while (fgets(buffer, sizeof(buffer), fd) != NULL)
 	{
 		if(strstr(buffer, line) != NULL)
 		{
 			fclose(fd);
-			return TRUE;
+			return true;
 		}
 	}
 	fclose(fd);
-	return FALSE;
+	return false;
 }
 
 
@@ -76,9 +76,6 @@ int get_int(const char* string)
 
 	first_num = strpbrk(string, "0123456789");
 	debug("first_num: '%s'\n",first_num);
-	if(first_num)
-		return atoi(first_num);
 
-	debug("first_num was 0, returning 1\n");
-	return 1;
+	return atoi(first_num);
 }
