@@ -1,7 +1,7 @@
 #
 # Begin TRAYFREQ_CONF
 #
-# Template config file for trayfreq-archlinux
+# Template/default config file for trayfreq-archlinux
 #
 
 [battery]
@@ -11,7 +11,7 @@
 
 ## Name of the governor to use for all cores when on battery power
 ## Get a space-separated list of available governors from
-## /sys/devices/system/cpu/cpu{{CORE_NUMBER}}/cpufreq/scaling_available_governors
+## /sys/devices/system/cpu/cpuX/cpufreq/scaling_available_governors
 # governor=powersave
 
 [ac]
@@ -27,7 +27,7 @@
 [frequency]
 ## The frequency to set the CPU to when trayfreq starts
 ## Get a space-separated list of available frequencies from
-## /sys/devices/system/cpu/cpu{{CORE_NUMBER}}/cpufreq/scaling_available_frequencies
+## /sys/devices/system/cpu/cpuX/cpufreq/scaling_available_frequencies
 # default=800000
 
 
