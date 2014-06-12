@@ -313,7 +313,6 @@ void tray_init()
 	debug("Setting up callbacks\n");
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
-	g_signal_connect(G_OBJECT(tray), "activate", GTK_SIGNAL_FUNC(activate), NULL);
 	debug("Adding timeout\n");
 	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
