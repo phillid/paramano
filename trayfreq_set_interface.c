@@ -25,7 +25,7 @@
 
 void si_gov(char* gov, int core)
 {
-	char cmd[256];
+	char cmd[1024];
 	if (getuid() != ROOT_UID)
 	{
 		sprintf(cmd, SUDO" -n "TRAYFREQ_SET" -g %s -c %i &",gov,core);
@@ -38,7 +38,7 @@ void si_gov(char* gov, int core)
 
 void si_freq(int freq, int core)
 {
-	char cmd[256];
+	char cmd[1024];
 	if (getuid() != ROOT_UID)
 	{
 		sprintf(cmd, SUDO" -n "TRAYFREQ_SET" -f %i -c %i &",freq,core);

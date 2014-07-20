@@ -144,6 +144,5 @@ install:
 	install -Dm 755 trayfreq $(DESTDIR)/$(BINDIR)/trayfreq
 	install -Dm 755 trayfreq-set $(DESTDIR)/$(BINDIR)/trayfreq-set
 
-	ln -s ../licenses/common/GLPv3/license.txt $(DESTDIR)/$(SHAREDIR)/trayfreq/LICENCE
 	ln -s ../../../etc/trayfreq.conf $(DESTDIR)/$(SHAREDIR)/trayfreq/trayfreq.conf
 ########################################################################
