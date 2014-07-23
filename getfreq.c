@@ -45,7 +45,7 @@ void gf_init()
 		// Get available governor freqs. If no governor, try next cpu
 		if (gf_available(i, freq_string, sizeof(freq_string) ) == -1)
 		{
-			debug("Couldn't find gov on core %d\n",i);
+			debug("Couldn't find freq scaling on core %d\n",i);
 			continue;
 		}
 
@@ -77,7 +77,7 @@ int gf_current(int core)
 	char path[80];
 	int freq;
 
-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_cur_freq", core);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
 
 	if(!(fd = fopen(path, "r")))
 	{

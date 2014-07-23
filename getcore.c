@@ -37,7 +37,7 @@ bool core_exists(unsigned int core)
 	char corestr[4];
 
 	sprintf(corestr, "%d", core);
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/scaling_cur_freq", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/cpuinfo_cur_freq", corestr);
 	debug("Checking if core %d exists by opening '%s'\n",core,path);
 	return (gboolean)(fd = fopen(path, "r"));
 }
