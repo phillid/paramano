@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include <unistd.h>
 
 unsigned int cores;
 
@@ -33,13 +34,11 @@ unsigned int cores;
 bool core_exists(unsigned int core)
 {
 	FILE* fd;
-	char path[80];
-	char corestr[4];
+	char path[128];
 
-	sprintf(corestr, "%d", core);
-	sprintf(path, "/sys/devices/system/cpu/cpu%s/cpufreq/cpuinfo_cur_freq", corestr);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq", core);
 	debug("Checking if core %d exists by opening '%s'\n",core,path);
-	return (gboolean)(fd = fopen(path, "r"));
+	return (access(path, F_OK) != -1);
 }
 
 
@@ -49,7 +48,9 @@ bool core_exists(unsigned int core)
 void gc_init()
 {
 	cores = 0;
-	while(core_exists(++cores));
+	while(core_exists(cores))
+		cores++;
+
 	debug("Found %d cores\n",cores);
 }
 
