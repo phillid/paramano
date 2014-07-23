@@ -77,7 +77,7 @@ int gf_current(int core)
 	char path[80];
 	int freq;
 
-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
+	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_cur_freq", core);
 
 	if(!(fd = fopen(path, "r")))
 	{
