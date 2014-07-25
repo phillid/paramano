@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 #include <libintl.h>
+#include <stdio.h>
 #include "common.h"
 #include "defaults.h"
 
@@ -28,8 +29,7 @@
 static GtkStatusIcon* tray;
 
 int bat_num; // Shortcoming: we only detect one battery
-char CHARGE_VALUE_PATH[FILE_PATH_SIZE];
-char CHARGE_STATE_PATH[FILE_PATH_SIZE];
+char *CHARGE_VALUE_PATH, *CHARGE_STATE_PATH;
 
 /***********************************************************************
  * Return the battery level percentage
@@ -40,42 +40,40 @@ int get_bat_percent()
 }
 
 
-#define TOOLTIP_TEXT_SIZE 128
-char tooltip_text[TOOLTIP_TEXT_SIZE];
-
-
 /***********************************************************************
  * Updates the battery tray tooltip text
  **********************************************************************/
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
-	char msg[TOOLTIP_TEXT_SIZE];
+	char* msg;
 
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
 			debug("Discharging\n");
-			sprintf(msg, _("Discharging (%d%%)"), get_bat_percent());
+			asprintf(&msg, _("Discharging (%d%%)"), get_bat_percent());
 			break;
 
 		case STATE_CHARGING:
 			debug("Charging\n");
-			sprintf(msg, _("Charging (%d%%)"), get_bat_percent());
+			asprintf(&msg, _("Charging (%d%%)"), get_bat_percent());
 			break;
 
 		case STATE_CHARGED:
 			debug("Charged\n");
-			sprintf(msg, _("Fully charged") );
+			asprintf(&msg, _("Fully charged") );
 			break;
 
 		default:
 			debug("Unknown\n");
-			sprintf(msg, _("Unknown status") );
+			asprintf(&msg, _("Unknown status") );
 			break;
 	}
 
 	debug("Setting tooltip text to '%s'\n",msg);
 	gtk_tooltip_set_text(tooltip, msg);
+
+	free(msg);
 
 	return true;
 }
@@ -87,34 +85,34 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 gboolean update_icon(gpointer user_data)
 {
 	char *icon_file;
-	char percent_string[4]; // worst case scenario 100 + \0
 	unsigned int rounded;
 
 	rounded = 20* (int)((get_bat_percent()+10)/20); // Round percentage to 0, 20, 40, 60, 80 or 100
 
 	debug("Rounded/adjusted percentage: %d\n",rounded);
-	sprintf(percent_string, "%d", rounded);
 
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", percent_string, ".png", NULL);
+			asprintf(&icon_file,"%s/traybat-%d.png",_DEFAULT_THEME,rounded);
 			break;
 
 		case STATE_CHARGING:
-			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-", percent_string, "-charging.png", NULL);
+			asprintf(&icon_file,"%s/traybat-%d-charging.png",_DEFAULT_THEME,rounded);
 			break;
 
 		default:
-			icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
+			asprintf(&icon_file,"%s/traybat-charged.png",_DEFAULT_THEME);
 			break;
 	}
 
 	debug("Setting tray icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
+
+	free(icon_file);
+
 	return true;
 }
-
 
 
 /***********************************************************************
@@ -122,20 +120,33 @@ gboolean update_icon(gpointer user_data)
  **********************************************************************/
 void bat_tray_init()
 {
+	char *icon_file;
+
 	// Get the battery number, store it for later
 	bat_num = get_bat_num();
 
 	// Set up battery info filenames/paths
-	sprintf(CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", bat_num);
-	sprintf(CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", bat_num);
+	asprintf(&CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", bat_num);
+	asprintf(&CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", bat_num);
 
 	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
-	char* icon_file = g_strconcat(_DEFAULT_THEME, "/traybat-charged.png", NULL);
+	asprintf(&icon_file,"%s/traybat-charged.png",_DEFAULT_THEME);
 	gtk_status_icon_set_from_file(tray, icon_file);
+	free(icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
 	g_timeout_add(5000, update_icon, NULL);
+}
+
+
+/***********************************************************************
+ * Free memory allocated in bat_tray_init()
+ **********************************************************************/
+void bat_tray_end()
+{
+	free(CHARGE_VALUE_PATH);
+	free(CHARGE_STATE_PATH);
 }
 
 
@@ -185,6 +196,7 @@ int get_battery_state()
 	return STATE_UNKNOWN;
 }
 
+
 /***********************************************************************
  * Get the number of the first (who has more than one?) battery
  * Returns -1 if no battery present
@@ -192,11 +204,11 @@ int get_battery_state()
 int get_bat_num()
 {
 	FILE* fd;
-	gchar file[40];
+	char* file;
 	unsigned int i;
-	for(i = 0; i < 3; i++)
+	for(i = 0; i < 10; i++)
 	{
-		sprintf(file, "/sys/class/power_supply/BAT%d/present", i);
+		asprintf(&file, "/sys/class/power_supply/BAT%d/present", i);
 		debug("Attempting to open '%s'\n",file);
 		if( (fd = fopen(file, "r")) )
 		{
@@ -205,10 +217,12 @@ int get_bat_num()
 			{
 				debug("Battery %d is present\n",i);
 				fclose(fd);
+				free(file);
 				return i;
 			}
 		}
 	}
 	debug("Fallthrough: couldn't find battery\n");
+	free(file);
 	return -1;
 }

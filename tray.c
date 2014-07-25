@@ -34,10 +34,10 @@
 #include <libintl.h>
 
 
-#define TOOLTIP_TEXT_SIZE 500
+//#define TOOLTIP_TEXT_SIZE 500
 
 GtkStatusIcon* tray;
-char tooltip_text[TOOLTIP_TEXT_SIZE];
+//char tooltip_text[TOOLTIP_TEXT_SIZE];
 
 GtkWidget* menu;
 GSList* menu_items;
@@ -128,7 +128,7 @@ static void tray_generate_menu()
 	tray_clear_menu();
 	gg_init();
 
-	char label[20];
+	char *label;
 	int i = 0;
 
 	char current_governor[20];
@@ -140,11 +140,13 @@ static void tray_generate_menu()
 	// Add available frequencies
 	for(i = 0; i < gf_number(); ++i)
 	{
-		memset(label, '\0', 20);
-		gf_get_frequency_label(gf_freqi(0, i), label);
+		label = gf_get_frequency_label(gf_freqi(0, i));
 		debug("Got freq label '%s', i=%d\n",label,i);
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, label);
+
+		free(label);
+
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
 		if(g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
@@ -198,28 +200,28 @@ static void tray_generate_menu()
  **********************************************************************/
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
-	char msg[TOOLTIP_TEXT_SIZE];
-	char current_governor[20];
-	char label[20];
+	char *msg, *label;
+	char current_governor[20]; // TO DO
 	int i = 0;
 
-	memset(msg, '\0', sizeof(msg));
 	memset(current_governor, '\0', sizeof(current_governor) );
 
 	gg_current(0, current_governor, sizeof(current_governor) );
-	sprintf(msg+strlen(msg), _("Governor: %s\n"), current_governor);
+
+	asprintf(&msg, _("Governor: %s\n"), current_governor);
 
 	for(i = 0; i < gc_number(); ++i)
 	{
-		debug("Adding CPU%i's frequency\n",i);
-		memset(label, '\0', sizeof(label));
-		gf_get_frequency_label(gf_current(i), label);
-		sprintf(msg+strlen(msg), _("CPU%i: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
+		debug("Adding CPU%d's frequency\n",i);
+		label = gf_get_frequency_label(gf_current(i));
+		asprintf(&msg, _("%sCPU%d: %s%s"), msg, i, label, i == gc_number()-1 ? "" : "\n");
+		free(label);
 	}
 
 	debug("Setting tooltip text\n");
-	tray_set_tooltip(msg);
-	gtk_tooltip_set_text(tooltip, tooltip_text);
+	gtk_tooltip_set_text(tooltip, msg);
+
+	free(msg);
 
 	return TRUE;
 }
@@ -326,8 +328,8 @@ void tray_init()
 void tray_set_tooltip(const char* msg)
 {
 	debug("Setting up toolip var with text '%s'\n",msg);
-	memset(tooltip_text, '\0', TOOLTIP_TEXT_SIZE);
-	memmove(tooltip_text, msg, strlen(msg));
+	//memset(tooltip_text, '\0', TOOLTIP_TEXT_SIZE);
+	//memmove(tooltip_text, msg, strlen(msg));
 }
 
 /**********************************************************************
@@ -335,6 +337,7 @@ void tray_set_tooltip(const char* msg)
  **********************************************************************/
 void tray_update_icon_percent()
 {
+	char* file;
 	gulong max_frequency = gf_freqi(0, 0);
 	gint adjusted_percent = 0;
 	// If no governor, set percentage to 0. This if statement fixes an FPE a few lines down
@@ -358,16 +361,13 @@ void tray_update_icon_percent()
 		}
 	}
 
-	debug("Rounded/adjusted bat percentage: %d\n",adjusted_percent);
-	/* convert the int to a string */
-	char adjusted_percent_string[] = {'\0', '\0', '\0', '\0'};
-	sprintf(adjusted_percent_string, "%i", adjusted_percent);
-
-	char* file = g_strconcat(_DEFAULT_THEME, "/cpufreq-", adjusted_percent_string, ".png", NULL);
+	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
+	asprintf(&file, "%s/cpufreq-%d.png", _DEFAULT_THEME,adjusted_percent);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
-	g_free(file);
+
+	free(file);
 }
 
 
