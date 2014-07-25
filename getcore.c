@@ -33,12 +33,13 @@ unsigned int cores;
  **********************************************************************/
 bool core_exists(unsigned int core)
 {
-	FILE* fd;
-	char path[128];
-
-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq", core);
+	char* path;
+	int result;
+	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq", core);
 	debug("Checking if core %d exists by opening '%s'\n",core,path);
-	return (access(path, F_OK) != -1);
+	result = access(path, F_OK);
+	free (path);
+	return (result != -1); 
 }
 
 

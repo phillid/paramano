@@ -28,7 +28,7 @@ char* _DEFAULT_PROG;
 char* _DEFAULT_BAT_GOV;
 char* _DEFAULT_AC_GOV;
 bool  _DEFAULT_SHOW_BATTERY;
-char  _DEFAULT_THEME[2048];
+char* _DEFAULT_THEME;
 
 
 void defaults_init();

@@ -31,7 +31,8 @@ EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 				-DTRAYFREQ_CONF=\"$(TRAYFREQ_CONF)\" \
 				-DLOCALEDIR=\"$(LOCALEDIR)\" \
 				-DSHAREDIR=\"$(SHAREDIR)\" \
-				-DROOT_UID=$(ROOT_UID)
+				-DROOT_UID=$(ROOT_UID) \
+				-D_GNU_SOURCE
 
 
 DEPS = 	bat_tray.h \
