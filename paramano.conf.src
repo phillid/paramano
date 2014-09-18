@@ -1,0 +1,41 @@
+#
+# Begin PARAMANO_CONF
+#
+# Template/default config file for Paramano
+#
+
+[battery]
+## Uncomment to hide battery icon -- useful for desktop PCs
+## Set to anything (or leave unset/commented out) to show battery icon
+# show=0
+
+## Name of the governor to use for all cores when on battery power
+## Get a space-separated list of available governors from
+## /sys/devices/system/cpu/cpuX/cpufreq/scaling_available_governors
+# governor=powersave
+
+[ac]
+## Governor to use for all core while on AC power
+## Often set to a performance or non-power-saving governor
+# governor=ondemand
+
+[governor]
+## Governor to set all cores to when Paramano starts
+# default=ondemand
+
+
+[frequency]
+## The frequency to set the CPU to when Paramano starts
+## Get a space-separated list of available frequencies from
+## /sys/devices/system/cpu/cpuX/cpufreq/scaling_available_frequencies
+# default=800000
+
+
+[extra]
+## If you're arty, you can put together your own theme and point Paramano to it
+# theme=SHAREDIR/paramano/themes/some-theme/
+
+
+#
+# End PARAMANO_CONF
+#
