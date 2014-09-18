@@ -36,5 +36,5 @@ void defaults_init()
 	_DEFAULT_BAT_GOV		= NULL;
 	_DEFAULT_AC_GOV			= NULL;
 	_DEFAULT_SHOW_BATTERY	= true;
-	asprintf(&_DEFAULT_THEME, SHAREDIR"/trayfreq/themes/default");
+	asprintf(&_DEFAULT_THEME, SHAREDIR"/paramano/themes/default");
 }
