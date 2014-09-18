@@ -7,9 +7,6 @@ I forked the project and got it working again.
 
 If you're using ArchLinux, just jump over to the [AUR page for this software](https://aur.archlinux.org/packages/trayfreq-archlinux) and install it that way.
 
-Despite the software's name, it should work on other distros as well.
-
-
 Runtime Dependencies
 --------------------
 
@@ -24,16 +21,16 @@ The sort of parameters you might pass to a ./configure can instead be passed to 
 
 Here's a list:
 
-* BINDIR to override default binary directory (`/usr/bin`) for trayfreq and trayfreq-set
+* BINDIR to override default binary directory (`/usr/bin`) for paramano and paramano-set
 * PREFIX to prefix all paths with something
 * LOCALE_DIR to override default of `/usr/share/locale`
 * SUDO to override default sudo program `/usr/bin/sudo`
 * MAKE to override default make program `make`
 * CC to override default compiler `gcc`
-* TRAYFREQ_SET to override default trayfreq-set program of `PREFIX/BINDIR/trayfreq-set`
+* PARAMANO_SET to override default paramano-set program of `PREFIX/BINDIR/paramano-set`
 * DESTDIR (only for `make install` -- see below)
 
-If you'd like a huge amount of debug information on the tty every time you run trayfreq or trayfreq-set, then set DEBUG to something, eg:
+If you'd like a huge amount of debug information on the tty every time you run paramano or paramano-set, then set DEBUG to something, eg:
 
 	make all DEBUG=yeah
 
@@ -57,19 +54,16 @@ Autostarting
 `make install` will copy a .desktop file to /etc/xdg/autostart, meaning that all xdg-compliant window managers should start it automatically when Bob logs in.
 Bob's WM starts these programs as root, thus he is fully able to change the governor.
 
-Alice uses a non-xdg-compliant WM (e.g. dwm)  so trayfreq is run as the user `alice`.
-She doesn't have permission to write to the files under `/sys/` so trayfreq can't change the governor.
-Alice needs to make trayfreq run `trayfreq-set` through sudo.
+Alice uses a non-xdg-compliant WM (e.g. dwm)  so paramano is run as the user `alice`.
+She doesn't have permission to write to the files under `/sys/` so paramano can't change the governor.
+Alice needs to make paramano run `paramano-set` through sudo.
 This can be done in the configuration file.
-Then, she also needs to give herself passwordless permission to run `trayfreq-set` through sudo:
+Then, she also needs to give herself passwordless permission to run `paramano-set` through sudo:
 
 
     # ... (/etc/sudoers
-	alice ALL = NOPASSWD: /usr/bin/trayfreq-set
+	alice ALL = NOPASSWD: /usr/bin/paramano-set
 	# ...
 
 Simple.
 
-Screenshots 'n' Stuff
-=====================
-See the [official page](http://batchbin.ueuo.com/projects/trayfreq-archlinux) for screenshots
