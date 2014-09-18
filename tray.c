@@ -21,7 +21,7 @@
 #include "getfreq.h"
 #include "getcore.h"
 #include "getgov.h"
-#include "trayfreq_set_interface.h"
+#include "paramano_set_interface.h"
 #include "bat_tray.h"
 #include "defaults.h"
 #include "common.h"

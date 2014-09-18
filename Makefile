@@ -1,5 +1,3 @@
-# Tabsize: 4
-
 # Build utils
 MAKE = make
 CC = gcc
@@ -13,10 +11,10 @@ LOCALEDIR=$(SHAREDIR)/locale
 
 # External program/support programs
 SUDO=$(BINDIR)/sudo
-TRAYFREQ_SET=$(BINDIR)/trayfreq-set
+PARAMANO_SET=$(BINDIR)/paramano-set
 
 # Misc
-TRAYFREQ_CONF=$(SYSCONFDIR)/trayfreq.conf
+PARAMANO_CONF=$(SYSCONFDIR)/paramano.conf
 ROOT_UID=0
 
 
@@ -27,8 +25,8 @@ endif
 EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
 				-DBINDIR=\"$(BINDIR)\" \
 				-DSUDO=\"$(SUDO)\" \
-				-DTRAYFREQ_SET=\"$(TRAYFREQ_SET)\" \
-				-DTRAYFREQ_CONF=\"$(TRAYFREQ_CONF)\" \
+				-DPARAMANO_SET=\"$(PARAMANO_SET)\" \
+				-DPARAMANO_CONF=\"$(PARAMANO_CONF)\" \
 				-DLOCALEDIR=\"$(LOCALEDIR)\" \
 				-DSHAREDIR=\"$(SHAREDIR)\" \
 				-DROOT_UID=$(ROOT_UID) \
@@ -43,9 +41,9 @@ DEPS = 	bat_tray.h \
 		getfreq.h \
 		getgov.h \
 		reload.h \
-		trayfreq.h \
+		paramano.h \
 		tray.h \
-		trayfreq_set_interface.h 
+		paramano_set_interface.h
 
 CFLAGS	=	-I/usr/include/gtk-2.0 \
 			-I/usr/lib/gtk-2.0/include \
@@ -63,13 +61,13 @@ LDFLAGS	=	-lgtk-3 \
 			-lglib-2.0
 ########################################################################
 # Make entire suite
-all: trayfreq trayfreq-set lang trayfreq.conf
+all: paramano paramano-set lang paramano.conf
 ########################################################################
 
 
 ########################################################################
-# Make main trayfreq system tray program
-trayfreq:	bat_tray.o \
+# Make main paramano system tray program
+paramano:	bat_tray.o \
 			common.o \
 			config_file.o \
 			defaults.o \
@@ -77,15 +75,15 @@ trayfreq:	bat_tray.o \
 			getfreq.o \
 			getgov.o \
 			reload.o \
-			trayfreq.o \
+			paramano.o \
 			tray.o \
-			trayfreq_set_interface.o
+			paramano_set_interface.o
 	$(CC) -o $@ $? $(LDFLAGS)
 
 ########################################################################
-# Make trayfreq-set utility
-trayfreq-set: \
-			trayfreq_set.o \
+# Make paramano-set utility
+paramano-set: \
+			paramano_set.o \
 			getcore.o \
 			getfreq.o \
 			getgov.o
@@ -109,17 +107,17 @@ lang:
 
 ########################################################################
 # Prepare template config file
-trayfreq.conf:
+paramano.conf:
 	sed	-e 's:SHAREDIR:$(SHAREDIR):g' \
-		-e 's:TRAYFREQ_CONF:$(TRAYFREQ_CONF):g' \
-		trayfreq.conf.src > trayfreq.conf
+		-e 's:PARAMANO_CONF:$(PARAMANO_CONF):g' \
+		paramano.conf.src > paramano.conf
 ########################################################################
 
 
 ########################################################################
 # Strip all symbols from binaries
 strip:
-	strip -s trayfreq trayfreq-set
+	strip -s paramano paramano-set
 	
 ########################################################################
 	
@@ -127,23 +125,21 @@ strip:
 ########################################################################
 # Remove generated files
 clean:
-	rm -f trayfreq trayfreq-set *.o lc/*.mo trayfreq.conf
+	rm -f paramano paramano-set *.o lc/*.mo paramano.conf
 ########################################################################
 
 
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(DESTDIR)/$(SHAREDIR)/trayfreq/
-	cp -r themes $(DESTDIR)/$(SHAREDIR)/trayfreq/
+	mkdir -p $(DESTDIR)/$(SHAREDIR)/paramano/
+	cp -r themes $(DESTDIR)/$(SHAREDIR)/paramano/
 
-	install -Dm 644 lc/fr.mo $(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/trayfreq.mo
+	install -Dm 644 lc/fr.mo $(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/paramano.mo
 
-	install -Dm 644 trayfreq.conf $(DESTDIR)/etc/trayfreq.conf
-	install -Dm 644 trayfreq.desktop $(DESTDIR)/etc/xdg/autostart/trayfreq.desktop
+	install -Dm 644 paramano.conf $(DESTDIR)/$(PARAMANO_CONF)
+	install -Dm 644 paramano.desktop $(DESTDIR)/etc/xdg/autostart/paramano.desktop
 
-	install -Dm 755 trayfreq $(DESTDIR)/$(BINDIR)/trayfreq
-	install -Dm 755 trayfreq-set $(DESTDIR)/$(BINDIR)/trayfreq-set
-
-	ln -s ../../../etc/trayfreq.conf $(DESTDIR)/$(SHAREDIR)/trayfreq/trayfreq.conf
+	install -Dm 755 paramano $(DESTDIR)/$(BINDIR)/paramano
+	install -Dm 755 paramano-set $(DESTDIR)/$(PARAMANO_SET)
 ########################################################################
