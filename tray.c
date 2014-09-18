@@ -306,7 +306,7 @@ void tray_init()
 {
 	tray_set_defaults();
 	tray = gtk_status_icon_new();
-	char* icon_file = g_strconcat(_DEFAULT_THEME, "/cpufreq-0.png", NULL);
+	char* icon_file = g_strconcat(_DEFAULT_THEME, "/cpu-0.png", NULL);
 
 	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -362,7 +362,7 @@ void tray_update_icon_percent()
 	}
 
 	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
-	asprintf(&file, "%s/cpufreq-%d.png", _DEFAULT_THEME,adjusted_percent);
+	asprintf(&file, "%s/cpu-%d.png", _DEFAULT_THEME,adjusted_percent);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
