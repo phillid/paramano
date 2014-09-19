@@ -16,8 +16,8 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef TRAYFREQ_H
-#define TRAYFREQ_H
+#ifndef PARAMANO_H
+#define PARAMANO_H
 
 void config_init();
 

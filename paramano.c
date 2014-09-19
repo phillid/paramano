@@ -43,8 +43,8 @@
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "");
-	bindtextdomain("trayfreq",LOCALEDIR);
-	textdomain("trayfreq");
+	bindtextdomain("paramano",LOCALEDIR);
+	textdomain("paramano");
 	debug("Set gettext up\n");
 
 	if(!gtk_init_check(&argc, &argv))
