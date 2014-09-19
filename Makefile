@@ -14,6 +14,7 @@ SUDO=$(BINDIR)/sudo
 PARAMANO_SET=$(BINDIR)/paramano-set
 
 # Misc
+PARAMANO=$(BINDIR)/paramano
 PARAMANO_CONF=$(SYSCONFDIR)/paramano.conf
 ROOT_UID=0
 
@@ -61,7 +62,7 @@ LDFLAGS	=	-lgtk-3 \
 			-lglib-2.0
 ########################################################################
 # Make entire suite
-all: paramano paramano-set lang paramano.conf
+all: paramano paramano-set lang paramano-extra
 ########################################################################
 
 
@@ -107,10 +108,13 @@ lang:
 
 ########################################################################
 # Prepare template config file
-paramano.conf:
-	sed	-e 's:SHAREDIR:$(SHAREDIR):g' \
-		-e 's:PARAMANO_CONF:$(PARAMANO_CONF):g' \
-		paramano.conf.src > paramano.conf
+paramano-extra:
+	for file in paramano.conf paramano.desktop ; do \
+		sed	-e 's:SHAREDIR:$(SHAREDIR):g' \
+			-e 's:PARAMANO_CONF:$(PARAMANO_CONF):g'  \
+			-e 's:PARAMANO:$(PARAMANO):g' \
+			$$file.src > $$file ; \
+	done
 ########################################################################
 
 
@@ -125,7 +129,7 @@ strip:
 ########################################################################
 # Remove generated files
 clean:
-	rm -f paramano paramano-set *.o lc/*.mo paramano.conf
+	rm -f paramano paramano-set *.o lc/*.mo paramano.conf paramano.desktop
 ########################################################################
 
 
@@ -140,6 +144,6 @@ install:
 	install -Dm 644 paramano.conf $(DESTDIR)/$(PARAMANO_CONF)
 	install -Dm 644 paramano.desktop $(DESTDIR)/etc/xdg/autostart/paramano.desktop
 
-	install -Dm 755 paramano $(DESTDIR)/$(BINDIR)/paramano
+	install -Dm 755 paramano $(DESTDIR)/$(PARAMANO)
 	install -Dm 755 paramano-set $(DESTDIR)/$(PARAMANO_SET)
 ########################################################################
