@@ -112,8 +112,8 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 int main(int argc, char *argv[])
 {
 	setlocale(LC_ALL,"");
-	bindtextdomain("trayfreq",LOCALEDIR);
-	textdomain("trayfreq");
+	bindtextdomain("paramano",LOCALEDIR);
+	textdomain("paramano");
 
 	debug("Set gettext up\n");
 
