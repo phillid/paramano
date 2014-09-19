@@ -1,68 +1,67 @@
-# French translation of strings for trayfreq-archlinux.
-# Copyright (C) David Phillips
-# This file is distributed under the same license as the trayfreq-archlinux package.
-# David Phillips <dbphillipsnz@gmail.com>, 2014.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: trayfreq-archlinux 0.5\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-01 13:02+1200\n"
-"PO-Revision-Date: 2014-05-01 13:08+1200\n"
-"Last-Translator: David Phillips <dbphillipsnz@gmail.com>\n"
-"Language-Team: French <dbphillipsnz@gmail.com>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2014-09-19 19:04+1200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: tray.c:192
+#: ../bat_tray.c:54
 #, c-format
-msgid "Governor: %s\n"
-msgstr "Profil: %s\n"
+msgid "Discharging (%d%%)"
+msgstr "En décharge (%d%%)"
 
-#: tray.c:199
+#: ../bat_tray.c:59
 #, c-format
-msgid "CPU%i: %s%s"
-msgstr "CPU%i: %s%s"
+msgid "Charging (%d%%)"
+msgstr "En charge (%d%%)"
 
-#: trayfreq.c:69
-msgid "Failed to open config files!\n"
-msgstr "Pouvais pas ouvrier les fichiers config !\n"
+#: ../bat_tray.c:64
+msgid "Fully charged"
+msgstr "Complétement chargée"
 
-#: trayfreq.c:105
+#: ../bat_tray.c:69
+msgid "Unknown status"
+msgstr "Statut inconnu"
+
+#: ../paramano.c:53
 msgid ""
 "GTK Error: gtk_init_check returned FALSE.\n"
 "Bailing."
 msgstr "Erreur: gtk_init_check a retourné FALSE.\n"
 "Je part"
 
-#: bat_tray/bat_tray.c:57
-#, c-format
-msgid "Discharging (%d%%)"
-msgstr "En décharge (%d%%)"
+#: ../paramano.c:123
+msgid "Failed to open config files!\n"
+msgstr "Pouvais pas ouvrier les fichiers config !\n"
 
-#: bat_tray/bat_tray.c:62
-#, c-format
-msgid "Charging (%d%%)"
-msgstr "En charge (%d%%)"
-
-#: bat_tray/bat_tray.c:67
-#, c-format
-msgid "Fully charged"
-msgstr "Complétement chargée"
-
-#: bat_tray/bat_tray.c:72
-#, c-format
-msgid "Unknown status"
-msgstr "Statut inconnu"
-
-#: trayfreq_set/trayfreq_set.c:65
+#: ../paramano_set.c:62
 #, c-format
 msgid "FAILED: Couldn't open %s for writing\n"
 msgstr "ERREUR: Peut pas écrire à %s\n"
 
-#: trayfreq_set/trayfreq_set.c:161
+#: ../paramano_set.c:158
 #, c-format
 msgid "%s {-f frequency|-g governor} -c core\n"
 msgstr "%s {-f fréquence|-g profil} -c core\n"
+
+#: ../tray.c:211
+#, c-format
+msgid "Governor: %s\n"
+msgstr "Profil: %s\n"
+
+#: ../tray.c:217
+#, c-format
+msgid "%sCPU%d: %s%s"
+msgstr "%sCPU%d: %s%s"
