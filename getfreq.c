@@ -87,7 +87,7 @@ int gf_current(int core)
         {
             debug("Couldn't open '%s'\n", path);
             free(path);
-		    return -1;
+            return -1;
         }
 	}
 
