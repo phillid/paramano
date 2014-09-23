@@ -81,9 +81,14 @@ int gf_current(int core)
 
 	if(!(fd = fopen(path, "r")))
 	{
-		debug("Couldn't open '%s'\n",path);
-		free(path);
-		return -1;
+        free(path);
+        asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_cur_freq", core);
+		if (!(fd = fopen(path, "r"))) 
+        {
+            debug("Couldn't open '%s'\n", path);
+            free(path);
+		    return -1;
+        }
 	}
 
 	fgets(buff, 13, fd);
