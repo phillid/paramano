@@ -146,4 +146,7 @@ install:
 
 	install -Dm 755 paramano $(DESTDIR)/$(PARAMANO)
 	install -Dm 755 paramano-set $(DESTDIR)/$(PARAMANO_SET)
+	ln -s paramano $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq
+	ln -s paramano-set $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq-set
 ########################################################################
+
