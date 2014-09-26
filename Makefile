@@ -80,11 +80,14 @@ paramano:	bat_tray.o \
 			tray.o \
 			paramano_set_interface.o
 	$(CC) -o $@ $? $(LDFLAGS)
+########################################################################
+
 
 ########################################################################
 # Make paramano-set utility
 paramano-set: \
 			paramano_set.o \
+			common.o \
 			getcore.o \
 			getfreq.o \
 			getgov.o
@@ -122,9 +125,8 @@ paramano-extra:
 # Strip all symbols from binaries
 strip:
 	strip -s paramano paramano-set
-	
 ########################################################################
-	
+
 
 ########################################################################
 # Remove generated files
@@ -146,6 +148,8 @@ install:
 
 	install -Dm 755 paramano $(DESTDIR)/$(PARAMANO)
 	install -Dm 755 paramano-set $(DESTDIR)/$(PARAMANO_SET)
+
+	# These provide some compatability with trayfreq
 	ln -s paramano $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq
 	ln -s paramano-set $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq-set
 ########################################################################

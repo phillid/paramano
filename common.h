@@ -1,18 +1,18 @@
 /************************************************************************
- * This file is part of paramano.                                       *
+ * This file is part of Paramano.                                       *
  *                                                                      *
- * paramano is free software; you can redistribute it and/or            *
+ * Paramano is free software; you can redistribute it and/or            *
  * modify it under the terms of the GNU General Public License as       *
  * published by the Free Software Foundation; either version 3 of the   *
  * License, or (at your option) any later version.                      *
  *                                                                      *
- * paramano is distributed in the hope that it will be useful,          *
+ * Paramano is distributed in the hope that it will be useful,          *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with paramano. If not, see                                     *
+ * along with Paramano. If not, see                                     *
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
@@ -20,12 +20,13 @@
 #define COMMON_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 int  get_int_value_from_file(const char* filename);
 int  get_int(const char* string);
 bool file_has_line(const char *filename, const char *line);
+FILE* check_for_file(char* path);
 
-#include <stdio.h>
 // <ew> Stringification of line number
 #define STRING2(x) #x
 #define STRING(x) STRING2(x)
