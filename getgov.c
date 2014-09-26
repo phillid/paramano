@@ -1,18 +1,18 @@
 /************************************************************************
- * This file is part of paramano.                                       *
+ * This file is part of Paramano.                                       *
  *                                                                      *
- * paramano is free software; you can redistribute it and/or            *
+ * Paramano is free software; you can redistribute it and/or            *
  * modify it under the terms of the GNU General Public License as       *
  * published by the Free Software Foundation; either version 3 of the   *
  * License, or (at your option) any later version.                      *
  *                                                                      *
- * paramano is distributed in the hope that it will be useful,          *
+ * Paramano is distributed in the hope that it will be useful,          *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with paramano. If not, see                                     *
+ * along with Paramano. If not, see                                     *
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
@@ -38,7 +38,7 @@ void gg_init()
 	gchar gov_string[500];
 	int i = 0;
 	total_governors = 0;
-	for(i = 0; i < gc_number(); ++i)
+	for (i = 0; i < gc_number(); ++i)
 	{
 		memset(gov_string, '\0', sizeof(gov_string) );
 		gg_available(i, gov_string, sizeof(gov_string) );
@@ -46,7 +46,7 @@ void gg_init()
 		// go through every governor in gov_string
 		gchar* curr = (char*)&gov_string;
 		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-		while(end_of_curr)
+		while (end_of_curr)
 		{
 			memset(governors[i][total_governors], '\0', 13);
 			memmove(governors[i][total_governors], curr, end_of_curr - curr);
@@ -62,51 +62,50 @@ void gg_init()
 /***********************************************************************
  * Populate out with current governor for core
  **********************************************************************/
-int gg_current(int core, char* out, int size)
+bool gg_current(int core, char* out, int size)
 {
 	FILE* fd;
-	char path[FILE_PATH_SIZE];
+	char *path;
+	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
 
-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
-
-	if(!(fd = fopen(path, "r")))
+	if (!(fd = check_for_file(path)))
 	{
-		debug("Couldn't open '%s'\n",path);
-		return -1;
+		free(path);
+		return false;
 	}
 
 	fgets(out, size, fd);
-	// Chomp
+
+	// Get first line
 	gchar* newline = g_strrstr(out, "\n");
 	*newline = '\0';
 
 	debug("Current gov for core %d is '%s'\n",core,out);
 
 	fclose(fd);
-	return 0;
+	free(path);
+	return true;
 }
 
 
 /***********************************************************************
- * Populate out with number of available cores
+ * Populate `out` with number of available cores
  **********************************************************************/
-int gg_available(int core, char* out, int size)
+bool gg_available(int core, char* out, int size)
 {
-	FILE* fd;
-	char path[80];
+	char *path;
+	FILE *fd;
+	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
 
-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
-
-	if(!(fd = fopen(path, "r")))
+	if (!(fd = check_for_file(path)))
 	{
-		debug("Couldn't open '%s'\n",path);
-		return -1;
+		free(path);
+		return false;
 	}
-
 	fgets(out, size, fd);
-
 	fclose(fd);
-	return 0;
+	free(path);
+	return true;
 }
 
 
