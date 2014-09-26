@@ -1,18 +1,18 @@
 /************************************************************************
- * This file is part of paramano.                                       *
+ * This file is part of Paramano.                                       *
  *                                                                      *
- * paramano is free software; you can redistribute it and/or            *
+ * Paramano is free software; you can redistribute it and/or            *
  * modify it under the terms of the GNU General Public License as       *
  * published by the Free Software Foundation; either version 3 of the   *
  * License, or (at your option) any later version.                      *
  *                                                                      *
- * paramano is distributed in the hope that it will be useful,          *
+ * Paramano is distributed in the hope that it will be useful,          *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with paramano. If not, see                                     *
+ * along with Paramano. If not, see                                     *
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
@@ -157,7 +157,7 @@ static void tray_generate_menu()
 
 		debug("Setting connection/callback\n");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
-		
+
 		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
@@ -184,10 +184,10 @@ static void tray_generate_menu()
 			debug("Governor is current one, ticking radio button\n");
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 		}
-		
+
 		debug("Adding callback");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(gov_menu_item_toggled), gg_gov(0, i));
-		
+
 		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}

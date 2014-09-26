@@ -1,18 +1,18 @@
 /************************************************************************
- * This file is part of paramano.                                       *
+ * This file is part of Paramano.                                       *
  *                                                                      *
- * paramano is free software; you can redistribute it and/or            *
+ * Paramano is free software; you can redistribute it and/or            *
  * modify it under the terms of the GNU General Public License as       *
  * published by the Free Software Foundation; either version 3 of the   *
  * License, or (at your option) any later version.                      *
  *                                                                      *
- * paramano is distributed in the hope that it will be useful,          *
+ * Paramano is distributed in the hope that it will be useful,          *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of       *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        *
  * GNU General Public License for more details.                         *
  *                                                                      *
  * You should have received a copy of the GNU General Public License    *
- * along with paramano. If not, see                                     *
+ * along with Paramano. If not, see                                     *
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
@@ -190,7 +190,7 @@ int get_battery_state()
 	if (file_has_line(CHARGE_STATE_PATH, "Charging"))
 	{
 		debug("Battery charging\n");
-		return STATE_CHARGING;	
+		return STATE_CHARGING;
 	}
 	debug("Fallthrough: unknown status\n");
 	return STATE_UNKNOWN;
@@ -209,8 +209,7 @@ int get_bat_num()
 	for(i = 0; i < 10; i++)
 	{
 		asprintf(&file, "/sys/class/power_supply/BAT%d/present", i);
-		debug("Attempting to open '%s'\n",file);
-		if( (fd = fopen(file, "r")) )
+		if( (fd = check_for_file(file)) )
 		{
 			debug("Found battery %d\n",i);
 			if (fgetc(fd) == '1')
