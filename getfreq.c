@@ -25,9 +25,12 @@
 #include <string.h>
 #include <glib.h>
 
-/* [CORE][FREQUENCY NUMBER] */
-char freqs[999][50][13];
-int total_freqs;
+#define MAX_CORES 1000
+#define MAX_FREQS 50
+#define FREQ_LENGTH 14
+
+char freqs[MAX_CORES][MAX_FREQS][FREQ_LENGTH];
+int total_freqs; // Number of freqs for core 0
 
 
 /***********************************************************************
@@ -35,10 +38,14 @@ int total_freqs;
  **********************************************************************/
 void gf_init()
 {
-	char freq_string[500];
+	char freq_string[4096]; // POSIX suggested line length. Source of error for CPUs with a huge number of freqs
+	char *next_token;
 	unsigned int i;
 
-	for(i = 0; i < gc_number(); i++)
+	memset(freqs, '\0', sizeof(freqs));
+
+
+	for(i = 0; (i < gc_number() && i < MAX_CORES); i++)
 	{
 		memset(freq_string, '\0', sizeof(freq_string) );
 
@@ -49,21 +56,25 @@ void gf_init()
 			continue;
 		}
 
-		// freq_string is a space separated list of freqs so
-		// iterate over each frequency in freq_string
-		char* curr = &freq_string[0];
-		char* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-		while(end_of_curr)
-		{
-			// TO DO : get rid of magic constants
-			memset(freqs[i][total_freqs], '\0', 13); // TO DO: get rid of magic constant 13
-			memmove(freqs[i][total_freqs], curr, end_of_curr - curr);
+		*strchrnul(freq_string, '\n') = '\0';
 
-			curr = end_of_curr+1;
-			end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+		// freq_string is a space separated list of freqs
+		// Use strtok to find each
+		next_token = strtok(freq_string, " \n");
+		total_freqs = 0;
+		do
+		{
+			chomp(next_token);
+			debug("Found frequency #%d (%s KHz)\n",freq,next_token);
+			strncpy(freqs[i][total_freqs], next_token, FREQ_LENGTH);
 			total_freqs++;
-		}
+		} while((next_token = strtok(NULL, " ")) != NULL);
 	}
+
+	// Hit the limit of storage of cores' frequencies
+	if (i == MAX_CORES)
+		info("Unable to add more than %d cores\n", MAX_CORES);
+
 	debug("Found %d frequencies\n",total_freqs);
 }
 
@@ -122,15 +133,19 @@ int gf_available(int core, char* out, int size)
 }
 
 /***********************************************************************
- * Populate `out` with a formatted, units-added freq label for freq
+ * Populate `out` with a formatted, units-added freq label for `freq`
  **********************************************************************/
 char* gf_get_frequency_label(int freq)
 {
 	char *string;
-	if(freq >= 1000000) // >= 1 million KHz (1GHz)
-		asprintf(&string, "%.2f GHz", ((float)freq/1000000) );
-	else
-		asprintf(&string, "%.2d MHz", freq/1000);
+	if(freq >= 1000000000) // >= 1 billion KHz (1 THz) This, ladies and gentlement, is future-proofing ;)
+		asprintf(&string, "%.2f THz", (float)freq/1000000000 );
+	else if(freq >= 1000000) // >= 1 million KHz (1 GHz)
+		asprintf(&string, "%.2f GHz", (float)freq/1000000 );
+	else if (freq >= 1000) // >= 1 thousand KHz (1 MHz)
+		asprintf(&string, "%.2f MHz", (float)freq/1000 );
+	else // < 1000 KHz (1 MHz)
+		asprintf(&string, "%.2f KHz", (float)freq);
 
 	debug("Prepared freq label '%s' for freq %d\n",string,freq);
 

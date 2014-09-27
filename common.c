@@ -93,3 +93,14 @@ int get_int(const char* string)
 
 	return atoi(first_num);
 }
+
+
+/***********************************************************************
+ * Replace occurrences of \n from end of string with \0
+ **********************************************************************/
+void chomp(char* string)
+{
+	int i;
+	for (i = strlen(string)-1; (i >= 0 && string[i] == '\n'); i--)
+		string[i] = '\0';
+}
