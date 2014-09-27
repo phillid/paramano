@@ -134,9 +134,9 @@ int main(int argc, char *argv[])
 		get_argument_summary(argc, argv, &args);
 
 		debug("Correct number of command line arguments\n");
-		debug("-c: %s  -g: %s  -f: %s\n",	(args.present | ARG_CORE )? "Yes":"No",
-											(args.present | ARG_GOV  )? "Yes":"No",
-											(args.present | ARG_FREQ )? "Yes":"No" );
+		debug("-c: %s  -g: %s  -f: %s\n",	(args.present & ARG_CORE )? "Yes":"No",
+											(args.present & ARG_GOV  )? "Yes":"No",
+											(args.present & ARG_FREQ )? "Yes":"No" );
 		debug("Core: %s\n",args.core);
 		debug("Gov : %s\n",args.governor);
 		debug("Freq: %s\n",args.frequency);
