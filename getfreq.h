@@ -23,7 +23,7 @@
 
 void  gf_init();
 int   gf_current(int core);
-bool   gf_available(int core, char* out, int size);
+int   gf_available(int core, char* out, int size);
 char* gf_get_frequency_label(int freq);
 char* gf_freqa(int core, int index);
 int   gf_freqi(int core, int index);

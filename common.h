@@ -26,6 +26,7 @@ int  get_int_value_from_file(const char* filename);
 int  get_int(const char* string);
 bool file_has_line(const char *filename, const char *line);
 FILE* check_for_file(char* path);
+void chomp(char* string);
 
 // <ew> Stringification of line number
 #define STRING2(x) #x

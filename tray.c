@@ -340,8 +340,10 @@ void tray_update_icon_percent()
 	char* file;
 	gulong max_frequency = gf_freqi(0, 0);
 	gint adjusted_percent = 0;
-	// If no governor, set percentage to 0. This if statement fixes an FPE a few lines down
-	if (gg_number() == 0)
+
+	// If max_frequency is 0, we don't want to divide by it,
+	// so give up, call it a day, and have a simple icon
+	if (max_frequency == 0)
 	{
 		adjusted_percent = 0;
 	} else {
