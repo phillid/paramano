@@ -94,15 +94,15 @@ gboolean update_icon(gpointer user_data)
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			asprintf(&icon_file,"%s/bat-%d.png",_DEFAULT_THEME,rounded);
+			asprintf(&icon_file,"%s/bat-%d.png",DEFAULT_THEME,rounded);
 			break;
 
 		case STATE_CHARGING:
-			asprintf(&icon_file,"%s/bat-%d-charging.png",_DEFAULT_THEME,rounded);
+			asprintf(&icon_file,"%s/bat-%d-charging.png",DEFAULT_THEME,rounded);
 			break;
 
 		default:
-			asprintf(&icon_file,"%s/bat-charged.png",_DEFAULT_THEME);
+			asprintf(&icon_file,"%s/bat-charged.png",DEFAULT_THEME);
 			break;
 	}
 
@@ -131,7 +131,7 @@ void bat_tray_init()
 
 	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
-	asprintf(&icon_file,"%s/bat-charged.png",_DEFAULT_THEME);
+	asprintf(&icon_file,"%s/bat-charged.png",DEFAULT_THEME);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	free(icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);

@@ -248,20 +248,20 @@ static gboolean update_icon(gpointer user_data)
 	{
 		case STATE_DISCHARGING:
 			debug("Discharging\n");
-			if(_DEFAULT_BAT_GOV)
+			if(DEFAULT_BAT_GOV)
 			{
 				for(i = 0; i < gc_number(); ++i)
-					si_gov(_DEFAULT_BAT_GOV, i);
+					si_gov(DEFAULT_BAT_GOV, i);
 			}
 			break;
 
 		case STATE_CHARGING:
 		case STATE_FULL:
 			debug("Charging/Full\n");
-			if(_DEFAULT_AC_GOV)
+			if(DEFAULT_AC_GOV)
 			{
 				for(i = 0; i < gc_number(); ++i)
-					si_gov(_DEFAULT_AC_GOV, i);
+					si_gov(DEFAULT_AC_GOV, i);
 			}
 
 			break;
@@ -280,20 +280,20 @@ void tray_set_defaults()
 {
 	// Set defaults
 	int i = 0;
-	if(_DEFAULT_GOV)
+	if(DEFAULT_GOV)
 	{
 		for(i = 0; i < gc_number(); ++i)
-			si_gov(_DEFAULT_GOV, i);
+			si_gov(DEFAULT_GOV, i);
 
 	} else {
 		for(i = 0; i < gc_number(); ++i)
 			si_gov("ondemand", i);
 	}
 
-	if(_DEFAULT_FREQ)
+	if(DEFAULT_FREQ)
 	{
 		for(i = 0; i < gc_number(); ++i)
-			si_freq(atoi(_DEFAULT_FREQ), i);
+			si_freq(atoi(DEFAULT_FREQ), i);
 	}
 
 }
@@ -306,7 +306,7 @@ void tray_init()
 {
 	tray_set_defaults();
 	tray = gtk_status_icon_new();
-	char* icon_file = g_strconcat(_DEFAULT_THEME, "/cpu-0.png", NULL);
+	char* icon_file = g_strconcat(DEFAULT_THEME, "/cpu-0.png", NULL);
 
 	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -364,7 +364,7 @@ void tray_update_icon_percent()
 	}
 
 	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
-	asprintf(&file, "%s/cpu-%d.png", _DEFAULT_THEME,adjusted_percent);
+	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 

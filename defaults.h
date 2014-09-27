@@ -22,13 +22,13 @@
 #include <stdbool.h> /* boolean types */
 #include <stdlib.h> /* NULL */
 
-char* _DEFAULT_GOV;
-char* _DEFAULT_FREQ;
-char* _DEFAULT_PROG;
-char* _DEFAULT_BAT_GOV;
-char* _DEFAULT_AC_GOV;
-bool  _DEFAULT_SHOW_BATTERY;
-char* _DEFAULT_THEME;
+char* DEFAULT_GOV;
+char* DEFAULT_FREQ;
+char* DEFAULT_PROG;
+char* DEFAULT_BAT_GOV;
+char* DEFAULT_AC_GOV;
+bool  DEFAULT_SHOW_BATTERY;
+char* DEFAULT_THEME;
 
 
 void defaults_init();
