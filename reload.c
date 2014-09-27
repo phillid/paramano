@@ -37,7 +37,7 @@ void reload_config()
 	config_init();
 
 	// Hide battery icon if told to
-	_DEFAULT_SHOW_BATTERY? bat_tray_show() : bat_tray_hide();
+	DEFAULT_SHOW_BATTERY? bat_tray_show() : bat_tray_hide();
 
 	// Update governor and frequency defaults
 	debug("Re-init freq tray\n");

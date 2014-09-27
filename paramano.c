@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 	tray_show();
 
 	// Show battery tray only if we're supposed to
-	if(_DEFAULT_SHOW_BATTERY)
+	if(DEFAULT_SHOW_BATTERY)
 	{
 		debug("Showing battery info this time around\n");
 		bat_tray_init();
@@ -127,24 +127,21 @@ void config_init()
 	// Reset defaults to default values
 	defaults_init();
 
-	_DEFAULT_GOV		= config_get_key(&config, "governor", "default");
-	_DEFAULT_FREQ		= config_get_key(&config, "frequency", "default");
-	_DEFAULT_BAT_GOV	= config_get_key(&config, "battery", "governor");
-	_DEFAULT_AC_GOV		= config_get_key(&config, "ac", "governor");
+	DEFAULT_GOV			= config_get_key(&config, "governor", "default");
+	DEFAULT_FREQ		= config_get_key(&config, "frequency", "default");
+	DEFAULT_BAT_GOV		= config_get_key(&config, "battery", "governor");
+	DEFAULT_AC_GOV		= config_get_key(&config, "ac", "governor");
 
-	char* temp = config_get_key(&config, "battery", "show");
-	if (temp)
-		_DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
+	char* temp;
+	if ((temp = config_get_key(&config, "battery", "show")))
+		DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
 
 	info("UID: %d   GID: %d\n", getuid(), getgid());
 
-	temp = config_get_key(&config, "extra", "theme");
-	if (temp && strlen(temp) < sizeof(_DEFAULT_THEME) )
-	{
-		sprintf(_DEFAULT_THEME, "%s", temp);
-	}
+	if ((temp = config_get_key(&config, "extra", "theme")))
+		asprintf(&DEFAULT_THEME, "%s", temp);
 
-	debug("Using theme %s\n",_DEFAULT_THEME);
+	debug("Using theme %s\n",DEFAULT_THEME);
 
 	g_free(config.file_name);
 	config_close(&config);

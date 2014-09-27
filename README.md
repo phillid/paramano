@@ -7,6 +7,8 @@ I forked the project and got it working again.
 
 If you're using ArchLinux, just jump over to the [AUR page for this software](https://aur.archlinux.org/packages/trayfreq-archlinux) and install it that way.
 
+For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your repositories.
+
 Runtime Dependencies
 --------------------
 

@@ -20,21 +20,21 @@
 
 #include <stdio.h>
 
-char* _DEFAULT_GOV;
-char* _DEFAULT_FREQ;
-char* _DEFAULT_PROG;
-char* _DEFAULT_BAT_GOV;
-char* _DEFAULT_AC_GOV;
-bool  _DEFAULT_SHOW_BATTERY = true;
-char* _DEFAULT_THEME;
+char* DEFAULT_GOV;
+char* DEFAULT_FREQ;
+char* DEFAULT_PROG;
+char* DEFAULT_BAT_GOV;
+char* DEFAULT_AC_GOV;
+bool  DEFAULT_SHOW_BATTERY = true;
+char* DEFAULT_THEME;
 
 void defaults_init()
 {
-	_DEFAULT_GOV			= NULL;
-	_DEFAULT_FREQ			= NULL;
-	_DEFAULT_PROG			= NULL;
-	_DEFAULT_BAT_GOV		= NULL;
-	_DEFAULT_AC_GOV			= NULL;
-	_DEFAULT_SHOW_BATTERY	= true;
-	asprintf(&_DEFAULT_THEME, SHAREDIR"/paramano/themes/default");
+	DEFAULT_GOV				= NULL;
+	DEFAULT_FREQ			= NULL;
+	DEFAULT_PROG			= NULL;
+	DEFAULT_BAT_GOV			= NULL;
+	DEFAULT_AC_GOV			= NULL;
+	DEFAULT_SHOW_BATTERY	= true;
+	asprintf(&DEFAULT_THEME, SHAREDIR"/paramano/themes/default");
 }
