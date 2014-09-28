@@ -18,24 +18,6 @@
 
 #include "paramano.h"
 
-#include "tray.h"
-#include "bat_tray.h"
-#include "getfreq.h"
-#include "getcore.h"
-#include "getgov.h"
-#include "config_file.h"
-#include "reload.h"
-#include "defaults.h"
-#include "common.h"
-
-#include <gtk/gtk.h>
-#include <unistd.h>		// getuid, getgid
-#include <stdio.h>		// printf, FILE, fopen, etc
-#include <string.h>		// strlen
-
-#include <libintl.h>	// gettext
-#include <locale.h>		// LC_ALL etc
-
 
 /***********************************************************************
  * Main

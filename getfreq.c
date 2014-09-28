@@ -16,14 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "getfreq.h"
-#include "getcore.h"
-#include "common.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
+#include "paramano.h"
 
 #define MAX_CORES 1000
 #define MAX_FREQS 50
@@ -139,13 +132,13 @@ char* gf_get_frequency_label(int freq)
 {
 	char *string;
 	if(freq >= 1000000000) // >= 1 billion KHz (1 THz) This, ladies and gentlement, is future-proofing ;)
-		asprintf(&string, "%.2f THz", (float)freq/1000000000 );
+		asprintf(&string, "%.2f THz", (double)freq/1000000000 );
 	else if(freq >= 1000000) // >= 1 million KHz (1 GHz)
-		asprintf(&string, "%.2f GHz", (float)freq/1000000 );
+		asprintf(&string, "%.2f GHz", (double)freq/1000000 );
 	else if (freq >= 1000) // >= 1 thousand KHz (1 MHz)
-		asprintf(&string, "%.2f MHz", (float)freq/1000 );
+		asprintf(&string, "%.2f MHz", (double)freq/1000 );
 	else // < 1000 KHz (1 MHz)
-		asprintf(&string, "%.2f KHz", (float)freq);
+		asprintf(&string, "%.2f KHz", (double)freq);
 
 	debug("Prepared freq label '%s' for freq %d\n",string,freq);
 
@@ -171,7 +164,7 @@ int gf_freqi(int core, int index)
 /***********************************************************************
  * Return total number of frequencies
  **********************************************************************/
-int gf_number()
+unsigned int gf_number()
 {
 	return total_freqs;
 }

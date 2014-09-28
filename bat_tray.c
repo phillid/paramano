@@ -17,17 +17,9 @@
  ************************************************************************/
 
 
-#include "bat_tray.h"
-
-#include <gtk/gtk.h>
-#include <libintl.h>
-#include <stdio.h>
-#include "common.h"
-#include "defaults.h"
-
+#include "paramano.h"
 
 static GtkStatusIcon* tray;
-
 int bat_num; // Shortcoming: we only detect one battery
 char *CHARGE_VALUE_PATH, *CHARGE_STATE_PATH;
 

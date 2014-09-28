@@ -16,15 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "string.h"
-#include "getgov.h"
-#include "getcore.h"
-#include "common.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
+#include "paramano.h"
 
 /* [CORE][GOVERNOR NUMBER] */
 char governors[999][50][13];
@@ -36,9 +28,9 @@ int total_governors;
 void gg_init()
 {
 	gchar gov_string[500];
-	int i = 0;
+	unsigned int i = 0;
 	total_governors = 0;
-	for (i = 0; i < gc_number(); ++i)
+	for (i = 0; i < gc_number(); i++)
 	{
 		memset(gov_string, '\0', sizeof(gov_string) );
 		gg_available(i, gov_string, sizeof(gov_string) );
@@ -120,7 +112,7 @@ char* gg_gov(int core, int index)
 /***********************************************************************
  * Return total number of governors
  **********************************************************************/
-int gg_number()
+unsigned int gg_number()
 {
 	return total_governors;
 }

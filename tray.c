@@ -16,28 +16,10 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "tray.h"
+#include "paramano.h"
 
-#include "getfreq.h"
-#include "getcore.h"
-#include "getgov.h"
-#include "paramano_set_interface.h"
-#include "bat_tray.h"
-#include "defaults.h"
-#include "common.h"
-
-#include <glib.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-
-
-//#define TOOLTIP_TEXT_SIZE 500
 
 GtkStatusIcon* tray;
-//char tooltip_text[TOOLTIP_TEXT_SIZE];
 
 GtkWidget* menu;
 GSList* menu_items;
@@ -54,8 +36,8 @@ static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 	{
 		checked_menu_item = GTK_WIDGET(item);
 		gint freq = GPOINTER_TO_INT(data);
-		int i = 0;
-		for(i = 0; i < gc_number(); ++i)
+		unsigned int i = 0;
+		for(i = 0; i < gc_number(); i++)
 			si_freq(freq, i);
 	}
 }
@@ -71,8 +53,8 @@ static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 	{
 		checked_menu_item = GTK_WIDGET(item);
 		char* gov = (char*)data;
-		int i = 0;
-		for(i = 0; i < gc_number(); ++i)
+		unsigned int i = 0;
+		for(i = 0; i < gc_number(); i++)
 			si_gov(gov, i);
 	}
 }
@@ -129,7 +111,7 @@ static void tray_generate_menu()
 	gg_init();
 
 	char *label;
-	int i = 0;
+	unsigned int i = 0;
 
 	char current_governor[20];
 	memset(current_governor, '\0', sizeof(current_governor) );
@@ -138,7 +120,7 @@ static void tray_generate_menu()
 	gint current_frequency = gf_current(0);
 
 	// Add available frequencies
-	for(i = 0; i < gf_number(); ++i)
+	for(i = 0; i < gf_number(); i++)
 	{
 		label = gf_get_frequency_label(gf_freqi(0, i));
 		debug("Got freq label '%s', i=%d\n",label,i);
@@ -202,7 +184,7 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 {
 	char *msg, *label;
 	char current_governor[20]; // TO DO
-	int i = 0;
+	unsigned int i = 0;
 
 	memset(current_governor, '\0', sizeof(current_governor) );
 
@@ -210,7 +192,7 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 	asprintf(&msg, _("Governor: %s\n"), current_governor);
 
-	for(i = 0; i < gc_number(); ++i)
+	for(i = 0; i < gc_number(); i++)
 	{
 		debug("Adding CPU%d's frequency\n",i);
 		label = gf_get_frequency_label(gf_current(i));
@@ -243,14 +225,14 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
  **********************************************************************/
 static gboolean update_icon(gpointer user_data)
 {
-	int i;
+	unsigned int i;
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
 			debug("Discharging\n");
 			if(DEFAULT_BAT_GOV)
 			{
-				for(i = 0; i < gc_number(); ++i)
+				for(i = 0; i < gc_number(); i++)
 					si_gov(DEFAULT_BAT_GOV, i);
 			}
 			break;
@@ -260,7 +242,7 @@ static gboolean update_icon(gpointer user_data)
 			debug("Charging/Full\n");
 			if(DEFAULT_AC_GOV)
 			{
-				for(i = 0; i < gc_number(); ++i)
+				for(i = 0; i < gc_number(); i++)
 					si_gov(DEFAULT_AC_GOV, i);
 			}
 
@@ -279,20 +261,20 @@ static gboolean update_icon(gpointer user_data)
 void tray_set_defaults()
 {
 	// Set defaults
-	int i = 0;
+	unsigned int i = 0;
 	if(DEFAULT_GOV)
 	{
-		for(i = 0; i < gc_number(); ++i)
+		for(i = 0; i < gc_number(); i++)
 			si_gov(DEFAULT_GOV, i);
 
 	} else {
-		for(i = 0; i < gc_number(); ++i)
+		for(i = 0; i < gc_number(); i++)
 			si_gov("ondemand", i);
 	}
 
 	if(DEFAULT_FREQ)
 	{
-		for(i = 0; i < gc_number(); ++i)
+		for(i = 0; i < gc_number(); i++)
 			si_freq(atoi(DEFAULT_FREQ), i);
 	}
 
@@ -319,17 +301,6 @@ void tray_init()
 	debug("Adding timeout\n");
 	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
-}
-
-
-/***********************************************************************
- * Set the tooltip message
- **********************************************************************/
-void tray_set_tooltip(const char* msg)
-{
-	debug("Setting up toolip var with text '%s'\n",msg);
-	//memset(tooltip_text, '\0', TOOLTIP_TEXT_SIZE);
-	//memmove(tooltip_text, msg, strlen(msg));
 }
 
 /**********************************************************************

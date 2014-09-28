@@ -19,13 +19,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <stdbool.h>
-#include <stdio.h>
-
 int   get_int_value_from_file(const char* filename);
 int   get_int(const char* string);
 bool  file_has_line(const char *filename, const char *line);
-FILE* check_for_file(char* path);
+FILE *check_for_file(char* path);
 
 // <ew> Stringification of line number
 #define STRING2(x) #x

@@ -41,8 +41,8 @@ DEPS = 	bat_tray.h \
 		getcore.h \
 		getfreq.h \
 		getgov.h \
-		reload.h \
 		paramano.h \
+		reload.h \
 		tray.h \
 		paramano_set_interface.h
 
@@ -55,6 +55,18 @@ CFLAGS	=	-I/usr/include/gtk-2.0 \
 			-I/usr/include/glib-2.0 \
 			-I/usr/lib/glib-2.0/include \
 			-Wall \
+			-Wclobbered \
+			-Wempty-body \
+			-Wignored-qualifiers \
+			-Wmissing-field-initializers \
+			-Wmissing-parameter-type \
+			-Woverride-init \
+			-Wsign-compare \
+			-Wtype-limits \
+			-Wuninitialized \
+			-Wunused-but-set-parameter \
+			-Wdouble-promotion \
+			-Werror \
 			-D_=gettext
 
 LDFLAGS	=	-lgtk-3 \

@@ -16,11 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "common.h"
-
-#include <stdio.h> /* fopen, fgets, printf */
-#include <stdlib.h> /* atoi */
-#include <string.h> /* lots of functions */
+#include "paramano.h"
 
 /***********************************************************************
  * Return integer value from first line in file

@@ -16,9 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "defaults.h"
-
-#include <stdio.h>
+#include "paramano.h"
 
 char* DEFAULT_GOV;
 char* DEFAULT_FREQ;
