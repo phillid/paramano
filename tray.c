@@ -58,18 +58,6 @@ static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 			si_gov(gov, i);
 	}
 }
-/*
-static gboolean governor_exists(gchar* governor)
-{
-	int i = 0;
-	for(i = 0; i < gf_number(); ++i)
-	{
-		if(g_strcmp0(governor, gg_gov(0, i)) == 0)
-			return TRUE;
-	}
-	return FALSE;
-}*/
-
 
 /***********************************************************************
  * Destroy a menu item
@@ -220,6 +208,46 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 }
 
 
+/**********************************************************************
+ * Set icon based on current freq/governor
+ **********************************************************************/
+static void tray_update_icon_percent()
+{
+	char* file;
+	int max_frequency = gf_freqi(0, 0);
+	int adjusted_percent, percent;
+
+	// If max_frequency is 0, we don't want to divide by it,
+	// so give up, call it a day, and have a simple icon
+	if (max_frequency == 0)
+	{
+		adjusted_percent = 0;
+	} else {
+		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
+		// TO DO: round instead of lots of ifs
+		percent = (gf_current(0) * 100)/max_frequency;
+		if(percent == 100) {
+			adjusted_percent = 100;
+		} else if(percent >= 65.5) {
+			adjusted_percent = 75;
+		} else if(percent >= 37.5) {
+			adjusted_percent = 50;
+		} else if(percent >= 12.5) {
+			adjusted_percent = 25;
+		} else {
+			adjusted_percent = 0;
+		}
+	}
+
+	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
+	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
+	debug("Setting tray icon to '%s'\n",file);
+	gtk_status_icon_set_from_file(tray, file);
+
+	free(file);
+}
+
+
 /***********************************************************************
  * Update the freq/gov tray icon
  **********************************************************************/
@@ -301,46 +329,6 @@ void tray_init()
 	debug("Adding timeout\n");
 	g_timeout_add(1000, update_icon, NULL);
 	tray_init_menu();
-}
-
-/**********************************************************************
- * Set icon based on current freq/governor
- **********************************************************************/
-void tray_update_icon_percent()
-{
-	char* file;
-	gulong max_frequency = gf_freqi(0, 0);
-	gint adjusted_percent = 0;
-
-	// If max_frequency is 0, we don't want to divide by it,
-	// so give up, call it a day, and have a simple icon
-	if (max_frequency == 0)
-	{
-		adjusted_percent = 0;
-	} else {
-		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
-		// TO DO: round instead of lots of ifs
-		gint percent = (gf_current(0) * 100)/max_frequency;
-		if(percent == 100) {
-			adjusted_percent = 100;
-		} else if(percent >= 65.5) {
-			adjusted_percent = 75;
-		} else if(percent >= 37.5) {
-			adjusted_percent = 50;
-		} else if(percent >= 12.5) {
-			adjusted_percent = 25;
-		} else {
-			adjusted_percent = 0;
-		}
-	}
-
-	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
-	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
-	debug("Setting tray icon to '%s'\n",file);
-	gtk_status_icon_set_from_file(tray, file);
-
-
-	free(file);
 }
 
 

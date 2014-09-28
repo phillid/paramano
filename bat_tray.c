@@ -74,7 +74,7 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 /***********************************************************************
  * Updates the battery tray icon based upon battery percent
  **********************************************************************/
-gboolean update_icon(gpointer user_data)
+static gboolean update_icon(gpointer user_data)
 {
 	char *icon_file;
 	unsigned int rounded;
