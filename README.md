@@ -9,7 +9,6 @@ Installation
 ------------
 
 * [Paramano on the AUR](https://aur.archlinux.org/packages/paramano)
-* [Latest stable source package](http://phillid.tk/sources/paramano-0.60.tar.gz)
 * A Gentoo ebuild is provided in the `build/` directory
 * For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your distro's repositories.
 
