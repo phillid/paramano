@@ -22,7 +22,7 @@
 void tray_set_defaults();
 void tray_init();
 void tray_set_tooltip(const char* msg);
-void tray_update_icon_percent();
+//void tray_update_icon_percent();
 void tray_show();
 void tray_hide();
 bool tray_visible();

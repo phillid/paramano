@@ -77,7 +77,7 @@ void gf_init()
 int gf_current(int core)
 {
 	FILE* fd;
-	char buff[13]; // TO DO : magic constant
+	char buff[4096];
 	char* path;
 	int freq;
 
