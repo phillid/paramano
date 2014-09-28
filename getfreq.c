@@ -64,7 +64,7 @@ void gf_init()
 		total_freqs = 0;
 		do
 		{
-			chomp(next_token);
+			//chomp(next_token);
 			debug("Found frequency #%d (%s KHz)\n",total_freqs,next_token);
 			strncpy(freqs[i][total_freqs], next_token, FREQ_LENGTH);
 			total_freqs++;
