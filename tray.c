@@ -239,7 +239,7 @@ static void tray_update_icon_percent()
 		}
 	}
 
-	debug("Rounded/adjusted CPU percentage: %d\n",adjusted_percent);
+	debug("Rounded/adjusted CPU percentage: %d / %d = %d\n",gf_current(0), max_frequency, adjusted_percent);
 	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
 	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
