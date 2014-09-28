@@ -1,4 +1,4 @@
-To do 
+To do
 =====
 
 * Disable open_file wrapper when compiling without debug flag
