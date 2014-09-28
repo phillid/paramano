@@ -17,16 +17,7 @@
  ************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <libintl.h>
-#include <locale.h>
-
-#include "getfreq.h"
-#include "getcore.h"
-#include "common.h"
+#include "paramano.h"
 
 #define FILE_PATH_STRING_SIZE 100
 
@@ -116,9 +107,6 @@ int main(int argc, char *argv[])
 	textdomain("paramano");
 
 	debug("Set gettext up\n");
-
-	gc_init();
-	gf_init();
 
 	argument_summary args;
 	memset(&args, 0, sizeof(args));

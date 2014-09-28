@@ -19,15 +19,13 @@
 #ifndef GETFREQ_H
 #define GETFREQ_H
 
-#include <stdbool.h>
-
-void  gf_init();
-int   gf_current(int core);
-int   gf_available(int core, char* out, int size);
-char* gf_get_frequency_label(int freq);
-char* gf_freqa(int core, int index);
-int   gf_freqi(int core, int index);
-int   gf_number();
+void         gf_init();
+int          gf_current(int core);
+int          gf_available(int core, char* out, int size);
+char*        gf_get_frequency_label(int freq);
+char*        gf_freqa(int core, int index);
+int          gf_freqi(int core, int index);
+unsigned int gf_number();
 
 
 #endif

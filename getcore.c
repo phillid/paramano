@@ -16,14 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "getcore.h"
-
-#include "common.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <glib.h>
-#include <unistd.h>
+#include "paramano.h"
 
 unsigned int cores;
 
@@ -59,7 +52,7 @@ void gc_init()
 /***********************************************************************
  * Return number of cores
  **********************************************************************/
-int gc_number()
+unsigned int gc_number()
 {
 	return cores;
 }

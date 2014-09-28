@@ -16,8 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "config_file.h"
-#include "common.h"
+#include "paramano.h"
 
 gboolean config_open(struct config_file* config_file)
 {

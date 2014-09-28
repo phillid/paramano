@@ -20,4 +20,5 @@
 #define RELOAD_H
 
 void reload_config();
+
 #endif

@@ -19,6 +19,26 @@
 #ifndef PARAMANO_H
 #define PARAMANO_H
 
+#include <gtk/gtk.h>
+#include <unistd.h>		// getuid, getgid
+#include <stdio.h>		// printf, FILE, fopen, etc
+#include <stdlib.h>		// free etc
+#include <stdbool.h>	// boolean types
+#include <string.h>		// strlen
+#include <libintl.h>	// gettext
+#include <locale.h>		// LC_ALL etc
+
+#include "tray.h"
+#include "bat_tray.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "getgov.h"
+#include "config_file.h"
+#include "reload.h"
+#include "defaults.h"
+#include "common.h"
+#include "paramano_set_interface.h"
+
 void config_init();
 
 #endif

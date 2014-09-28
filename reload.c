@@ -16,13 +16,7 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "reload.h"
-#include "bat_tray.h"
-#include "tray.h"
 #include "paramano.h"
-#include "defaults.h"
-#include "common.h"
-#include <stdio.h>
 
 
 /***********************************************************************

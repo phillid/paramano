@@ -19,7 +19,7 @@
 #ifndef GETCORE_H
 #define GETCORE_H
 
-void gc_init();
-int  gc_number();
+void         gc_init();
+unsigned int gc_number();
 
 #endif
