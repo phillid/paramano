@@ -1,7 +1,7 @@
 # Maintainer: David Phillips (aka phillid) <dbphillipsnz at _remove this part if you want_ gmail dot com>
 
 pkgname=paramano
-pkgver=0.60
+pkgver=0.6.1
 pkgrel=1
 pkgdesc="Docking battery monitor and CPU governer controller (fork of trayfreq)"
 arch=('i686' 'x86_64' 'armv6h')
@@ -10,14 +10,14 @@ license=('GPL')
 depends=('gtk3' 'sudo')
 makedepends=()
 replaces="trayfreq-archlinux"
-source=(http://phillid.tk/source/${pkgname}-${pkgver}-${pkgrel}.tar.gz)
-sha1sums=('e5d91772a6848567fc9bf511168323331c8af2b1')
+source=(https://github.com/phillid/${pkgname}/archive/${pkgver}.tar.gz)
+sha1sums=('6171d2effaf57dbf74805264da9a69d2cedb6fba')
 backup=('etc/paramano.conf')
 
 build() {
-	make --directory=${srcdir}/${pkgname}-stable
+	make all --directory=${srcdir}/${pkgname}-${pkgver}
 }
 
 package() {
-	make install DESTDIR=${pkgdir} --directory=${srcdir}/$pkgname-stable
+	make install DESTDIR=${pkgdir} --directory=${srcdir}/${pkgname}-${pkgver}
 }
