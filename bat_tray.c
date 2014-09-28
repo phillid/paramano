@@ -31,6 +31,45 @@ int get_bat_percent()
 	return get_int_value_from_file(CHARGE_VALUE_PATH);
 }
 
+/***********************************************************************
+ * Return number of seconds until battery is fully charged/discharged
+ **********************************************************************/
+int get_bat_seconds_left()
+{
+	int charge_now, charge_full, current_now;
+	char* file;
+
+	// Read current current value
+	asprintf(&file, POWERDIR"BAT%d/current_now",bat_num);
+	current_now = get_int_value_from_file(file);
+	free(file);
+
+	// Return -1 if zero current (infinite charge time)
+	if (current_now == 0)
+		return -1;
+
+	asprintf(&file, POWERDIR"BAT%d/charge_now",bat_num);
+	charge_now = get_int_value_from_file(file);
+	free(file);
+
+	switch(get_battery_state())
+	{
+		case STATE_CHARGING:
+			// We need to know full charge to calculate this one
+			asprintf(&file, POWERDIR"BAT%d/charge_full",bat_num);
+			charge_full = get_int_value_from_file(file);
+			free(file);
+
+			return (3600*(charge_full - charge_now))/current_now;
+			break;
+		case STATE_DISCHARGING:
+			return (3600*charge_now)/current_now;
+			break;
+		default:
+			return -1;
+	}
+}
+
 
 /***********************************************************************
  * Updates the battery tray tooltip text
@@ -38,17 +77,27 @@ int get_bat_percent()
 static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
 {
 	char* msg;
+	int seconds_left = get_bat_seconds_left();
+
+	char* time_left;
+
+	if (seconds_left != -1)
+	{
+		asprintf(&time_left, _("%02d:%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60), seconds_left%60);
+	} else {
+		asprintf(&time_left, _("Unknown time left"));
+	}
 
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
 			debug("Discharging\n");
-			asprintf(&msg, _("Discharging (%d%%)"), get_bat_percent());
+			asprintf(&msg, _("Discharging (%d%%)\n%s"), get_bat_percent(), time_left);
 			break;
 
 		case STATE_CHARGING:
 			debug("Charging\n");
-			asprintf(&msg, _("Charging (%d%%)"), get_bat_percent());
+			asprintf(&msg, _("Charging (%d%%)\n%s"), get_bat_percent(), time_left);
 			break;
 
 		case STATE_CHARGED:
@@ -61,10 +110,10 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 			asprintf(&msg, _("Unknown status") );
 			break;
 	}
-
 	debug("Setting tooltip text to '%s'\n",msg);
 	gtk_tooltip_set_text(tooltip, msg);
 
+	free(time_left);
 	free(msg);
 
 	return true;
