@@ -48,7 +48,7 @@ int get_int_value_from_file(const char* filename)
 bool file_has_line(const char *filename, const char *line)
 {
 	FILE* fd;
-	char buffer[512];
+	char buffer[4096];
 
 	if (!(fd = fopen(filename, "r")))
 		return false;
@@ -94,13 +94,7 @@ int get_int(const char* string)
 	return atoi(first_num);
 }
 
-
 /***********************************************************************
- * Replace occurrences of \n from end of string with \0
+ * Get value after token in file.
+ * For example:
  **********************************************************************/
-void chomp(char* string)
-{
-	int i;
-	for (i = strlen(string)-1; (i >= 0 && string[i] == '\n'); i--)
-		string[i] = '\0';
-}
