@@ -19,6 +19,8 @@
 #ifndef PARAMANO_H
 #define PARAMANO_H
 
+#define POWERDIR "/sys/class/power_supply/"
+
 #include <gtk/gtk.h>
 #include <unistd.h>		// getuid, getgid
 #include <stdio.h>		// printf, FILE, fopen, etc
