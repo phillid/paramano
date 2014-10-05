@@ -6,7 +6,7 @@ EAPI="4"
 
 DESCRIPTION="Docking battery monitor and CPU governer controller (fork of trayfreq)"
 HOMEPAGE="https://github.com/phillid/paramano"
-SRC_URI="http://phillid.tk/source/${P}-1.tar.gz"
+SRC_URI="https/github.com/phillid/paramano/archive/${PV}.tar.gz"
 
 LICENSE="GPL"
 SLOT="0"
