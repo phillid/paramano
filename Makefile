@@ -1,7 +1,3 @@
-# Build utils
-MAKE = make
-CC = gcc
-
 # Directories
 PREFIX=/usr
 BINDIR=$(PREFIX)/bin
