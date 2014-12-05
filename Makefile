@@ -16,31 +16,31 @@ ROOT_UID=0
 
 
 ifdef DEBUG
- EXTRA_CFLAGS+=-DDEBUG
+ DEFS += -DDEBUG
 endif
 
-EXTRA_CFLAGS+=	-DPREFIX=\"$(PREFIX)\" \
-				-DBINDIR=\"$(BINDIR)\" \
-				-DSUDO=\"$(SUDO)\" \
-				-DPARAMANO_SET=\"$(PARAMANO_SET)\" \
-				-DPARAMANO_CONF=\"$(PARAMANO_CONF)\" \
-				-DLOCALEDIR=\"$(LOCALEDIR)\" \
-				-DSHAREDIR=\"$(SHAREDIR)\" \
-				-DROOT_UID=$(ROOT_UID) \
-				-D_GNU_SOURCE
+DEFS +=		-DPREFIX=\"$(PREFIX)\" \
+			-DBINDIR=\"$(BINDIR)\" \
+			-DSUDO=\"$(SUDO)\" \
+			-DPARAMANO_SET=\"$(PARAMANO_SET)\" \
+			-DPARAMANO_CONF=\"$(PARAMANO_CONF)\" \
+			-DLOCALEDIR=\"$(LOCALEDIR)\" \
+			-DSHAREDIR=\"$(SHAREDIR)\" \
+			-DROOT_UID=$(ROOT_UID) \
+			-D_GNU_SOURCE
 
 
-DEPS = 	bat_tray.h \
-		common.h \
-		config_file.h \
-		defaults.h \
-		getcore.h \
-		getfreq.h \
-		getgov.h \
-		paramano.h \
-		reload.h \
-		tray.h \
-		paramano_set_interface.h
+DEPS =		bat_tray.h \
+			common.h \
+			config_file.h \
+			defaults.h \
+			getcore.h \
+			getfreq.h \
+			getgov.h \
+			paramano.h \
+			reload.h \
+			tray.h \
+			paramano_set_interface.h
 
 CFLAGS	=	-I/usr/include/gtk-2.0 \
 			-I/usr/lib/gtk-2.0/include \
@@ -106,7 +106,7 @@ paramano-set: \
 
 ########################################################################
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(EXTRA_CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(DEFS)
 ########################################################################
 
 
