@@ -15,10 +15,6 @@ PARAMANO_CONF=$(SYSCONFDIR)/paramano.conf
 ROOT_UID=0
 
 
-ifdef DEBUG
- DEFS += -DDEBUG
-endif
-
 DEFS +=		-DPREFIX=\"$(PREFIX)\" \
 			-DBINDIR=\"$(BINDIR)\" \
 			-DSUDO=\"$(SUDO)\" \
@@ -68,9 +64,27 @@ CFLAGS	=	-I/usr/include/gtk-2.0 \
 LDFLAGS	=	-lgtk-3 \
 			-lgobject-2.0 \
 			-lglib-2.0
+
+
+
+########################################################################
+# Phony targets
+.PHONY: all debug lang paramano-extra clean strip install
+########################################################################
+
+
 ########################################################################
 # Make entire suite
 all: paramano paramano-set lang paramano-extra
+########################################################################
+
+
+########################################################################
+# Make entire suite, with a huge amount of debug messages compiled-in
+# Seriously, don't use this feature unless you're actually having a
+# bug. It'll flood your system journal with repetitive, boring drivel
+debug:
+	make all CFLAGS="$(CFLAGS) -DDEBUG"
 ########################################################################
 
 
@@ -99,7 +113,6 @@ paramano-set: \
 			getcore.o \
 			getfreq.o \
 			getgov.o
-
 	$(CC) -o $@ $? $(LDFLAGS)
 ########################################################################
 
@@ -146,19 +159,19 @@ clean:
 ########################################################################
 # Install entire suite
 install:
-	mkdir -p $(DESTDIR)/$(SHAREDIR)/paramano/
-	cp -r themes $(DESTDIR)/$(SHAREDIR)/paramano/
+	mkdir -p "$(DESTDIR)/$(SHAREDIR)/paramano/"
+	cp -r themes "$(DESTDIR)/$(SHAREDIR)/paramano/"
 
-	install -Dm 644 lc/fr.mo $(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/paramano.mo
+	install -Dm 644 lc/fr.mo "$(DESTDIR)/$(LOCALEDIR)/fr/LC_MESSAGES/paramano.mo"
 
-	install -Dm 644 paramano.conf $(DESTDIR)/$(PARAMANO_CONF)
-	install -Dm 644 paramano.desktop $(DESTDIR)/etc/xdg/autostart/paramano.desktop
+	install -Dm 644 paramano.conf "$(DESTDIR)/$(PARAMANO_CONF)"
+	install -Dm 644 paramano.desktop "$(DESTDIR)/etc/xdg/autostart/paramano.desktop"
 
-	install -Dm 755 paramano $(DESTDIR)/$(PARAMANO)
-	install -Dm 755 paramano-set $(DESTDIR)/$(PARAMANO_SET)
+	install -Dm 755 paramano "$(DESTDIR)/$(PARAMANO)"
+	install -Dm 755 paramano-set "$(DESTDIR)/$(PARAMANO_SET)"
 
 	# These provide some compatability with trayfreq
-	ln -s paramano $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq
-	ln -s paramano-set $$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq-set
+	ln -s paramano "$$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq"
+	ln -s paramano-set "$$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq-set"
 ########################################################################
 
