@@ -89,8 +89,3 @@ int get_int(const char* string)
 
 	return atoi(first_num);
 }
-
-/***********************************************************************
- * Get value after token in file.
- * For example:
- **********************************************************************/
