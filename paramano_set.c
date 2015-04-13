@@ -44,7 +44,7 @@ char write_str_to_file(const char *file, const char *data, const char *core)
 	if ( (fd = fopen(file_path, "w")) != NULL )
 	{
 		debug("Writing '%s' to '%s'\n",data,file_path);
-		fprintf(fd, data);
+		fputs(data, fd);
 		fclose(fd);
 		return 1;
 	}
