@@ -52,6 +52,11 @@ int get_bat_seconds_left()
 	charge_now = get_int_value_from_file(file);
 	free(file);
 
+	if (charge_now == -1 || current_now == -1)
+	{
+		return -1;
+	}
+
 	switch(get_battery_state())
 	{
 		case STATE_CHARGING:
@@ -81,11 +86,11 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 	char* time_left;
 
-	if (seconds_left != -1)
+	if (seconds_left == -1)
 	{
-		asprintf(&time_left, _("%02d:%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60), seconds_left%60);
-	} else {
 		asprintf(&time_left, _("Unknown time left"));
+	} else {
+		asprintf(&time_left, _("%02d:%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60), seconds_left%60);
 	}
 
 	switch(get_battery_state())
