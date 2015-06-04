@@ -8,13 +8,13 @@ High Priority
 
 Normal Priority
 ---------------
+* Remove some calls to debug, replace with assertions
+* Remove all calls to asprintf, replace with snprintf
 * Get rid of various magic numbers
 * Sniff for memory leaks
-* Boil the code down
 * Investigate shared library rather than calling paramano-set
 
 Low Priority
 ------------
-* Ensure all is aligned to my coding style
-** Define my coding style
+* Ensure all is aligns to an explicit style
 * Make a curses-based version of paramano
