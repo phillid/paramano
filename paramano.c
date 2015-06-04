@@ -93,7 +93,7 @@ void config_init()
 		debug("Didn't find '%s'\n",config.file_name);
 		g_free(config.file_name);
 		home_config_exists = FALSE;
-    }
+	}
 
 	if(!home_config_exists)
 		config.file_name = g_strconcat(PARAMANO_CONF, NULL);
