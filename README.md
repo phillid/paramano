@@ -8,8 +8,7 @@ Simple.
 Installation
 ------------
 
-* [Paramano on the AUR](https://aur.archlinux.org/packages/paramano)
-* A Gentoo ebuild is provided in the `build/` directory
+* [Paramano on AUR4](https://aur4.archlinux.org/packages/paramano)
 * For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your distro's repositories.
 
 Runtime Dependencies
