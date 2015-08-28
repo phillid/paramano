@@ -18,6 +18,30 @@
 
 #include "paramano.h"
 
+#include <stdarg.h>
+
+
+int get_int_value_from_filef(const char* format, ...)
+{
+	int value = 0;
+	va_list a;
+	va_start(a, format);
+	value = vget_int_value_from_filef(format, a);
+	va_end(a);
+
+	return value;
+}
+
+int vget_int_value_from_filef(const char* format, va_list args)
+{
+
+	char filename[1024];
+	if (vsnprintf(filename, sizeof(filename), format, args) == sizeof(filename))
+		fprintf(stderr, "WARN: filename buffer too small");
+	return get_int_value_from_file(filename);
+}
+
+
 /***********************************************************************
  * Return integer value from first line in file
  **********************************************************************/
