@@ -31,28 +31,59 @@ int get_bat_percent()
 	return get_int_value_from_file(CHARGE_VALUE_PATH);
 }
 
+
 /***********************************************************************
  * Return number of seconds until battery is fully charged/discharged
  **********************************************************************/
-int get_bat_seconds_left()
+long get_bat_seconds_left()
 {
-	int charge_now, charge_full, current_now;
-	char* file;
+	int now = 0;
+	int full = 0;
+	int rate = 0;
 
-	// Read current current value
-	asprintf(&file, POWERDIR"BAT%d/current_now",bat_num);
-	current_now = get_int_value_from_file(file);
-	free(file);
 
-	// Return -1 if zero current (infinite charge time)
-	if (current_now == 0)
-		return -1;
+	/* FIXME this now/full/rate logic has probably earned its own function.
+	 * Not because of DRY, but just for readability's sake perhaps */
 
-	asprintf(&file, POWERDIR"BAT%d/charge_now",bat_num);
-	charge_now = get_int_value_from_file(file);
-	free(file);
+	/* Kernel battery info is reported in one of two formats:
+	 *   - charge units
+	 *   - energy units
+	 * Charge Units      | Energy Units
+	 * ------------------+---------------
+	 * charge_now (µAh)  | energy_now (µWh)
+	 * charge_full (µAh) | energy_full (µWh)
+	 * current_now (µA)  | power_now (µW)
+	 *
+	 * Simple arithmetic produces the desired time value (time to fill, time
+	 * to empty).
+	 *
+	 * If a valid (non-negative) value from energy_now is received, we assume
+	 * all values are in energy units and proceed from there. If an invalid
+	 * value is received, we assume all values are in charge units etc.
+	 */
 
-	if (charge_now == -1 || current_now == -1)
+	/* Attempt to read current ENERGY level */
+	now = get_int_value_from_filef(POWERDIR"BAT%d/energy_now", bat_num);
+
+	/* FIXME battery's full charge/energy is only required when charging */
+	/* Energy units or charge units */
+	if (now >= 0)
+	{
+		debug("Energy units");
+		full = get_int_value_from_filef(POWERDIR"BAT%d/energy_full", bat_num);
+		rate = get_int_value_from_filef(POWERDIR"BAT%d/power_now", bat_num);
+	} else {
+		debug("Charge units");
+		full = get_int_value_from_filef(POWERDIR"BAT%d/charge_full", bat_num);
+		now = get_int_value_from_filef(POWERDIR"BAT%d/charge_now", bat_num);
+		rate = get_int_value_from_filef(POWERDIR"BAT%d/current_now", bat_num);
+	}
+
+
+	/* Note the '<=' for rate (we divide by rate) */
+	if (full < 0 ||
+		now < 0 ||
+		rate <= 0)
 	{
 		return -1;
 	}
@@ -60,15 +91,10 @@ int get_bat_seconds_left()
 	switch(get_battery_state())
 	{
 		case STATE_CHARGING:
-			// We need to know full charge to calculate this one
-			asprintf(&file, POWERDIR"BAT%d/charge_full",bat_num);
-			charge_full = get_int_value_from_file(file);
-			free(file);
-
-			return (3600*(charge_full - charge_now))/current_now;
+			return (3600*(long long)(full - now))/rate;
 			break;
 		case STATE_DISCHARGING:
-			return (3600*charge_now)/current_now;
+			return (3600*(long long)now)/rate;
 			break;
 		default:
 			return -1;
@@ -86,11 +112,13 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 
 	char* time_left;
 
+	fprintf(stderr, "%d seconds left on bat\n", seconds_left);
+
 	if (seconds_left == -1)
 	{
 		asprintf(&time_left, _("Unknown time left"));
 	} else {
-		asprintf(&time_left, _("%02d:%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60), seconds_left%60);
+		asprintf(&time_left, _("%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60));
 	}
 
 	switch(get_battery_state())
