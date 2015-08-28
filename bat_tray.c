@@ -218,7 +218,7 @@ void bat_tray_init()
 	free(icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
-	g_timeout_add(5000, update, NULL);
+	g_timeout_add(120000, update, NULL);
 
 	/* Force something useful to be in the cached tooltip text,
 	 * force meaningful icon */

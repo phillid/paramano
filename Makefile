@@ -26,7 +26,7 @@ DEFS +=		-DPREFIX=\"$(PREFIX)\" \
 			-D_GNU_SOURCE
 
 
-DEPS =		bat_tray.h \
+DEPS +=		bat_tray.h \
 			common.h \
 			config_file.h \
 			defaults.h \
@@ -38,7 +38,7 @@ DEPS =		bat_tray.h \
 			tray.h \
 			paramano_set_interface.h
 
-CFLAGS	=	-I/usr/include/gtk-2.0 \
+CFLAGS	+=	-I/usr/include/gtk-2.0 \
 			-I/usr/lib/gtk-2.0/include \
 			-I/usr/include/pango-1.0 \
 			-I/usr/include/cairo \
@@ -61,7 +61,7 @@ CFLAGS	=	-I/usr/include/gtk-2.0 \
 			-Werror \
 			-D_=gettext
 
-LDFLAGS	=	-lgtk-3 \
+LDFLAGS	+=	-lgtk-3 \
 			-lgobject-2.0 \
 			-lglib-2.0
 
