@@ -4,7 +4,6 @@ To do
 High Priority
 -------------
 * Make tooltip strings cached
-* Support graphical sudo front-ends
 
 Normal Priority
 ---------------
