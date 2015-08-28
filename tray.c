@@ -19,11 +19,11 @@
 #include "paramano.h"
 
 
-GtkStatusIcon* tray;
-
-GtkWidget* menu;
-GSList* menu_items;
-GtkWidget* checked_menu_item;
+static GtkStatusIcon* tray;
+static char tooltip_text[1024];
+static GtkWidget* menu;
+static GSList* menu_items;
+static GtkWidget* checked_menu_item;
 
 
 /***********************************************************************
@@ -166,9 +166,19 @@ static void tray_generate_menu()
 }
 
 /***********************************************************************
- * Refresh the tooltip message
+ * Tell gtk what the tooltip message should be
  **********************************************************************/
-static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
+static gboolean show_tooltip(GtkStatusIcon* status_icon, gint x, gint y, gboolean keyboard_mode,GtkTooltip* tooltip, gpointer data)
+{
+	gtk_tooltip_set_text(tooltip, tooltip_text);
+	return true;
+}
+
+
+/***********************************************************************
+ * Work out what the tooltip message would be now, store it away
+ **********************************************************************/
+static void update_tooltip_cache()
 {
 	char *msg, *label;
 	char current_governor[20]; // TO DO
@@ -188,12 +198,10 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 		free(label);
 	}
 
-	debug("Setting tooltip text\n");
-	gtk_tooltip_set_text(tooltip, msg);
+	strncpy(tooltip_text, msg, sizeof(tooltip_text));
+	tooltip_text[sizeof(tooltip_text)] = '\0';
 
 	free(msg);
-
-	return TRUE;
 }
 
 
@@ -211,7 +219,7 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
 /**********************************************************************
  * Set icon based on current freq/governor
  **********************************************************************/
-static void tray_update_icon_percent()
+static void update_icon()
 {
 	char* file;
 	int max_frequency = gf_freqi(0, 0);
@@ -224,7 +232,7 @@ static void tray_update_icon_percent()
 		adjusted_percent = 0;
 	} else {
 		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
-		// TO DO: round instead of lots of ifs
+		// TO DO: round/truncate instead of lots of ifs
 		percent = (gf_current(0) * 100)/max_frequency;
 		if(percent == 100) {
 			adjusted_percent = 100;
@@ -250,8 +258,9 @@ static void tray_update_icon_percent()
 
 /***********************************************************************
  * Update the freq/gov tray icon
+ * Also updates the cached tooltip text
  **********************************************************************/
-static gboolean update_icon(gpointer user_data)
+static gboolean update()
 {
 	unsigned int i;
 	switch ( get_battery_state() )
@@ -278,8 +287,9 @@ static gboolean update_icon(gpointer user_data)
 	}
 
 	debug("Updating icon\n");
-	tray_update_icon_percent();
-	return TRUE;
+	update_tooltip_cache();
+	update_icon();
+	return true;
 }
 
 
@@ -318,16 +328,23 @@ void tray_init()
 	tray = gtk_status_icon_new();
 	char* icon_file = g_strconcat(DEFAULT_THEME, "/cpu-0.png", NULL);
 
+	/* Force something useful to be in the cached tooltip text */
+	update_tooltip_cache();
+
 	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip(tray, TRUE);
 
 	debug("Setting up callbacks\n");
-	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
+	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
 
 	debug("Adding timeout\n");
-	g_timeout_add(1000, update_icon, NULL);
+	g_timeout_add(1000, update, NULL);
+
+	/* Force meaningful tooltip cached text and force meaningful icon */
+	update();
+
 	tray_init_menu();
 }
 

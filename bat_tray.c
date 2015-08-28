@@ -20,6 +20,7 @@
 #include "paramano.h"
 
 static GtkStatusIcon* tray;
+static char tooltip_text[1024];
 int bat_num; // Shortcoming: we only detect one battery
 char *CHARGE_VALUE_PATH, *CHARGE_STATE_PATH;
 
@@ -103,16 +104,22 @@ long get_bat_seconds_left()
 
 
 /***********************************************************************
- * Updates the battery tray tooltip text
+ * Shows/updates the battery tray tooltip
  **********************************************************************/
-static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean keyboard_mode,GtkTooltip* tooltip,gpointer data)
+static gboolean show_tooltip(GtkStatusIcon* status_icon, gint x, gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer data)
+{
+	gtk_tooltip_set_text(tooltip, tooltip_text);
+	return true;
+}
+
+/***********************************************************************
+ * Updates the battery tray tooltip's cached text
+ **********************************************************************/
+static void update_tooltip_cache()
 {
 	char* msg;
 	int seconds_left = get_bat_seconds_left();
-
 	char* time_left;
-
-	fprintf(stderr, "%d seconds left on bat\n", seconds_left);
 
 	if (seconds_left == -1)
 	{
@@ -143,20 +150,19 @@ static gboolean update_tooltip(GtkStatusIcon* status_icon,gint x,gint y,gboolean
 			asprintf(&msg, _("Unknown status") );
 			break;
 	}
-	debug("Setting tooltip text to '%s'\n",msg);
-	gtk_tooltip_set_text(tooltip, msg);
+	debug("Setting cached tooltip text to '%s'\n",msg);
+	strncpy(tooltip_text, msg, sizeof(tooltip_text));
 
 	free(time_left);
 	free(msg);
-
-	return true;
 }
 
 
 /***********************************************************************
  * Updates the battery tray icon based upon battery percent
+ * Also updates the cached tooltip text
  **********************************************************************/
-static gboolean update_icon(gpointer user_data)
+static gboolean update()
 {
 	char *icon_file;
 	unsigned int rounded;
@@ -180,6 +186,8 @@ static gboolean update_icon(gpointer user_data)
 			break;
 	}
 
+
+	update_tooltip_cache();
 	debug("Setting tray icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
 
@@ -209,8 +217,12 @@ void bat_tray_init()
 	gtk_status_icon_set_from_file(tray, icon_file);
 	free(icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
-	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(update_tooltip), NULL);
-	g_timeout_add(5000, update_icon, NULL);
+	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
+	g_timeout_add(5000, update, NULL);
+
+	/* Force something useful to be in the cached tooltip text,
+	 * force meaningful icon */
+	update();
 }
 
 
