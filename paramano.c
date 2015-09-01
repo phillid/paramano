@@ -41,11 +41,11 @@ int main(int argc, char** argv)
 	tray_init();
 	tray_show();
 
-	// Show battery tray only if we're supposed to
+	/* Show battery tray only if we're supposed to */
 	if(DEFAULT_SHOW_BATTERY)
 	{
 		bat_tray_init();
-		bat_tray_show();
+//		bat_tray_show();
 	}
 
 	gtk_main();
@@ -60,22 +60,22 @@ void config_init()
 {
 	struct config_file config;
 	FILE* fd = NULL;
-	gboolean home_config_exists;
-	config.key_file = NULL;
+	bool home_config_exists = false;
 
+	config.key_file = NULL;
 	config.file_name = g_strconcat(getenv("HOME"), "/.paramano.conf", NULL);
 
 
-	// Check if ~/.paramano.conf exists
+	/* Check if ~/.paramano.conf exists */
 	if( (fd = fopen(config.file_name, "r")) )
 	{
-		// If file exists, close it, set param to TRUE
+		/* If file exists, close it, set param to true */
 		fclose(fd);
-		home_config_exists = TRUE;
+		home_config_exists = true;
 	} else {
-		// If file didn't exist, it's not open (don't close it), free filename var, set param to FALSE
+		/* If file didn't exist, it's not open (don't close it), free filename var, set param to false */
 		g_free(config.file_name);
-		home_config_exists = FALSE;
+		home_config_exists = false;
 	}
 
 	if(!home_config_exists)
@@ -88,7 +88,7 @@ void config_init()
 		return;
 	}
 
-	// Reset defaults to default values
+	/* Reset defaults to default values */
 	defaults_init();
 
 	DEFAULT_GOV			= config_get_key(&config, "governor", "default");
@@ -105,7 +105,7 @@ void config_init()
 	if ((temp = config_get_key(&config, "extra", "theme")))
 		snprintf(DEFAULT_THEME, sizeof(DEFAULT_THEME), "%s", temp);
 
-	g_free(config.file_name);
+//	g_free(config.file_name);
 	config_close(&config);
 }
 

@@ -30,7 +30,6 @@ int get_int_value_from_filef(const char* format, ...)
 	va_start(a, format);
 	value = vget_int_value_from_filef(format, a);
 	va_end(a);
-
 	return value;
 }
 
@@ -40,7 +39,6 @@ int get_int_value_from_filef(const char* format, ...)
  **********************************************************************/
 int vget_int_value_from_filef(const char* format, va_list args)
 {
-
 	char filename[1024];
 	if (vsnprintf(filename, sizeof(filename), format, args) == sizeof(filename))
 		fprintf(stderr, "WARN: filename buffer too small");
@@ -53,9 +51,9 @@ int vget_int_value_from_filef(const char* format, va_list args)
  **********************************************************************/
 int get_int_value_from_file(const char* filename)
 {
-	FILE* fd;
+	FILE* fd = NULL;
 	char buffer[512];
-	int value;
+	int value = 0;
 
 	if(!(fd = fopen(filename, "r")))
 		return -1;
@@ -66,7 +64,6 @@ int get_int_value_from_file(const char* filename)
 	fclose(fd);
 	return value;
 }
-
 
 
 /***********************************************************************
@@ -84,9 +81,5 @@ void chomp(char *string)
  **********************************************************************/
 int get_int(const char* string)
 {
-	char* first_num;
-
-	first_num = strpbrk(string, "0123456789");
-
-	return atoi(first_num);
+	return atoi(strpbrk(string, "0123456789"));
 }

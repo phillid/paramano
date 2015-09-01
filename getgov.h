@@ -25,4 +25,4 @@ bool         gg_available(int core, char* out, int size);
 char*        gg_gov(int core, int index);
 unsigned int gg_number();
 
-#endif
+#endif /* ifndef GETGOV_H */

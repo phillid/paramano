@@ -23,7 +23,7 @@
 #define FREQ_LENGTH 14
 
 static char freqs[MAX_CORES][MAX_FREQS][FREQ_LENGTH];
-static int total_freqs; // Number of freqs for core 0
+static int total_freqs; /* Number of freqs for core 0 */
 
 
 /***********************************************************************
@@ -31,25 +31,24 @@ static int total_freqs; // Number of freqs for core 0
  **********************************************************************/
 void gf_init()
 {
-	char freq_string[4096]; // POSIX suggested line length. Source of error for CPUs with a huge number of freqs
-	char *next_token;
-	unsigned int i;
+	char freq_string[4096]; /* POSIX suggested line length. Source of error for CPUs with a huge number of freqs */
+	char *next_token = NULL;
+	unsigned int i = 0;
 
 	memset(freqs, '\0', sizeof(freqs));
 
-
-	for(i = 0; (i < gc_number() && i < MAX_CORES); i++)
+	for(i = 0; i < gc_number() && i < MAX_CORES; i++)
 	{
 		memset(freq_string, '\0', sizeof(freq_string) );
 
-		// Get available governor freqs. If no governor, try next cpu
+		/* Get available governor freqs. If no governor, try next cpu */
 		if (gf_available(i, freq_string, sizeof(freq_string) ) == -1)
 			continue;
 
 		*strchrnul(freq_string, '\n') = '\0';
 
-		// freq_string is a space separated list of freqs
-		// Use strtok to find each
+		/* freq_string is a space separated list of freqs.
+		 * Use strtok to find each */
 		next_token = strtok(freq_string, " \n");
 		total_freqs = 0;
 		do
@@ -59,7 +58,7 @@ void gf_init()
 		} while((next_token = strtok(NULL, " ")) != NULL);
 	}
 
-	// Hit the limit of storage of cores' frequencies
+	/* Hit the limit of storage of cores' frequencies */
 	if (i == MAX_CORES)
 		info("Unable to add more than %d cores\n", MAX_CORES);
 }
@@ -69,18 +68,17 @@ void gf_init()
  **********************************************************************/
 int gf_current(int core)
 {
-	FILE* fd;
+	FILE* fd = NULL;
 	char buff[4096];
 	char path[1024];
-	int freq;
+	int freq = 0;
 
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
 
 	if(!(fd = fopen(path, "r")))
 		return -1;
 
-	fgets(buff, 13, fd);
-
+	fgets(buff, 13, fd); /* FIXME magic */
 	freq = atoi(buff);
 	fclose(fd);
 
@@ -93,7 +91,7 @@ int gf_current(int core)
  **********************************************************************/
 int gf_available(int core, char* out, int size)
 {
-	FILE* fd;
+	FILE* fd = NULL;
 	char path[1024];
 
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_frequencies", core);
@@ -102,7 +100,6 @@ int gf_available(int core, char* out, int size)
 		return -1;
 
 	fgets(out, size, fd);
-
 	fclose(fd);
 	return 0;
 }
@@ -112,13 +109,13 @@ int gf_available(int core, char* out, int size)
  **********************************************************************/
 void gf_get_frequency_label(char *buffer, size_t max_size, int freq)
 {
-	if(freq >= 1000000000) // >= 1 billion KHz (1 THz) This, ladies and gentlement, is future-proofing ;)
+	if(freq >= 1000000000) /* This, ladies and gentlement, is future-proofing */
 		snprintf(buffer, max_size, "%.2f THz", (double)freq/1000000000 );
-	else if(freq >= 1000000) // >= 1 million KHz (1 GHz)
+	else if(freq >= 1000000)
 		snprintf(buffer, max_size, "%.2f GHz", (double)freq/1000000 );
-	else if (freq >= 1000) // >= 1 thousand KHz (1 MHz)
+	else if (freq >= 1000)
 		snprintf(buffer, max_size, "%.2f MHz", (double)freq/1000 );
-	else // < 1000 KHz (1 MHz)
+	else
 		snprintf(buffer, max_size, "%.2f KHz", (double)freq);
 }
 

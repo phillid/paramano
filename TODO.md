@@ -8,5 +8,4 @@ Normal Priority
 
 Low Priority
 ------------
-* Ensure all code aligns to an explicit style
 * Make a curses-based version of paramano

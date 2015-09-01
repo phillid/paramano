@@ -22,4 +22,4 @@
 void si_gov(char* gov, int core);
 void si_freq(int freq, int core);
 
-#endif
+#endif /* ifndef PARAMANO_SET_INTERFACE_H */

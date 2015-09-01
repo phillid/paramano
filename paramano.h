@@ -42,4 +42,4 @@
 
 void config_init();
 
-#endif
+#endif /* ifndef PARAMANO_H */

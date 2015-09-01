@@ -22,4 +22,4 @@
 void         gc_init();
 unsigned int gc_number();
 
-#endif
+#endif /* ifndef GETCORE_H */

@@ -102,7 +102,7 @@ static void tray_generate_menu()
 
 	gint current_frequency = gf_current(0);
 
-	// Add available frequencies
+	/* Add available frequencies */
 	for(i = 0; i < gf_number(); i++)
 	{
 		gf_get_frequency_label(label, sizeof(label), gf_freqi(0, i));
@@ -119,11 +119,11 @@ static void tray_generate_menu()
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
 
-	// Add a seperator
+	/* Add a seperator */
 	GtkWidget* seperator = gtk_separator_menu_item_new();
 	gtk_menu_append(menu, seperator);
 
-	// Add available governors
+	/* Add available governors */
 	for(i = 0; i < gg_number(); i++)
 	{
 		if(g_strcmp0(gg_gov(0, i), "userspace") == 0)
@@ -158,7 +158,7 @@ static gboolean show_tooltip(GtkStatusIcon* status_icon, gint x, gint y, gboolea
 static void update_tooltip_cache()
 {
 	char msg[10240], label[1024];
-	char current_governor[20]; // TO DO
+	char current_governor[20]; /* FIXME magic */
 	unsigned int i = 0;
 	unsigned int offset = 0;
 
@@ -198,14 +198,14 @@ static void update_icon()
 	int max_frequency = gf_freqi(0, 0);
 	int adjusted_percent, percent;
 
-	// If max_frequency is 0, we don't want to divide by it,
-	// so give up, call it a day, and have a simple icon
+	/* If max_frequency is 0, we don't want to divide by it,
+	 * so give up, call it a day, and have a simple icon */
 	if (max_frequency == 0)
 	{
 		adjusted_percent = 0;
 	} else {
-		// Percentages need to be {25,50,75,100}. Round to one of these numbers.
-		// TO DO: round/truncate instead of lots of ifs
+		/* Percentages need to be {25,50,75,100}. Round to one of these numbers.
+		 * TO DO: round/truncate instead of lots of ifs */
 		percent = (gf_current(0) * 100)/max_frequency;
 		if(percent == 100) {
 			adjusted_percent = 100;
@@ -264,7 +264,6 @@ static gboolean update()
  **********************************************************************/
 void tray_set_defaults()
 {
-	// Set defaults
 	unsigned int i = 0;
 	if(DEFAULT_GOV)
 	{

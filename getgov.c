@@ -27,20 +27,20 @@ static int total_governors;
  **********************************************************************/
 void gg_init()
 {
-	gchar gov_string[500];
+	char gov_string[500];
 	unsigned int i = 0;
 	total_governors = 0;
+
 	for (i = 0; i < gc_number(); i++)
 	{
 		memset(gov_string, '\0', sizeof(gov_string) );
 		gg_available(i, gov_string, sizeof(gov_string) );
 
-		// go through every governor in gov_string
-		gchar* curr = (char*)&gov_string;
-		gchar* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+		char* curr = gov_string;
+		char* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
 		while (end_of_curr)
 		{
-			memset(governors[i][total_governors], '\0', 13);
+			memset(governors[i][total_governors], '\0', 13); /* FIXME magic */
 			memmove(governors[i][total_governors], curr, end_of_curr - curr);
 
 			curr = end_of_curr+1;
@@ -56,20 +56,17 @@ void gg_init()
  **********************************************************************/
 bool gg_current(int core, char* out, int size)
 {
-	FILE* fd;
+	FILE* fd = NULL;
 	char path[1024];
+
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
 
 	if (!(fd = fopen(path, "r")))
 		return false;
 
 	fgets(out, size, fd);
-
-	// Get first line
-	gchar* newline = g_strrstr(out, "\n");
-	*newline = '\0';
-
 	fclose(fd);
+	chomp(out);
 	return true;
 }
 
@@ -79,8 +76,9 @@ bool gg_current(int core, char* out, int size)
  **********************************************************************/
 bool gg_available(int core, char* out, int size)
 {
+	FILE *fd = NULL;
 	char path[1024];
-	FILE *fd;
+
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
 
 	if (!(fd = fopen(path, "r")))

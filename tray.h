@@ -26,4 +26,4 @@ void tray_hide();
 bool tray_visible();
 bool tray_embedded();
 
-#endif
+#endif /* ifndef TRAY_H */

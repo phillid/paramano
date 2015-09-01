@@ -43,7 +43,6 @@ long get_bat_seconds_left()
 	int full = 0;
 	int rate = 0;
 
-
 	/* FIXME this now/full/rate logic has probably earned its own function.
 	 * Not because of DRY, but just for readability's sake perhaps */
 
@@ -81,12 +80,8 @@ long get_bat_seconds_left()
 
 
 	/* Note the '<=' for rate (we divide by rate) */
-	if (full < 0 ||
-		now < 0 ||
-		rate <= 0)
-	{
+	if (full < 0 || now < 0 || rate <= 0)
 		return -1;
-	}
 
 	switch(get_battery_state())
 	{
@@ -188,10 +183,10 @@ void bat_tray_init()
 {
 	char icon_file[1024];
 
-	// Get the battery number, store it for later
+	/* Get the battery number, store it for later */
 	bat_num = get_bat_num();
 
-	// Set up battery info filenames/paths
+	/* Set up battery info filenames/paths */
 	snprintf(CHARGE_VALUE_PATH, sizeof(CHARGE_STATE_PATH), "/sys/class/power_supply/BAT%d/capacity", bat_num);
 	snprintf(CHARGE_STATE_PATH, sizeof(CHARGE_STATE_PATH), "/sys/class/power_supply/BAT%d/status", bat_num);
 
@@ -231,7 +226,7 @@ void bat_tray_hide()
 int get_battery_state()
 {
 	char state[1024];
-	FILE* fd;
+	FILE* fd = NULL;
 
 	if (!(fd = fopen(CHARGE_STATE_PATH, "r")) ||
 		!fgets(state, sizeof(state), fd))
@@ -260,13 +255,14 @@ int get_battery_state()
  **********************************************************************/
 int get_bat_num()
 {
-	FILE* fd;
+	FILE* fd = NULL;
 	char filename[1024];
-	unsigned int i;
+	int i = 0;
+
 	for(i = 0; i < 10; i++)
 	{
 		snprintf(filename, sizeof(filename), "/sys/class/power_supply/BAT%d/present", i);
-		if( (fd = fopen(filename, "r")) )
+		if((fd = fopen(filename, "r")))
 		{
 			if (fgetc(fd) == '1')
 			{

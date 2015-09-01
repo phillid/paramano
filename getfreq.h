@@ -27,5 +27,4 @@ char*        gf_freqa(int core, int index);
 int          gf_freqi(int core, int index);
 unsigned int gf_number();
 
-
-#endif
+#endif /* ifndef GETFREQ_H */
