@@ -18,8 +18,7 @@
 
 #include "paramano.h"
 
-unsigned int cores;
-
+static unsigned int cores;
 
 /***********************************************************************
  * Return true/false if specified core num exists

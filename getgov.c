@@ -19,8 +19,8 @@
 #include "paramano.h"
 
 /* [CORE][GOVERNOR NUMBER] */
-char governors[999][50][13];
-int total_governors;
+static char governors[999][50][13];
+static int total_governors;
 
 /***********************************************************************
  * Grab all available governors

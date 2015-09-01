@@ -21,8 +21,8 @@
 
 static GtkStatusIcon* tray;
 static char tooltip_text[1024];
-int bat_num; // Shortcoming: we only detect one battery
-char *CHARGE_VALUE_PATH, *CHARGE_STATE_PATH;
+static int bat_num; // Shortcoming: we only detect one battery
+static char *CHARGE_VALUE_PATH, *CHARGE_STATE_PATH;
 
 /***********************************************************************
  * Return the battery level percentage

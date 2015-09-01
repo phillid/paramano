@@ -22,8 +22,8 @@
 #define MAX_FREQS 50
 #define FREQ_LENGTH 14
 
-char freqs[MAX_CORES][MAX_FREQS][FREQ_LENGTH];
-int total_freqs; // Number of freqs for core 0
+static char freqs[MAX_CORES][MAX_FREQS][FREQ_LENGTH];
+static int total_freqs; // Number of freqs for core 0
 
 
 /***********************************************************************

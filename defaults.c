@@ -18,14 +18,6 @@
 
 #include "paramano.h"
 
-/*char* DEFAULT_GOV;
-char* DEFAULT_FREQ;
-char* DEFAULT_PROG;
-char* DEFAULT_BAT_GOV;
-char* DEFAULT_AC_GOV;
-bool  DEFAULT_SHOW_BATTERY = true;
-char* DEFAULT_THEME;*/
-
 void defaults_init()
 {
 	DEFAULT_GOV				= NULL;
