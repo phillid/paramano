@@ -157,10 +157,10 @@ static gboolean show_tooltip(GtkStatusIcon* status_icon, gint x, gint y, gboolea
  **********************************************************************/
 static void update_tooltip_cache()
 {
-	char msg[1024], label[1024];
+	char msg[10240], label[1024];
 	char current_governor[20]; // TO DO
 	unsigned int i = 0;
-	int offset = 0;
+	unsigned int offset = 0;
 
 	memset(current_governor, '\0', sizeof(current_governor) );
 
@@ -171,11 +171,11 @@ static void update_tooltip_cache()
 	for(i = 0; i < gc_number(); i++)
 	{
 		gf_get_frequency_label(label, sizeof(label), gf_current(i));
-		offset += snprintf(msg+offset, sizeof(msg), _("CPU%d: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
+		offset += snprintf(msg+offset, sizeof(msg)-offset, _("CPU%d: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
 	}
 
 	strncpy(tooltip_text, msg, sizeof(tooltip_text));
-	tooltip_text[sizeof(tooltip_text)] = '\0';
+	tooltip_text[sizeof(tooltip_text)-1] = '\0';
 }
 
 

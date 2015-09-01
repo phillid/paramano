@@ -144,6 +144,7 @@ static void update_tooltip_cache()
 			break;
 	}
 	strncpy(tooltip_text, msg, sizeof(tooltip_text));
+	tooltip_text[sizeof(tooltip_text)-1] = '\0';
 }
 
 
