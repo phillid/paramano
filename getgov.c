@@ -60,7 +60,7 @@ bool gg_current(int core, char* out, int size)
 	char *path;
 	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
 
-	if (!(fd = check_for_file(path)))
+	if (!(fd = fopen(path, "r")))
 	{
 		free(path);
 		return false;
@@ -89,7 +89,7 @@ bool gg_available(int core, char* out, int size)
 	FILE *fd;
 	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
 
-	if (!(fd = check_for_file(path)))
+	if (!(fd = fopen(path, "r")))
 	{
 		free(path);
 		return false;

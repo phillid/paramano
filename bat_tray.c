@@ -261,19 +261,30 @@ void bat_tray_hide()
  **********************************************************************/
 int get_battery_state()
 {
-	if (file_has_line(CHARGE_STATE_PATH, "Discharging"))
+	char state[1024];
+	FILE* fd;
+
+	if (!(fd = fopen(CHARGE_STATE_PATH, "r")) ||
+		!fgets(state, sizeof(state), fd))
+		return STATE_UNKNOWN;
+
+	fclose(fd);
+
+	chomp(state);
+
+	if (strcmp(state, "Discharging") == 0)
 	{
 		debug("Battery discharging\n");
 		return STATE_DISCHARGING;
 	}
 
-	if (file_has_line(CHARGE_STATE_PATH, "Full"))
+	if (strcmp(state, "Full") == 0)
 	{
 		debug("Battery full\n");
 		return STATE_CHARGED;
 	}
 
-	if (file_has_line(CHARGE_STATE_PATH, "Charging"))
+	if (strcmp(state, "Charging") == 0)
 	{
 		debug("Battery charging\n");
 		return STATE_CHARGING;
@@ -295,7 +306,7 @@ int get_bat_num()
 	for(i = 0; i < 10; i++)
 	{
 		asprintf(&file, "/sys/class/power_supply/BAT%d/present", i);
-		if( (fd = check_for_file(file)) )
+		if( (fd = fopen(file, "r")) )
 		{
 			debug("Found battery %d\n",i);
 			if (fgetc(fd) == '1')
@@ -305,6 +316,7 @@ int get_bat_num()
 				free(file);
 				return i;
 			}
+			fclose(fd);
 		}
 	}
 	debug("Fallthrough: couldn't find battery\n");

@@ -21,6 +21,9 @@
 #include <stdarg.h>
 
 
+/***********************************************************************
+ * Return integer value from first line in file (formatted filename)
+ **********************************************************************/
 int get_int_value_from_filef(const char* format, ...)
 {
 	int value = 0;
@@ -32,6 +35,10 @@ int get_int_value_from_filef(const char* format, ...)
 	return value;
 }
 
+
+/***********************************************************************
+ * va_list wrapper function for get_int_value_from_filef()
+ **********************************************************************/
 int vget_int_value_from_filef(const char* format, va_list args)
 {
 
@@ -62,43 +69,15 @@ int get_int_value_from_file(const char* filename)
 }
 
 
-/***********************************************************************
- * Return true/false if a file has specified line of text
- **********************************************************************/
-bool file_has_line(const char *filename, const char *line)
-{
-	FILE* fd;
-	char buffer[4096];
-
-	if (!(fd = fopen(filename, "r")))
-		return false;
-
-	while (fgets(buffer, sizeof(buffer), fd) != NULL)
-	{
-		if(strstr(buffer, line) != NULL)
-		{
-			fclose(fd);
-			return true;
-		}
-	}
-	fclose(fd);
-	return false;
-}
-
 
 /***********************************************************************
- * Calls fopen on the specified file, giving debug error message on
- * failure. Returns the file descriptor in all cases.
+ * Truncates a string at the first '\r' or '\n'
  **********************************************************************/
-FILE* check_for_file(char* path)
+void chomp(char *string)
 {
-	FILE* fd;
-	if(!(fd = fopen(path, "r")))
-	{
-		debug("Couldn't open '%s'\n",path);
-	}
-	return fd;
+	string[strcspn(string, "\r\n")] = '\0';
 }
+
 
 /***********************************************************************
  * Fetches first number (ie the 35 of "35 123") from a
