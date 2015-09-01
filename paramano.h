@@ -36,7 +36,6 @@
 #include "getcore.h"
 #include "getgov.h"
 #include "config_file.h"
-#include "reload.h"
 #include "defaults.h"
 #include "common.h"
 #include "paramano_set_interface.h"

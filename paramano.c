@@ -34,12 +34,6 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	struct sigaction sig_act;
-	sig_act.sa_handler = reload_config;
-	sig_act.sa_flags = 0;
-	sigemptyset(&sig_act.sa_mask);
-
-	sigaction(SIGUSR1, &sig_act, NULL);
 	config_init();
 	gc_init();
 	gg_init();

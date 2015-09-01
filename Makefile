@@ -34,7 +34,6 @@ DEPS +=		bat_tray.h \
 			getfreq.h \
 			getgov.h \
 			paramano.h \
-			reload.h \
 			tray.h \
 			paramano_set_interface.h
 
@@ -97,7 +96,6 @@ paramano:	bat_tray.o \
 			getcore.o \
 			getfreq.o \
 			getgov.o \
-			reload.o \
 			paramano.o \
 			tray.o \
 			paramano_set_interface.o
