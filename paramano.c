@@ -27,11 +27,9 @@ int main(int argc, char** argv)
 	setlocale(LC_ALL, "");
 	bindtextdomain("paramano",LOCALEDIR);
 	textdomain("paramano");
-	debug("Set gettext up\n");
 
 	if(!gtk_init_check(&argc, &argv))
 	{
-		debug("Couldn't start gtk\n");
 		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
 	}
@@ -41,10 +39,7 @@ int main(int argc, char** argv)
 	sig_act.sa_flags = 0;
 	sigemptyset(&sig_act.sa_mask);
 
-	if (sigaction(SIGUSR1, &sig_act, NULL) == -1)
-	{
-		debug("Couldn't set sigaction for SIGUSR1\n");
-	}
+	sigaction(SIGUSR1, &sig_act, NULL);
 	config_init();
 	gc_init();
 	gg_init();
@@ -55,15 +50,11 @@ int main(int argc, char** argv)
 	// Show battery tray only if we're supposed to
 	if(DEFAULT_SHOW_BATTERY)
 	{
-		debug("Showing battery info this time around\n");
 		bat_tray_init();
 		bat_tray_show();
 	}
 
-	debug("Passing control to Gtk\n");
-
 	gtk_main();
-	debug("Exiting main()\n");
 	return 0;
 }
 
@@ -85,12 +76,10 @@ void config_init()
 	if( (fd = fopen(config.file_name, "r")) )
 	{
 		// If file exists, close it, set param to TRUE
-		debug("Found '%s'\n",config.file_name);
 		fclose(fd);
 		home_config_exists = TRUE;
 	} else {
 		// If file didn't exist, it's not open (don't close it), free filename var, set param to FALSE
-		debug("Didn't find '%s'\n",config.file_name);
 		g_free(config.file_name);
 		home_config_exists = FALSE;
 	}
@@ -101,7 +90,6 @@ void config_init()
 	gboolean success = config_open(&config);
 	if(!success)
 	{
-		debug("Couldn't open '%s' for reading\n",config.file_name);
 		g_warning(_("Failed to open config files!\n"));
 		return;
 	}
@@ -122,8 +110,6 @@ void config_init()
 
 	if ((temp = config_get_key(&config, "extra", "theme")))
 		asprintf(&DEFAULT_THEME, "%s", temp);
-
-	debug("Using theme %s\n",DEFAULT_THEME);
 
 	g_free(config.file_name);
 	config_close(&config);

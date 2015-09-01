@@ -33,17 +33,6 @@ int  get_int(const char* string);
 #define STR_LINE STRING(__LINE__)
 // </ew>
 
-
-#ifdef DEBUG
-/*
- Make debug macros into empty space if debug mode's not enabled.
- Otherwise, make debug macro calls into appropriate printf()s
-*/
- #define debug(...)	printf("DEBUG: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
-#else
- #define debug(...);
-#endif
-
 #define info(...)	printf("INFO: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
 #define FILE_PATH_SIZE 2048
 #endif

@@ -25,8 +25,6 @@
  ************************************************************************/
 void reload_config()
 {
-	debug("Reloading config\n");
-
 	// Reload config
 	config_init();
 
@@ -34,6 +32,5 @@ void reload_config()
 	DEFAULT_SHOW_BATTERY? bat_tray_show() : bat_tray_hide();
 
 	// Update governor and frequency defaults
-	debug("Re-init freq tray\n");
 	tray_set_defaults();
 }

@@ -72,8 +72,6 @@ bool gg_current(int core, char* out, int size)
 	gchar* newline = g_strrstr(out, "\n");
 	*newline = '\0';
 
-	debug("Current gov for core %d is '%s'\n",core,out);
-
 	fclose(fd);
 	free(path);
 	return true;

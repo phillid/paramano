@@ -44,10 +44,7 @@ void gf_init()
 
 		// Get available governor freqs. If no governor, try next cpu
 		if (gf_available(i, freq_string, sizeof(freq_string) ) == -1)
-		{
-			debug("Couldn't find freq scaling on core %d\n",i);
 			continue;
-		}
 
 		*strchrnul(freq_string, '\n') = '\0';
 
@@ -57,8 +54,6 @@ void gf_init()
 		total_freqs = 0;
 		do
 		{
-			//chomp(next_token);
-			debug("Found frequency #%d (%s KHz)\n",total_freqs,next_token);
 			strncpy(freqs[i][total_freqs], next_token, FREQ_LENGTH);
 			total_freqs++;
 		} while((next_token = strtok(NULL, " ")) != NULL);
@@ -67,8 +62,6 @@ void gf_init()
 	// Hit the limit of storage of cores' frequencies
 	if (i == MAX_CORES)
 		info("Unable to add more than %d cores\n", MAX_CORES);
-
-	debug("Found %d frequencies\n",total_freqs);
 }
 
 /***********************************************************************
@@ -85,7 +78,6 @@ int gf_current(int core)
 
 	if(!(fd = fopen(path, "r")))
 	{
-		debug("Couldn't open '%s'\n",path);
 		free(path);
 		return -1;
 	}
@@ -94,7 +86,6 @@ int gf_current(int core)
 
 	freq = atoi(buff);
 	fclose(fd);
-	debug("Found freq %d on core %d\n",freq,core);
 
 	free(path);
 	return freq;
@@ -113,7 +104,6 @@ int gf_available(int core, char* out, int size)
 
 	if(!(fd = fopen(path, "r")))
 	{
-		debug("Couldn't open '%s'\n",path);
 		free(path);
 		return -1;
 	}
@@ -139,8 +129,6 @@ char* gf_get_frequency_label(int freq)
 		asprintf(&string, "%.2f MHz", (double)freq/1000 );
 	else // < 1000 KHz (1 MHz)
 		asprintf(&string, "%.2f KHz", (double)freq);
-
-	debug("Prepared freq label '%s' for freq %d\n",string,freq);
 
 	return string;
 }

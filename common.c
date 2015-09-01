@@ -88,7 +88,6 @@ int get_int(const char* string)
 	char* first_num;
 
 	first_num = strpbrk(string, "0123456789");
-	debug("first_num: '%s'\n",first_num);
 
 	return atoi(first_num);
 }

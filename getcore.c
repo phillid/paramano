@@ -29,7 +29,6 @@ bool core_exists(unsigned int core)
 	char* path;
 	int result;
 	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq", core);
-	debug("Checking if core %d exists by opening '%s'\n",core,path);
 	result = access(path, F_OK);
 	free (path);
 	return (result != -1);
@@ -44,8 +43,6 @@ void gc_init()
 	cores = 0;
 	while(core_exists(cores))
 		cores++;
-
-	debug("Found %d cores\n",cores);
 }
 
 

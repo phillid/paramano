@@ -21,25 +21,19 @@
 gboolean config_open(struct config_file* config_file)
 {
 	if(config_file->key_file)
-	{
-		debug("Freeing config_file->keyfile\n");
 		g_key_file_free(config_file->key_file);
-	}
 
-	debug("Creating new config_file->key_file\n");
 	config_file->key_file = g_key_file_new();
 	gboolean success = g_key_file_load_from_file(
 										config_file->key_file,
 										config_file->file_name,
 										G_KEY_FILE_NONE,
 										NULL);
-	debug("Returning %s\n",success? "TRUE" : "FALSE");
 	return success;
 }
 
 void config_close(struct config_file* config_file)
 {
-	debug("Freeing key_file with %s value\n",config_file->key_file == NULL? "NULL":"non-NULL");
 	g_key_file_free(config_file->key_file);
 }
 

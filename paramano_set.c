@@ -43,7 +43,6 @@ char write_str_to_file(const char *file, const char *data, const char *core)
 	// Try to open file and write data to it
 	if ( (fd = fopen(file_path, "w")) != NULL )
 	{
-		debug("Writing '%s' to '%s'\n",data,file_path);
 		fputs(data, fd);
 		fclose(fd);
 		return 1;
@@ -73,7 +72,6 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 			if ( strcmp(argv[arg], "-c") == 0 )
 			{
 				// Found -c with an arg
-				debug("Found -c with arg '%s'\n",argv[arg+1]);
 				argsum->present |= ARG_CORE;
 				argsum->core = (char*)(argv[arg+1]);
 				continue;
@@ -82,7 +80,6 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 			if ( strcmp(argv[arg], "-f") == 0 )
 			{
 				// Found -f with an arg
-				debug("Found -f with arg '%s'\n",argv[arg+1]);
 				argsum->present |= ARG_FREQ;
 				argsum->frequency = (char*)(argv[arg+1]);
 				continue;
@@ -91,7 +88,6 @@ void get_argument_summary(int argc, char **argv, argument_summary *argsum)
 			if ( strcmp(argv[arg], "-g") == 0 )
 			{
 				// Found -g with an arg
-				debug("Found -g with arg '%s'\n",argv[arg+1]);
 				argsum->present |= ARG_GOV;
 				argsum->governor = (char*)(argv[arg+1]);
 				//continue;
@@ -106,43 +102,24 @@ int main(int argc, char *argv[])
 	bindtextdomain("paramano",LOCALEDIR);
 	textdomain("paramano");
 
-	debug("Set gettext up\n");
-
 	argument_summary args;
 	memset(&args, 0, sizeof(args));
 
 	// If unusual number of args, give up now
 	if (argc == 5)
 	{
-
-		debug ("Checking UID\n");
 		if (getuid() != 0)
 			fprintf(stderr,"Warning: running as UID %d, not 0\n",getuid() );
 
 		get_argument_summary(argc, argv, &args);
 
-		debug("Correct number of command line arguments\n");
-		debug("-c: %s  -g: %s  -f: %s\n",	(args.present & ARG_CORE )? "Yes":"No",
-											(args.present & ARG_GOV  )? "Yes":"No",
-											(args.present & ARG_FREQ )? "Yes":"No" );
-		debug("Core: %s\n",args.core);
-		debug("Gov : %s\n",args.governor);
-		debug("Freq: %s\n",args.frequency);
-
 		if ( args.present == ( ARG_CORE | ARG_GOV ) )
-		{
-			debug("Changing governor\n");
 			return set_gov(args.governor , args.core);
-		}
 
 		if ( args.present == ( ARG_CORE | ARG_FREQ ) )
-		{
-			debug("Changing frequency\n");
 			return set_gov("userspace", args.core) | set_speed(args.frequency, args.core);
-		}
 	}
 	// Fall through to here if no valid argument combination
-	debug("Fell through, showing command usage\n");
 	fprintf(stderr, _("%s {-f frequency|-g governor} -c core\n"), argv[0] );
 	return 1;
 }

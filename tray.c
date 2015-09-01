@@ -31,7 +31,6 @@ static GtkWidget* checked_menu_item;
  **********************************************************************/
 static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
-	debug("[checking in]\n");
 	if(gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
@@ -48,7 +47,6 @@ static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
  **********************************************************************/
 static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
-	debug("[checking in]\n");
 	if(gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
@@ -64,7 +62,6 @@ static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
  **********************************************************************/
 static void remove_menu_item(GtkWidget* menu_item, gpointer data)
 {
-	debug("Destroying menu_item\n");
 	gtk_widget_destroy(menu_item);
 }
 
@@ -74,7 +71,6 @@ static void remove_menu_item(GtkWidget* menu_item, gpointer data)
  **********************************************************************/
 static void tray_clear_menu()
 {
-	debug("Clearing the menu\n");
 	GtkContainer* cont = GTK_CONTAINER(menu);
 	gtk_container_foreach(cont, remove_menu_item, NULL);
 	menu_items = NULL;
@@ -86,7 +82,6 @@ static void tray_clear_menu()
  **********************************************************************/
 static void tray_init_menu()
 {
-	debug("Spawning new menu");
 	menu = gtk_menu_new();
 }
 
@@ -111,7 +106,6 @@ static void tray_generate_menu()
 	for(i = 0; i < gf_number(); i++)
 	{
 		label = gf_get_frequency_label(gf_freqi(0, i));
-		debug("Got freq label '%s', i=%d\n",label,i);
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, label);
 
@@ -120,20 +114,14 @@ static void tray_generate_menu()
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
 		if(g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
-		{
-			debug("This freq is current freq, ticking radio button\n");
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
-		}
 
-		debug("Setting connection/callback\n");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
 
-		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
 
 	// Add a seperator
-	debug("Adding separator\n");
 	GtkWidget* seperator = gtk_separator_menu_item_new();
 	gtk_menu_append(menu, seperator);
 
@@ -141,27 +129,18 @@ static void tray_generate_menu()
 	for(i = 0; i < gg_number(); i++)
 	{
 		if(g_strcmp0(gg_gov(0, i), "userspace") == 0)
-		{
-			debug("Gov is userspace, not adding\n");
 			continue;
-		}
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, gg_gov(0, i));
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
 		if(g_strcmp0(gg_gov(0, i), current_governor) == 0)
-		{
-			debug("Governor is current one, ticking radio button\n");
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
-		}
 
-		debug("Adding callback");
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(gov_menu_item_toggled), gg_gov(0, i));
 
-		debug("Adding item to menu\n");
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
-	debug("Showing menu\n");
 	gtk_widget_show_all(menu);
 }
 
@@ -192,7 +171,6 @@ static void update_tooltip_cache()
 
 	for(i = 0; i < gc_number(); i++)
 	{
-		debug("Adding CPU%d's frequency\n",i);
 		label = gf_get_frequency_label(gf_current(i));
 		asprintf(&msg, _("%sCPU%d: %s%s"), msg, i, label, i == gc_number()-1 ? "" : "\n");
 		free(label);
@@ -210,7 +188,6 @@ static void update_tooltip_cache()
  **********************************************************************/
 static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_time,gpointer data)
 {
-	debug("Spawning popup menu\n");
 	tray_generate_menu();
 	gtk_menu_popup(GTK_MENU(menu),NULL,NULL,gtk_status_icon_position_menu,tray,button,activate_time);
 }
@@ -247,9 +224,7 @@ static void update_icon()
 		}
 	}
 
-	debug("Rounded/adjusted CPU percentage: %d / %d = %d\n",gf_current(0), max_frequency, adjusted_percent);
 	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
-	debug("Setting tray icon to '%s'\n",file);
 	gtk_status_icon_set_from_file(tray, file);
 
 	free(file);
@@ -266,7 +241,6 @@ static gboolean update()
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			debug("Discharging\n");
 			if(DEFAULT_BAT_GOV)
 			{
 				for(i = 0; i < gc_number(); i++)
@@ -276,7 +250,6 @@ static gboolean update()
 
 		case STATE_CHARGING:
 		case STATE_FULL:
-			debug("Charging/Full\n");
 			if(DEFAULT_AC_GOV)
 			{
 				for(i = 0; i < gc_number(); i++)
@@ -286,7 +259,6 @@ static gboolean update()
 			break;
 	}
 
-	debug("Updating icon\n");
 	update_tooltip_cache();
 	update_icon();
 	return true;
@@ -331,15 +303,12 @@ void tray_init()
 	/* Force something useful to be in the cached tooltip text */
 	update_tooltip_cache();
 
-	debug("Setting icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip(tray, TRUE);
 
-	debug("Setting up callbacks\n");
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
 
-	debug("Adding timeout\n");
 	g_timeout_add(1000, update, NULL);
 
 	/* Force meaningful tooltip cached text and force meaningful icon */
@@ -354,7 +323,6 @@ void tray_init()
  **********************************************************************/
 void tray_show()
 {
-	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
@@ -363,7 +331,6 @@ void tray_show()
  **********************************************************************/
 void tray_hide()
 {
-	debug("Hiding tray");
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 

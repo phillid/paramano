@@ -70,11 +70,9 @@ long get_bat_seconds_left()
 	/* Energy units or charge units */
 	if (now >= 0)
 	{
-		debug("Energy units");
 		full = get_int_value_from_filef(POWERDIR"BAT%d/energy_full", bat_num);
 		rate = get_int_value_from_filef(POWERDIR"BAT%d/power_now", bat_num);
 	} else {
-		debug("Charge units");
 		full = get_int_value_from_filef(POWERDIR"BAT%d/charge_full", bat_num);
 		now = get_int_value_from_filef(POWERDIR"BAT%d/charge_now", bat_num);
 		rate = get_int_value_from_filef(POWERDIR"BAT%d/current_now", bat_num);
@@ -131,26 +129,21 @@ static void update_tooltip_cache()
 	switch(get_battery_state())
 	{
 		case STATE_DISCHARGING:
-			debug("Discharging\n");
 			asprintf(&msg, _("Discharging (%d%%)\n%s"), get_bat_percent(), time_left);
 			break;
 
 		case STATE_CHARGING:
-			debug("Charging\n");
 			asprintf(&msg, _("Charging (%d%%)\n%s"), get_bat_percent(), time_left);
 			break;
 
 		case STATE_CHARGED:
-			debug("Charged\n");
 			asprintf(&msg, _("Fully charged") );
 			break;
 
 		default:
-			debug("Unknown\n");
 			asprintf(&msg, _("Unknown status") );
 			break;
 	}
-	debug("Setting cached tooltip text to '%s'\n",msg);
 	strncpy(tooltip_text, msg, sizeof(tooltip_text));
 
 	free(time_left);
@@ -169,8 +162,6 @@ static gboolean update()
 
 	rounded = 20* (int)((get_bat_percent()+10)/20); // Round percentage to 0, 20, 40, 60, 80 or 100
 
-	debug("Rounded/adjusted percentage: %d\n",rounded);
-
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
@@ -188,7 +179,6 @@ static gboolean update()
 
 
 	update_tooltip_cache();
-	debug("Setting tray icon to '%s'\n",icon_file);
 	gtk_status_icon_set_from_file(tray, icon_file);
 
 	free(icon_file);
@@ -211,7 +201,6 @@ void bat_tray_init()
 	asprintf(&CHARGE_VALUE_PATH, "/sys/class/power_supply/BAT%d/capacity", bat_num);
 	asprintf(&CHARGE_STATE_PATH, "/sys/class/power_supply/BAT%d/status", bat_num);
 
-	debug("Spawning new status icon\n");
 	tray = gtk_status_icon_new();
 	asprintf(&icon_file,"%s/bat-charged.png",DEFAULT_THEME);
 	gtk_status_icon_set_from_file(tray, icon_file);
@@ -241,7 +230,6 @@ void bat_tray_end()
  **********************************************************************/
 void bat_tray_show()
 {
-	debug("Showing tray\n");
 	gtk_status_icon_set_visible(tray, TRUE);
 }
 
@@ -251,7 +239,6 @@ void bat_tray_show()
  **********************************************************************/
 void bat_tray_hide()
 {
-	debug("Hiding tray\n");
 	gtk_status_icon_set_visible(tray, FALSE);
 }
 
@@ -273,23 +260,14 @@ int get_battery_state()
 	chomp(state);
 
 	if (strcmp(state, "Discharging") == 0)
-	{
-		debug("Battery discharging\n");
 		return STATE_DISCHARGING;
-	}
 
 	if (strcmp(state, "Full") == 0)
-	{
-		debug("Battery full\n");
 		return STATE_CHARGED;
-	}
 
 	if (strcmp(state, "Charging") == 0)
-	{
-		debug("Battery charging\n");
 		return STATE_CHARGING;
-	}
-	debug("Fallthrough: unknown status\n");
+
 	return STATE_UNKNOWN;
 }
 
@@ -308,10 +286,8 @@ int get_bat_num()
 		asprintf(&file, "/sys/class/power_supply/BAT%d/present", i);
 		if( (fd = fopen(file, "r")) )
 		{
-			debug("Found battery %d\n",i);
 			if (fgetc(fd) == '1')
 			{
-				debug("Battery %d is present\n",i);
 				fclose(fd);
 				free(file);
 				return i;
@@ -319,7 +295,6 @@ int get_bat_num()
 			fclose(fd);
 		}
 	}
-	debug("Fallthrough: couldn't find battery\n");
 	free(file);
 	return -1;
 }
