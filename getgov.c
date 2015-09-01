@@ -57,14 +57,11 @@ void gg_init()
 bool gg_current(int core, char* out, int size)
 {
 	FILE* fd;
-	char *path;
-	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
+	char path[1024];
+	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", core);
 
 	if (!(fd = fopen(path, "r")))
-	{
-		free(path);
 		return false;
-	}
 
 	fgets(out, size, fd);
 
@@ -73,7 +70,6 @@ bool gg_current(int core, char* out, int size)
 	*newline = '\0';
 
 	fclose(fd);
-	free(path);
 	return true;
 }
 
@@ -83,18 +79,15 @@ bool gg_current(int core, char* out, int size)
  **********************************************************************/
 bool gg_available(int core, char* out, int size)
 {
-	char *path;
+	char path[1024];
 	FILE *fd;
-	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
+	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_governors", core);
 
 	if (!(fd = fopen(path, "r")))
-	{
-		free(path);
 		return false;
-	}
+
 	fgets(out, size, fd);
 	fclose(fd);
-	free(path);
 	return true;
 }
 

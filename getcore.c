@@ -25,11 +25,10 @@ static unsigned int cores;
  **********************************************************************/
 bool core_exists(unsigned int core)
 {
-	char* path;
+	char path[1024];
 	int result;
-	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq", core);
+	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq", core);
 	result = access(path, F_OK);
-	free (path);
 	return (result != -1);
 }
 

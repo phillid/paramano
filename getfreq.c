@@ -71,23 +71,19 @@ int gf_current(int core)
 {
 	FILE* fd;
 	char buff[4096];
-	char* path;
+	char path[1024];
 	int freq;
 
-	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
+	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
 
 	if(!(fd = fopen(path, "r")))
-	{
-		free(path);
 		return -1;
-	}
 
 	fgets(buff, 13, fd);
 
 	freq = atoi(buff);
 	fclose(fd);
 
-	free(path);
 	return freq;
 }
 
@@ -98,39 +94,32 @@ int gf_current(int core)
 int gf_available(int core, char* out, int size)
 {
 	FILE* fd;
-	char* path;
+	char path[1024];
 
-	asprintf(&path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_frequencies", core);
+	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_frequencies", core);
 
 	if(!(fd = fopen(path, "r")))
-	{
-		free(path);
 		return -1;
-	}
 
 	fgets(out, size, fd);
 
 	fclose(fd);
-	free(path);
 	return 0;
 }
 
 /***********************************************************************
  * Populate `out` with a formatted, units-added freq label for `freq`
  **********************************************************************/
-char* gf_get_frequency_label(int freq)
+void gf_get_frequency_label(char *buffer, size_t max_size, int freq)
 {
-	char *string;
 	if(freq >= 1000000000) // >= 1 billion KHz (1 THz) This, ladies and gentlement, is future-proofing ;)
-		asprintf(&string, "%.2f THz", (double)freq/1000000000 );
+		snprintf(buffer, max_size, "%.2f THz", (double)freq/1000000000 );
 	else if(freq >= 1000000) // >= 1 million KHz (1 GHz)
-		asprintf(&string, "%.2f GHz", (double)freq/1000000 );
+		snprintf(buffer, max_size, "%.2f GHz", (double)freq/1000000 );
 	else if (freq >= 1000) // >= 1 thousand KHz (1 MHz)
-		asprintf(&string, "%.2f MHz", (double)freq/1000 );
+		snprintf(buffer, max_size, "%.2f MHz", (double)freq/1000 );
 	else // < 1000 KHz (1 MHz)
-		asprintf(&string, "%.2f KHz", (double)freq);
-
-	return string;
+		snprintf(buffer, max_size, "%.2f KHz", (double)freq);
 }
 
 /***********************************************************************

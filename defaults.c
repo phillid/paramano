@@ -26,5 +26,5 @@ void defaults_init()
 	DEFAULT_BAT_GOV			= NULL;
 	DEFAULT_AC_GOV			= NULL;
 	DEFAULT_SHOW_BATTERY	= true;
-	asprintf(&DEFAULT_THEME, SHAREDIR"/paramano/themes/default");
+	snprintf(DEFAULT_THEME, sizeof(DEFAULT_THEME), SHAREDIR"/paramano/themes/default");
 }

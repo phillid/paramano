@@ -103,7 +103,7 @@ void config_init()
 	info("UID: %d   GID: %d\n", getuid(), getgid());
 
 	if ((temp = config_get_key(&config, "extra", "theme")))
-		asprintf(&DEFAULT_THEME, "%s", temp);
+		snprintf(DEFAULT_THEME, sizeof(DEFAULT_THEME), "%s", temp);
 
 	g_free(config.file_name);
 	config_close(&config);

@@ -93,7 +93,7 @@ static void tray_generate_menu()
 	tray_clear_menu();
 	gg_init();
 
-	char *label;
+	char label[1024];
 	unsigned int i = 0;
 
 	char current_governor[20];
@@ -105,11 +105,9 @@ static void tray_generate_menu()
 	// Add available frequencies
 	for(i = 0; i < gf_number(); i++)
 	{
-		label = gf_get_frequency_label(gf_freqi(0, i));
+		gf_get_frequency_label(label, sizeof(label), gf_freqi(0, i));
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, label);
-
-		free(label);
 
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
@@ -159,27 +157,25 @@ static gboolean show_tooltip(GtkStatusIcon* status_icon, gint x, gint y, gboolea
  **********************************************************************/
 static void update_tooltip_cache()
 {
-	char *msg, *label;
+	char msg[1024], label[1024];
 	char current_governor[20]; // TO DO
 	unsigned int i = 0;
+	int offset = 0;
 
 	memset(current_governor, '\0', sizeof(current_governor) );
 
 	gg_current(0, current_governor, sizeof(current_governor) );
 
-	asprintf(&msg, _("Governor: %s\n"), current_governor);
+	offset = snprintf(msg, sizeof(msg), _("Governor: %s\n"), current_governor);
 
 	for(i = 0; i < gc_number(); i++)
 	{
-		label = gf_get_frequency_label(gf_current(i));
-		asprintf(&msg, _("%sCPU%d: %s%s"), msg, i, label, i == gc_number()-1 ? "" : "\n");
-		free(label);
+		gf_get_frequency_label(label, sizeof(label), gf_current(i));
+		offset += snprintf(msg+offset, sizeof(msg), _("CPU%d: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
 	}
 
 	strncpy(tooltip_text, msg, sizeof(tooltip_text));
 	tooltip_text[sizeof(tooltip_text)] = '\0';
-
-	free(msg);
 }
 
 
@@ -198,7 +194,7 @@ static void popup_menu(GtkStatusIcon* statuc_icon,guint button,guint activate_ti
  **********************************************************************/
 static void update_icon()
 {
-	char* file;
+	char file[1024];
 	int max_frequency = gf_freqi(0, 0);
 	int adjusted_percent, percent;
 
@@ -224,10 +220,8 @@ static void update_icon()
 		}
 	}
 
-	asprintf(&file, "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
+	snprintf(file, sizeof(file), "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
 	gtk_status_icon_set_from_file(tray, file);
-
-	free(file);
 }
 
 
