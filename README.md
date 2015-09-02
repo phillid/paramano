@@ -7,15 +7,19 @@ Simple.
 
 Installation
 ------------
+For ArchLinux: [Paramano on AUR](https://aur.archlinux.org/packages/paramano/).
 
-* [Paramano on AUR4](https://aur4.archlinux.org/packages/paramano)
-* For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your distro's repositories.
+For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your distro's repositories.
 
-Runtime Dependencies
---------------------
+In most case a simple workflow like "make && make install" is all that is needed.
+
+
+Dependencies
+------------
 
 * gtk3
 * sudo
+
 
 Building
 ========
@@ -33,7 +37,8 @@ Here's a list:
 * CC to override default compiler `gcc`
 * PARAMANO_SET to override default paramano-set program of `BINDIR/paramano-set`
 * DEBUG can be set to anything to build a huge amount of debug output stuff into parmano and parmano-set
-* DESTDIR (only for `make install` -- see below)
+* DESTDIR (only for `make install`)
+
 
 FAQ
 ===
@@ -48,7 +53,4 @@ Here is an example for the user `alice`:
 	alice ALL = NOPASSWD: /usr/bin/paramano-set
 	# ...
 
-
-This won't build under MinGW/This doesn't work on Windows
------------------------------
-Correct.
+You might like to make a group if you have numerous users who you wish to grant this permission.
