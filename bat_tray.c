@@ -115,7 +115,7 @@ static void update_tooltip_cache()
 	char time_left[64];
 	int seconds_left = get_bat_seconds_left();
 
-	if (seconds_left == -1)
+	if (seconds_left < 0)
 		snprintf(time_left, sizeof(time_left), _("Unknown time left"));
 	else
 		snprintf(time_left, sizeof(time_left), _("%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60));
