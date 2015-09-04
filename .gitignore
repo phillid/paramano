@@ -1,3 +1,6 @@
 *.o
 paramano
 paramano-set
+paramano.conf
+paramano.desktop
+*.mo
