@@ -83,7 +83,7 @@ long get_bat_seconds_left()
 	if (full < 0 || now < 0 || rate <= 0)
 		return -1;
 
-	switch(get_battery_state())
+	switch (get_battery_state())
 	{
 		case STATE_CHARGING:
 			return (3600*(long long)(full - now))/rate;
@@ -120,7 +120,7 @@ static void update_tooltip_cache()
 	else
 		snprintf(time_left, sizeof(time_left), _("%02d:%02d left"), (int)(seconds_left/3600), (int)((seconds_left%3600)/60));
 
-	switch(get_battery_state())
+	switch (get_battery_state())
 	{
 		case STATE_DISCHARGING:
 			snprintf(msg, sizeof(msg), _("Discharging (%d%%)\n%s"), get_bat_percent(), time_left);
@@ -259,10 +259,10 @@ int get_bat_num()
 	char filename[1024];
 	int i = 0;
 
-	for(i = 0; i < 10; i++)
+	for (i = 0; i < 10; i++)
 	{
 		snprintf(filename, sizeof(filename), "/sys/class/power_supply/BAT%d/present", i);
-		if((fd = fopen(filename, "r")))
+		if ((fd = fopen(filename, "r")))
 		{
 			if (fgetc(fd) == '1')
 			{

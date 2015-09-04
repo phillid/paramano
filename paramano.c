@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	bindtextdomain("paramano",LOCALEDIR);
 	textdomain("paramano");
 
-	if(!gtk_init_check(&argc, &argv))
+	if (!gtk_init_check(&argc, &argv))
 	{
 		g_error( _("GTK Error: gtk_init_check returned FALSE.\nBailing.") );
 		return 1;
@@ -42,10 +42,10 @@ int main(int argc, char** argv)
 	tray_show();
 
 	/* Show battery tray only if we're supposed to */
-	if(DEFAULT_SHOW_BATTERY)
+	if (DEFAULT_SHOW_BATTERY)
 	{
 		bat_tray_init();
-//		bat_tray_show();
+		bat_tray_show();
 	}
 
 	gtk_main();
