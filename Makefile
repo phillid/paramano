@@ -70,22 +70,13 @@ LDFLAGS	+=	-lgtk-3 \
 
 ########################################################################
 # Phony targets
-.PHONY: all debug lang paramano-extra clean strip install
+.PHONY: all lang paramano-extra clean strip install
 ########################################################################
 
 
 ########################################################################
 # Make entire suite
 all: paramano paramano-set lang paramano-extra
-########################################################################
-
-
-########################################################################
-# Make entire suite, with a huge amount of debug messages compiled-in
-# Seriously, don't use this feature unless you're actually having a
-# bug. It'll flood your system journal with repetitive, boring drivel
-debug:
-	make all CFLAGS="$(CFLAGS) -DDEBUG"
 ########################################################################
 
 
