@@ -16,7 +16,12 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "paramano_set_interface.h"
+#include "common.h"
+
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void si_gov(char* gov, int core)
 {

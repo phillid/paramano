@@ -4,6 +4,7 @@ BINDIR=$(PREFIX)/bin
 SYSCONFDIR=/etc
 SHAREDIR=$(PREFIX)/share
 LOCALEDIR=$(SHAREDIR)/locale
+POWER_DIR="/sys/class/power_supply/"
 
 # External program/support programs
 SUDO=$(BINDIR)/sudo
@@ -22,6 +23,7 @@ DEFS +=		-DPREFIX=\"$(PREFIX)\" \
 			-DPARAMANO_CONF=\"$(PARAMANO_CONF)\" \
 			-DLOCALEDIR=\"$(LOCALEDIR)\" \
 			-DSHAREDIR=\"$(SHAREDIR)\" \
+			-DPOWERDIR=\"$(POWER_DIR)\" \
 			-DROOT_UID=$(ROOT_UID) \
 			-D_GNU_SOURCE
 

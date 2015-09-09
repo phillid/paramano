@@ -16,8 +16,12 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-
-#include "paramano.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <libintl.h>
+#include <locale.h>
+#include <getopt.h>
+#include <unistd.h>
 
 #define set_freq_max(freq, core)	write_str_to_file("scaling_max_freq", freq, core)
 #define set_freq_min(freq, core)	write_str_to_file("scaling_min_freq", freq, core)

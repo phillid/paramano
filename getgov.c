@@ -16,7 +16,13 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "getgov.h"
+#include "getcore.h"
+#include "common.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <glib.h>
 
 /* [CORE][GOVERNOR NUMBER] */
 static char governors[999][50][13];

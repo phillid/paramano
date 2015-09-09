@@ -16,7 +16,14 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "getfreq.h"
+#include "getcore.h"
+#include "common.h"
+
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define MAX_CORES 1000
 #define MAX_FREQS 50

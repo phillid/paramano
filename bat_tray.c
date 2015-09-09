@@ -17,7 +17,14 @@
  ************************************************************************/
 
 
-#include "paramano.h"
+#include "bat_tray.h"
+#include "common.h"
+#include "defaults.h"
+
+#include <gtk/gtk.h>
+#include <stdbool.h>
+#include <string.h>
+#include <libintl.h>
 
 static GtkStatusIcon* tray;
 static char tooltip_text[1024];

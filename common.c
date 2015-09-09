@@ -16,8 +16,11 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "common.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
 
 /***********************************************************************

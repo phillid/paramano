@@ -16,8 +16,19 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "tray.h"
+#include "getcore.h"
+#include "getfreq.h"
+#include "getgov.h"
+#include "bat_tray.h"
+#include "defaults.h"
+#include "paramano_set_interface.h"
 
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libintl.h>
+#include <gtk/gtk.h>
 
 static GtkStatusIcon* tray;
 static char tooltip_text[1024];

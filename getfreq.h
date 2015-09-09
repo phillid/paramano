@@ -19,6 +19,8 @@
 #ifndef GETFREQ_H
 #define GETFREQ_H
 
+#include <stddef.h>
+
 void         gf_init();
 int          gf_current(int core);
 int          gf_available(int core, char* out, int size);

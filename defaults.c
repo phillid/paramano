@@ -16,7 +16,10 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "defaults.h"
+
+#include <stddef.h>
+#include <stdio.h>
 
 void defaults_init()
 {

@@ -19,6 +19,8 @@
 #ifndef TRAY_H
 #define TRAY_H
 
+#include <stdbool.h>
+
 void tray_set_defaults();
 void tray_init();
 void tray_show();

@@ -19,6 +19,9 @@
 #ifndef CONFIG_FILE_H
 #define CONFIG_FILE_H
 
+#include <glib.h>
+#include <gtk/gtk.h>
+
 struct config_file
 {
 	GKeyFile* key_file;

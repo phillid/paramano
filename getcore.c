@@ -16,7 +16,11 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#include "paramano.h"
+#include "getcore.h"
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
 
 static unsigned int cores;
 
