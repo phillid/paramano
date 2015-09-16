@@ -16,9 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef DEFAULTS_H
-#define DEFAULTS_H
-
 #include <stdbool.h>
 
 char* DEFAULT_GOV;
@@ -31,5 +28,3 @@ char  DEFAULT_THEME[1024];
 
 
 void defaults_init();
-
-#endif /* ifndef DEFAULTS_H */

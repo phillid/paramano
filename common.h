@@ -16,9 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef COMMON_H
-#define COMMON_H
-
 #include <stdarg.h>
 
 int  get_int_value_from_filef(const char* format, ...);
@@ -35,4 +32,3 @@ int  get_int(const char* string);
 
 #define info(...)	printf("INFO: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
 #define FILE_PATH_SIZE 2048
-#endif /* ifndef COMMON_H */

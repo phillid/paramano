@@ -16,9 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef BAT_TRAY_H
-#define BAT_TRAY_H
-
 #define STATE_CHARGING		0
 #define STATE_DISCHARGING	1
 #define STATE_CHARGED		2
@@ -30,5 +27,3 @@ void bat_tray_show();
 void bat_tray_hide();
 int  get_battery_state();
 int  get_bat_num();
-
-#endif /* ifndef BAT_TRAY_H */

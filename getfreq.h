@@ -16,9 +16,6 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef GETFREQ_H
-#define GETFREQ_H
-
 #include <stddef.h>
 
 void         gf_init();
@@ -28,5 +25,3 @@ void         gf_get_frequency_label(char* buffer, size_t max_size, int freq);
 char*        gf_freqa(int core, int index);
 int          gf_freqi(int core, int index);
 unsigned int gf_number();
-
-#endif /* ifndef GETFREQ_H */

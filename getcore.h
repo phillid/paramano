@@ -16,10 +16,5 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef GETCORE_H
-#define GETCORE_H
-
 void         gc_init();
 unsigned int gc_number();
-
-#endif /* ifndef GETCORE_H */

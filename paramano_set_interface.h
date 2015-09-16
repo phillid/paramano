@@ -16,10 +16,5 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef PARAMANO_SET_INTERFACE_H
-#define PARAMANO_SET_INTERFACE_H
-
 void si_gov(char* gov, int core);
 void si_freq(int freq, int core);
-
-#endif /* ifndef PARAMANO_SET_INTERFACE_H */

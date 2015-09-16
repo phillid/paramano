@@ -16,9 +16,4 @@
  * <http://www.gnu.org/licenses/>.                                      *
  ************************************************************************/
 
-#ifndef PARAMANO_H
-#define PARAMANO_H
-
 void config_init();
-
-#endif /* ifndef PARAMANO_H */
