@@ -48,9 +48,7 @@ void config_init()
 
 	snprintf(config.file_name, sizeof(config.file_name), "%s/paramano.conf", config_home);
 
-	if( (fd = fopen(config.file_name, "r")) )
-		fclose(fd);
-	else
+	if (access(config.file_name, R_OK) == -1)
 		strncpy(config.file_name, PARAMANO_CONF, sizeof(config.file_name)); /* fallback to system-wide */
 
 	if(!config_open(&config))
