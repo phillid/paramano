@@ -43,7 +43,7 @@ bool core_exists(unsigned int core)
 void gc_init()
 {
 	cores = 0;
-	while(core_exists(cores))
+	while (core_exists(cores))
 		cores++;
 }
 

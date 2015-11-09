@@ -58,7 +58,7 @@ int get_int_value_from_file(const char* filename)
 	char buffer[512];
 	int value = 0;
 
-	if(!(fd = fopen(filename, "r")))
+	if (!(fd = fopen(filename, "r")))
 		return -1;
 
 	if (fgets(buffer, sizeof(buffer), fd))

@@ -42,12 +42,12 @@ static GtkWidget* checked_menu_item;
  **********************************************************************/
 static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
-	if(gtk_check_menu_item_get_active(item))
+	if (gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
 		gint freq = GPOINTER_TO_INT(data);
 		unsigned int i = 0;
-		for(i = 0; i < gc_number(); i++)
+		for (i = 0; i < gc_number(); i++)
 			si_freq(freq, i);
 	}
 }
@@ -58,12 +58,12 @@ static void freq_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
  **********************************************************************/
 static void gov_menu_item_toggled(GtkCheckMenuItem* item, gpointer data)
 {
-	if(gtk_check_menu_item_get_active(item))
+	if (gtk_check_menu_item_get_active(item))
 	{
 		checked_menu_item = GTK_WIDGET(item);
 		char* gov = (char*)data;
 		unsigned int i = 0;
-		for(i = 0; i < gc_number(); i++)
+		for (i = 0; i < gc_number(); i++)
 			si_gov(gov, i);
 	}
 }
@@ -114,7 +114,7 @@ static void tray_generate_menu()
 	gint current_frequency = gf_current(0);
 
 	/* Add available frequencies */
-	for(i = 0; i < gf_number(); i++)
+	for (i = 0; i < gf_number(); i++)
 	{
 		gf_get_frequency_label(label, sizeof(label), gf_freqi(0, i));
 
@@ -122,7 +122,7 @@ static void tray_generate_menu()
 
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
-		if(g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
+		if (g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
@@ -135,15 +135,15 @@ static void tray_generate_menu()
 	gtk_menu_append(menu, seperator);
 
 	/* Add available governors */
-	for(i = 0; i < gg_number(); i++)
+	for (i = 0; i < gg_number(); i++)
 	{
-		if(g_strcmp0(gg_gov(0, i), "userspace") == 0)
+		if (g_strcmp0(gg_gov(0, i), "userspace") == 0)
 			continue;
 
 		GtkWidget* item = gtk_radio_menu_item_new_with_label(menu_items, gg_gov(0, i));
 		menu_items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM (item));
 
-		if(g_strcmp0(gg_gov(0, i), current_governor) == 0)
+		if (g_strcmp0(gg_gov(0, i), current_governor) == 0)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
 		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(gov_menu_item_toggled), gg_gov(0, i));
@@ -179,7 +179,7 @@ static void update_tooltip_cache()
 
 	offset = snprintf(msg, sizeof(msg), _("Governor: %s\n"), current_governor);
 
-	for(i = 0; i < gc_number(); i++)
+	for (i = 0; i < gc_number(); i++)
 	{
 		gf_get_frequency_label(label, sizeof(label), gf_current(i));
 		offset += snprintf(msg+offset, sizeof(msg)-offset, _("CPU%d: %s%s"), i, label, i == gc_number()-1 ? "" : "\n");
@@ -218,13 +218,13 @@ static void update_icon()
 		/* Percentages need to be {25,50,75,100}. Round to one of these numbers.
 		 * TO DO: round/truncate instead of lots of ifs */
 		percent = (gf_current(0) * 100)/max_frequency;
-		if(percent == 100) {
+		if (percent == 100) {
 			adjusted_percent = 100;
-		} else if(percent >= 65.5) {
+		} else if (percent >= 65.5) {
 			adjusted_percent = 75;
-		} else if(percent >= 37.5) {
+		} else if (percent >= 37.5) {
 			adjusted_percent = 50;
-		} else if(percent >= 12.5) {
+		} else if (percent >= 12.5) {
 			adjusted_percent = 25;
 		} else {
 			adjusted_percent = 0;
@@ -246,18 +246,18 @@ static gboolean update()
 	switch ( get_battery_state() )
 	{
 		case STATE_DISCHARGING:
-			if(DEFAULT_BAT_GOV)
+			if (DEFAULT_BAT_GOV)
 			{
-				for(i = 0; i < gc_number(); i++)
+				for (i = 0; i < gc_number(); i++)
 					si_gov(DEFAULT_BAT_GOV, i);
 			}
 			break;
 
 		case STATE_CHARGING:
 		case STATE_FULL:
-			if(DEFAULT_AC_GOV)
+			if (DEFAULT_AC_GOV)
 			{
-				for(i = 0; i < gc_number(); i++)
+				for (i = 0; i < gc_number(); i++)
 					si_gov(DEFAULT_AC_GOV, i);
 			}
 
@@ -276,19 +276,19 @@ static gboolean update()
 void tray_set_defaults()
 {
 	unsigned int i = 0;
-	if(DEFAULT_GOV)
+	if (DEFAULT_GOV)
 	{
-		for(i = 0; i < gc_number(); i++)
+		for (i = 0; i < gc_number(); i++)
 			si_gov(DEFAULT_GOV, i);
 
 	} else {
-		for(i = 0; i < gc_number(); i++)
+		for (i = 0; i < gc_number(); i++)
 			si_gov("ondemand", i);
 	}
 
-	if(DEFAULT_FREQ)
+	if (DEFAULT_FREQ)
 	{
-		for(i = 0; i < gc_number(); i++)
+		for (i = 0; i < gc_number(); i++)
 			si_freq(atoi(DEFAULT_FREQ), i);
 	}
 

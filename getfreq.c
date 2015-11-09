@@ -44,7 +44,7 @@ void gf_init()
 
 	memset(freqs, '\0', sizeof(freqs));
 
-	for(i = 0; i < gc_number() && i < MAX_CORES; i++)
+	for (i = 0; i < gc_number() && i < MAX_CORES; i++)
 	{
 		memset(freq_string, '\0', sizeof(freq_string) );
 
@@ -62,7 +62,7 @@ void gf_init()
 		{
 			strncpy(freqs[i][total_freqs], next_token, FREQ_LENGTH);
 			total_freqs++;
-		} while((next_token = strtok(NULL, " ")) != NULL);
+		} while ((next_token = strtok(NULL, " ")) != NULL);
 	}
 
 	/* Hit the limit of storage of cores' frequencies */
@@ -82,7 +82,7 @@ int gf_current(int core)
 
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", core);
 
-	if(!(fd = fopen(path, "r")))
+	if (!(fd = fopen(path, "r")))
 		return -1;
 
 	fgets(buff, 13, fd); /* FIXME magic */
@@ -103,7 +103,7 @@ int gf_available(int core, char* out, int size)
 
 	snprintf(path, sizeof(path), "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_available_frequencies", core);
 
-	if(!(fd = fopen(path, "r")))
+	if (!(fd = fopen(path, "r")))
 		return -1;
 
 	fgets(out, size, fd);
@@ -116,9 +116,9 @@ int gf_available(int core, char* out, int size)
  **********************************************************************/
 void gf_get_frequency_label(char *buffer, size_t max_size, int freq)
 {
-	if(freq >= 1000000000) /* This, ladies and gentlement, is future-proofing */
+	if (freq >= 1000000000) /* This, ladies and gentlement, is future-proofing */
 		snprintf(buffer, max_size, "%.2f THz", (double)freq/1000000000 );
-	else if(freq >= 1000000)
+	else if (freq >= 1000000)
 		snprintf(buffer, max_size, "%.2f GHz", (double)freq/1000000 );
 	else if (freq >= 1000)
 		snprintf(buffer, max_size, "%.2f MHz", (double)freq/1000 );

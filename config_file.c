@@ -51,7 +51,7 @@ void config_init()
 	if (access(config.file_name, R_OK) == -1)
 		strncpy(config.file_name, PARAMANO_CONF, sizeof(config.file_name)); /* fallback to system-wide */
 
-	if(!config_open(&config))
+	if (!config_open(&config))
 	{
 		g_warning(_("Failed to open config files!\n"));
 		return;
@@ -77,7 +77,7 @@ void config_init()
 
 gboolean config_open(struct config_file* config_file)
 {
-	if(config_file->key_file)
+	if (config_file->key_file)
 		g_key_file_free(config_file->key_file);
 
 	config_file->key_file = g_key_file_new();
