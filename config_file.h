@@ -25,6 +25,7 @@ struct config_file
 	gchar* file_name;
 };
 
+void     config_init();
 gboolean config_open(struct config_file* config_file);
 void     config_close(struct config_file* config_file);
 gchar*   config_get_key(struct config_file* config_file, const gchar* group_name, const gchar* key_name);

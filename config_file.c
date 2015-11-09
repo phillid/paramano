@@ -17,9 +17,63 @@
  ************************************************************************/
 
 #include "config_file.h"
+#include "defaults.h"
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <stdlib.h>
+#include <libintl.h>
+
+void config_init()
+{
+	struct config_file config;
+	char *xdg_config_home;
+	FILE* fd = NULL;
+
+	config.key_file = NULL;
+	
+	/* Default to $HOME/.config/paramano.conf as specified in the XDG
+	 * Base Directory Standard :
+	 * <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+	 */
+	xdg_config_home = getenv("XDG_CONFIG_HOME");
+	if (xdg_config_home == NULL)
+		xdg_config_home = g_strconcat(getenv("HOME"), "/.config", NULL);
+
+	config.file_name = g_strconcat(xdg_config_home, "/paramano.conf", NULL);
+
+	if( (fd = fopen(config.file_name, "r")) )
+	{
+		fclose(fd);
+	} else {
+		/* no (readable) user-specific config file, fall back */
+		config.file_name = g_strconcat(PARAMANO_CONF, NULL);
+	}
+
+	if(!config_open(&config))
+	{
+		g_warning(_("Failed to open config files!\n"));
+		return;
+	}
+
+	/* Reset defaults to default values */
+	defaults_init();
+
+	DEFAULT_GOV			= config_get_key(&config, "governor", "default");
+	DEFAULT_FREQ		= config_get_key(&config, "frequency", "default");
+	DEFAULT_BAT_GOV		= config_get_key(&config, "battery", "governor");
+	DEFAULT_AC_GOV		= config_get_key(&config, "ac", "governor");
+
+	char* temp;
+	if ((temp = config_get_key(&config, "battery", "show")))
+		DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
+
+	if ((temp = config_get_key(&config, "extra", "theme")))
+		snprintf(DEFAULT_THEME, sizeof(DEFAULT_THEME), "%s", temp);
+
+	config_close(&config);
+	g_free(config.file_name);
+}
 
 gboolean config_open(struct config_file* config_file)
 {
