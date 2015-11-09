@@ -23,11 +23,13 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <libintl.h>
+#include <string.h>
 
 void config_init()
 {
 	struct config_file config;
-	char *xdg_config_home;
+	char *xdg_config_home = NULL;
+	char config_home[1024];
 	FILE* fd = NULL;
 
 	config.key_file = NULL;
@@ -37,18 +39,19 @@ void config_init()
 	 * <http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html>
 	 */
 	xdg_config_home = getenv("XDG_CONFIG_HOME");
-	if (xdg_config_home == NULL)
-		xdg_config_home = g_strconcat(getenv("HOME"), "/.config", NULL);
 
-	config.file_name = g_strconcat(xdg_config_home, "/paramano.conf", NULL);
+	/* FIXME: unchecked return values from snprintf */
+	if (xdg_config_home == NULL)
+		snprintf(config_home, sizeof(config_home), "%s/.config", getenv("HOME"));
+	else
+		strncpy(config_home, xdg_config_home, sizeof(config_home));
+
+	snprintf(config.file_name, sizeof(config.file_name), "%s/paramano.conf", config_home);
 
 	if( (fd = fopen(config.file_name, "r")) )
-	{
 		fclose(fd);
-	} else {
-		/* no (readable) user-specific config file, fall back */
-		config.file_name = g_strconcat(PARAMANO_CONF, NULL);
-	}
+	else
+		strncpy(config.file_name, PARAMANO_CONF, sizeof(config.file_name)); /* fallback to system-wide */
 
 	if(!config_open(&config))
 	{
@@ -69,10 +72,9 @@ void config_init()
 		DEFAULT_SHOW_BATTERY = ( temp[0] == '1' );
 
 	if ((temp = config_get_key(&config, "extra", "theme")))
-		snprintf(DEFAULT_THEME, sizeof(DEFAULT_THEME), "%s", temp);
+		strncpy(DEFAULT_THEME, temp, sizeof(DEFAULT_THEME));
 
 	config_close(&config);
-	g_free(config.file_name);
 }
 
 gboolean config_open(struct config_file* config_file)

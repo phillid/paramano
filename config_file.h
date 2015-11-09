@@ -22,7 +22,7 @@
 struct config_file
 {
 	GKeyFile* key_file;
-	gchar* file_name;
+	char file_name[4096];
 };
 
 void     config_init();
