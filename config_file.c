@@ -30,7 +30,6 @@ void config_init()
 	struct config_file config;
 	char *xdg_config_home = NULL;
 	char config_home[1024];
-	FILE* fd = NULL;
 
 	config.key_file = NULL;
 	
