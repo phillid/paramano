@@ -242,10 +242,23 @@ static void update_icon()
  **********************************************************************/
 static gboolean update()
 {
+	static int last_bat_state = -1;
+	int now_bat_state = STATE_UNKNOWN;
 	unsigned int i;
-	switch ( get_battery_state() )
+
+	update_tooltip_cache();
+	update_icon();
+
+	now_bat_state = get_battery_state();
+	if (now_bat_state == last_bat_state)
+		return true;
+
+	last_bat_state = now_bat_state;
+
+	switch ( now_bat_state )
 	{
 		case STATE_DISCHARGING:
+			fprintf(stderr, "discharging\n");
 			if (DEFAULT_BAT_GOV)
 			{
 				for (i = 0; i < gc_number(); i++)
@@ -255,6 +268,7 @@ static gboolean update()
 
 		case STATE_CHARGING:
 		case STATE_FULL:
+			fprintf(stderr, "ac power\n");
 			if (DEFAULT_AC_GOV)
 			{
 				for (i = 0; i < gc_number(); i++)
@@ -263,9 +277,6 @@ static gboolean update()
 
 			break;
 	}
-
-	update_tooltip_cache();
-	update_icon();
 	return true;
 }
 
