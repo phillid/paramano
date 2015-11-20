@@ -235,9 +235,14 @@ int get_battery_state()
 	char state[1024];
 	FILE* fd = NULL;
 
-	if (!(fd = fopen(CHARGE_STATE_PATH, "r")) ||
-		!fgets(state, sizeof(state), fd))
+	if (!(fd = fopen(CHARGE_STATE_PATH, "r")))
 		return STATE_UNKNOWN;
+
+	if (!fgets(state, sizeof(state), fd))
+	{
+		fclose(fd);
+		return STATE_UNKNOWN;
+	}
 
 	fclose(fd);
 
