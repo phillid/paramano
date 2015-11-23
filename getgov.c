@@ -37,7 +37,7 @@ void gg_init()
 	unsigned int i = 0;
 	total_governors = 0;
 
-	for (i = 0; i < gc_number(); i++)
+	for (i = 0; i < 1/*gc_number()*/; i++)
 	{
 		memset(gov_string, '\0', sizeof(gov_string) );
 		gg_available(i, gov_string, sizeof(gov_string) );
