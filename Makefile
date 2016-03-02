@@ -51,7 +51,7 @@ CFLAGS	+=	-I/usr/include/gtk-2.0 \
 			-Werror \
 			-D_=gettext
 
-LDFLAGS	+=	-lgtk-3 \
+LDFLAGS	+=	-lgtk-2 \
 			-lgobject-2.0 \
 			-lglib-2.0
 
