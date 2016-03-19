@@ -11,7 +11,7 @@ For ArchLinux: [Paramano on AUR](https://aur.archlinux.org/packages/paramano/).
 
 For other distros, you'll likely want to install Paramano using your package manager, creating a package if one doesn't exist in your distro's repositories.
 
-In most case a simple workflow like "make && make install" is all that is needed.
+In most cases a simple workflow like "make && make install" is all that is needed.
 
 
 Dependencies
@@ -23,8 +23,8 @@ Dependencies
 
 Building
 ========
-Due to KISS, I don't tend to use ./configure scripts for relatively small programs.
-The sort of parameters you might pass to a ./configure can instead be passed to make.
+Due to KISS, I don't tend to use `./configure` scripts for relatively small programs.
+The sort of parameters you might pass to a `./configure` can instead be passed to make.
 
 Here's a list:
 
@@ -36,7 +36,6 @@ Here's a list:
 * MAKE to override default make program `make`
 * CC to override default compiler `gcc`
 * PARAMANO_SET to override default paramano-set program of `BINDIR/paramano-set`
-* DEBUG can be set to anything to build a huge amount of debug output stuff into parmano and parmano-set
 * DESTDIR (only for `make install`)
 
 
