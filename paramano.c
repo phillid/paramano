@@ -9,18 +9,11 @@
 #include "common.h"
 
 #include <gtk/gtk.h>
-#include <unistd.h>     // getuid, getgid
-#include <stdio.h>      // printf, FILE, fopen, etc
-#include <stdlib.h>     // free etc
-#include <stdbool.h>    // boolean types
-#include <string.h>     // strlen
-#include <libintl.h>    // gettext
-#include <locale.h>     // LC_ALL etc
+#include <stdio.h>
+#include <stdlib.h>
+#include <libintl.h>
+#include <locale.h>
 
-
-/***********************************************************************
- * Main
- **********************************************************************/
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL, "");
