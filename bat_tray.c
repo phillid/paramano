@@ -138,10 +138,17 @@ static void update_tooltip_cache()
 static gboolean update()
 {
 	char icon_file[1024];
-	unsigned int rounded = 0;
+	int rounded = 0;
 
 	/* Round percentage to 0, 20, 40, 60, 80 or 100 */
 	rounded = 20 * (int)((get_bat_percent() + 10) / 20);
+
+	/* cap rounded value to safe bounds */
+	if (rounded < 0)
+		rounded = 0;
+
+	if (rounded > 100)
+		rounded = 100;
 
 	switch (get_battery_state())
 	{
