@@ -24,15 +24,10 @@ void gg_init()
 		memset(gov_string, '\0', sizeof(gov_string) );
 		gg_available(i, gov_string, sizeof(gov_string) );
 
-		char* curr = gov_string;
-		char* end_of_curr = g_strstr_len(curr, strlen(curr), " ");
-		while (end_of_curr)
-		{
+		char** list = g_strsplit(g_strstrip(gov_string), " ", -1);
+		for (char** name = list; *name; ++name) {
 			memset(governors[i][total_governors], '\0', 13); /* FIXME magic */
-			memmove(governors[i][total_governors], curr, end_of_curr - curr);
-
-			curr = end_of_curr+1;
-			end_of_curr = g_strstr_len(curr, strlen(curr), " ");
+			memmove(governors[i][total_governors], *name, strlen(*name));
 			total_governors++;
 		}
 	}
