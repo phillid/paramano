@@ -53,3 +53,9 @@ Here is an example for the user `alice`:
 	# ...
 
 You might like to make a group if you have numerous users who you wish to grant this permission.
+
+Changing just frequency doesn't work
+------------------------------------
+Hardware varies greatly, and some CPUs won't let you set the frequency directly.
+In such cases, you will simply have to make do with the governors exposed
+through cpufreq to paramano.
