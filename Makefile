@@ -1,19 +1,12 @@
 include config.mk
 
-########################################################################
-# Phony targets
 .PHONY: all lang paramano-extra clean strip install
-########################################################################
 
 
-########################################################################
-# Make entire suite
 all: paramano paramano-set lang paramano-extra
-########################################################################
 
 
-########################################################################
-# Make main paramano system tray program
+# main paramano system tray program
 paramano:	bat_tray.o \
 			common.o \
 			config_file.o \
@@ -24,12 +17,9 @@ paramano:	bat_tray.o \
 			paramano.o \
 			tray.o \
 			paramano_set_interface.o
-	$(CC) -o $@ $^ $(LDFLAGS)
-########################################################################
 
 
-########################################################################
-# Make paramano-set utility
+# paramano-set governor/frequency setting utility
 paramano-set: \
 			paramano_set.o \
 			common.o \
@@ -37,23 +27,17 @@ paramano-set: \
 			getfreq.o \
 			getgov.o
 	$(CC) -o $@ $? $(LDFLAGS)
-########################################################################
 
 
-########################################################################
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEFS)
-########################################################################
+#%.o: %.c $(DEPS)
+#	$(CC) -c -o $@ $< $(CFLAGS) $(DEFS)
 
 
-########################################################################
 # Make language file(s)
 lang:
 	msgfmt -c -o lc/fr.mo lc/fr.po
-########################################################################
 
 
-########################################################################
 # Prepare template config file
 paramano-extra:
 	for file in paramano.conf paramano.desktop ; do \
@@ -62,24 +46,18 @@ paramano-extra:
 			-e 's:PARAMANO:$(PARAMANO):g' \
 			$$file.src > $$file ; \
 	done
-########################################################################
 
 
-########################################################################
 # Strip all symbols from binaries
 strip:
 	strip -s paramano paramano-set
-########################################################################
 
 
-########################################################################
 # Remove generated files
 clean:
 	rm -f paramano paramano-set *.o lc/*.mo paramano.conf paramano.desktop
-########################################################################
 
 
-########################################################################
 # Install entire suite
 install:
 	mkdir -p "$(DESTDIR)/$(SHAREDIR)/paramano/"
@@ -96,5 +74,3 @@ install:
 	# These provide some compatability with trayfreq
 	ln -s paramano "$$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq"
 	ln -s paramano-set "$$(dirname $(DESTDIR)/$(PARAMANO))/trayfreq-set"
-########################################################################
-
