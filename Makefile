@@ -26,7 +26,7 @@ paramano-set: \
 			getcore.o \
 			getfreq.o \
 			getgov.o
-	$(CC) -o $@ $? $(LDFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 
 #%.o: %.c $(DEPS)
