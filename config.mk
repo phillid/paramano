@@ -48,7 +48,8 @@ CFLAGS +=  -I/usr/include/gtk-2.0 \
            -I/usr/include/glib-2.0 \
            -I/usr/lib/glib-2.0/include \
            -Wall \
-           -D_=gettext
+           -D_=gettext \
+           $(DEFS)
 
 LDFLAGS += -lgtk-x11-2.0 \
            -lgobject-2.0 \
