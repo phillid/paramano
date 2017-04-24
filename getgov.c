@@ -55,7 +55,7 @@ bool gg_current(int core, char* out, int size)
 
 
 /***********************************************************************
- * Populate `out` with number of available cores
+ * Populate `out` with governors as specified by sysfs
  **********************************************************************/
 bool gg_available(int core, char* out, int size)
 {
