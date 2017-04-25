@@ -38,12 +38,12 @@ msgstr "En décharge (%d%%)\n"
 msgid ""
 "Charging (%d%%)\n"
 "%s"
-msgstr "En charge (%d%%)"
+msgstr "Chargement (%d%%)"
 "%s"
 
 #: ../bat_tray.c:64
 msgid "Fully charged"
-msgstr "Complétement chargée"
+msgstr "Chargé"
 
 #: ../bat_tray.c:69
 msgid "Unknown status"
