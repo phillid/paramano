@@ -17,6 +17,7 @@ paramano:	bat_tray.o \
 			paramano.o \
 			tray.o \
 			paramano_set_interface.o
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 
 # paramano-set governor/frequency setting utility
