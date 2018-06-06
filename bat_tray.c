@@ -209,7 +209,7 @@ void bat_tray_init()
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
-	g_timeout_add(120000, update, NULL);
+	g_timeout_add(10000, update, NULL);
 
 	/* trigger icon refresh in update() below */
 	old_rounded = get_bat_percent_rounded() - 1;
