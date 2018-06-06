@@ -9,6 +9,7 @@
 
 static GtkStatusIcon* tray;
 static char tooltip_text[1024];
+static int old_rounded;
 static int bat_num; // Shortcoming: we only detect one battery
 static char CHARGE_VALUE_PATH[1024];
 static char CHARGE_STATE_PATH[1024];
@@ -19,6 +20,27 @@ static char CHARGE_STATE_PATH[1024];
 int get_bat_percent()
 {
 	return get_int_value_from_file(CHARGE_VALUE_PATH);
+}
+
+
+/***********************************************************************
+ * Get battery level percentage, rounded to one of: 0, 20, 40, 60, 80
+ * or 100. These values match the icon files
+ **********************************************************************/
+int get_bat_percent_rounded()
+{
+	int rounded = 0;
+
+	rounded = 20 * (int)((get_bat_percent() + 10) / 20);
+
+	/* cap rounded value to safe bounds */
+	if (rounded < 0)
+		rounded = 0;
+
+	if (rounded > 100)
+		rounded = 100;
+
+	return rounded;
 }
 
 
@@ -140,15 +162,13 @@ static gboolean update()
 	char icon_file[1024];
 	int rounded = 0;
 
-	/* Round percentage to 0, 20, 40, 60, 80 or 100 */
-	rounded = 20 * (int)((get_bat_percent() + 10) / 20);
+	update_tooltip_cache();
 
-	/* cap rounded value to safe bounds */
-	if (rounded < 0)
-		rounded = 0;
-
-	if (rounded > 100)
-		rounded = 100;
+	/* if rounded hasn't changed, don't spend time changing icon */
+	rounded = get_bat_percent_rounded();
+	if (rounded == old_rounded) {
+		return true;
+	}
 
 	switch (get_battery_state())
 	{
@@ -165,7 +185,6 @@ static gboolean update()
 			break;
 	}
 
-	update_tooltip_cache();
 	gtk_status_icon_set_from_file(tray, icon_file);
 	return true;
 }
@@ -192,7 +211,10 @@ void bat_tray_init()
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
 	g_timeout_add(120000, update, NULL);
 
-	/* Force useful cached tooltip text, force meaningful icon */
+	/* trigger icon refresh in update() below */
+	old_rounded = get_bat_percent_rounded() - 1;
+
+	/* pre-load cached tooltip text */
 	update();
 }
 
