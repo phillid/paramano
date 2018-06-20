@@ -39,8 +39,8 @@ DEPS +=    bat_tray.h \
            tray.h \
            paramano_set_interface.h
 
-CFLAGS +=  -I/usr/include/gtk-2.0 \
-           -I/usr/lib/gtk-2.0/include \
+CFLAGS +=  -I/usr/include/gtk-3.0 \
+           -I/usr/lib/gtk-3.0/include \
            -I/usr/include/pango-1.0 \
            -I/usr/include/cairo \
            -I/usr/include/gdk-pixbuf-2.0 \
@@ -51,6 +51,6 @@ CFLAGS +=  -I/usr/include/gtk-2.0 \
            -D_=gettext \
            $(DEFS)
 
-LDFLAGS += -lgtk-x11-2.0 \
+LDFLAGS += -lgtk-3 \
            -lgobject-2.0 \
            -lglib-2.0

@@ -208,7 +208,7 @@ void bat_tray_init()
 	snprintf(icon_file, sizeof(icon_file), "%s/bat-charged.png", DEFAULT_THEME);
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
-	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
+	g_signal_connect(G_OBJECT(tray), "query-tooltip", G_CALLBACK(show_tooltip), NULL);
 	g_timeout_add(10000, update, NULL);
 
 	/* trigger icon refresh in update() below */

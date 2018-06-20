@@ -107,14 +107,14 @@ static void tray_generate_menu()
 		if (g_strcmp0(current_governor, "userspace") == 0 && gf_freqi(0, i) == current_frequency)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
-		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
+		g_signal_connect(G_OBJECT(item), "toggled", G_CALLBACK(freq_menu_item_toggled), GINT_TO_POINTER(gf_freqi(0, i)));
 
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
 
 	/* Add a seperator */
 	GtkWidget* seperator = gtk_separator_menu_item_new();
-	gtk_menu_append(menu, seperator);
+	gtk_menu_shell_append(menu, seperator);
 
 	/* Add available governors */
 	for (i = 0; i < gg_number(); i++)
@@ -128,7 +128,7 @@ static void tray_generate_menu()
 		if (g_strcmp0(gg_gov(0, i), current_governor) == 0)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
 
-		g_signal_connect(G_OBJECT(item), "toggled", GTK_SIGNAL_FUNC(gov_menu_item_toggled), gg_gov(0, i));
+		g_signal_connect(G_OBJECT(item), "toggled", G_CALLBACK(gov_menu_item_toggled), gg_gov(0, i));
 
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 	}
@@ -303,8 +303,8 @@ void tray_init()
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip(tray, TRUE);
 
-	g_signal_connect(G_OBJECT(tray), "query-tooltip", GTK_SIGNAL_FUNC(show_tooltip), NULL);
-	g_signal_connect(G_OBJECT(tray), "popup-menu", GTK_SIGNAL_FUNC(popup_menu), NULL);
+	g_signal_connect(G_OBJECT(tray), "query-tooltip", G_CALLBACK(show_tooltip), NULL);
+	g_signal_connect(G_OBJECT(tray), "popup-menu", G_CALLBACK(popup_menu), NULL);
 
 	g_timeout_add(1000, update, NULL);
 
