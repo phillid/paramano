@@ -114,7 +114,7 @@ static void tray_generate_menu()
 
 	/* Add a seperator */
 	GtkWidget* seperator = gtk_separator_menu_item_new();
-	gtk_menu_shell_append(menu, seperator);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), seperator);
 
 	/* Add available governors */
 	for (i = 0; i < gg_number(); i++)
