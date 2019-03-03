@@ -1,4 +1,5 @@
 #include "tray.h"
+#include "common.h"
 #include "getcore.h"
 #include "getfreq.h"
 #include "getgov.h"
@@ -17,6 +18,7 @@ static char tooltip_text[1024];
 static GtkWidget* menu;
 static GSList* menu_items;
 static GtkWidget* checked_menu_item;
+static old_adjusted_percent = -1;
 
 
 /***********************************************************************
@@ -213,7 +215,15 @@ static void update_icon()
 		}
 	}
 
+	if (adjusted_percent == old_adjusted_percent) {
+		debug("Unchanged, short circuiting\n");
+		return;
+	}
+
+	old_adjusted_percent = adjusted_percent;
+
 	snprintf(file, sizeof(file), "%s/cpu-%d.png", DEFAULT_THEME,adjusted_percent);
+	debug("Set icon to %s\n", file);
 	gtk_status_icon_set_from_file(tray, file);
 }
 
@@ -240,7 +250,7 @@ static gboolean update()
 	switch ( now_bat_state )
 	{
 		case STATE_DISCHARGING:
-			fprintf(stderr, "discharging\n");
+			debug("discharging\n");
 			if (DEFAULT_BAT_GOV)
 			{
 				for (i = 0; i < gc_number(); i++)
@@ -250,7 +260,7 @@ static gboolean update()
 
 		case STATE_CHARGING:
 		case STATE_FULL:
-			fprintf(stderr, "ac power\n");
+			debug("ac power\n");
 			if (DEFAULT_AC_GOV)
 			{
 				for (i = 0; i < gc_number(); i++)
@@ -306,7 +316,7 @@ void tray_init()
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", G_CALLBACK(show_tooltip), NULL);
 	g_signal_connect(G_OBJECT(tray), "popup-menu", G_CALLBACK(popup_menu), NULL);
 
-	g_timeout_add(1000, update, NULL);
+	g_timeout_add(CPU_TRAY_UPDATE_INTERVAL, update, NULL);
 
 	/* Force meaningful tooltip cached text and force meaningful icon */
 	update();

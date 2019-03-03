@@ -26,7 +26,7 @@ int vget_int_value_from_filef(const char* format, va_list args)
 {
 	char filename[1024];
 	if (vsnprintf(filename, sizeof(filename), format, args) == sizeof(filename))
-		fprintf(stderr, "WARN: filename buffer too small");
+		info("Error: filename buffer too small");
 	return get_int_value_from_file(filename);
 }
 

@@ -12,5 +12,17 @@ int  get_int(const char* string);
 #define STR_LINE STRING(__LINE__)
 /* </ew> */
 
-#define info(...)	printf("INFO: "__FILE__":"STR_LINE" --- "__VA_ARGS__)
+#define info(format, ...)	printf("INFO : "__FILE__"@%s():"STR_LINE": "format, __func__ __VA_OPT__(,) __VA_ARGS__)
+
+#ifdef DEBUG
+#define debug(format, ...)	fprintf(stderr, "DEBUG: "__FILE__"@%s():"STR_LINE": "format, __func__ __VA_OPT__(,) __VA_ARGS__)
+#else
+#define debug(...)
+#endif
+
+#define debug_entry()	debug("entry\n")
+#define debug_exit()	debug("exit\n")
+
 #define FILE_PATH_SIZE 2048
+#define CPU_TRAY_UPDATE_INTERVAL 2000
+#define BAT_TRAY_UPDATE_INTERVAL 10000

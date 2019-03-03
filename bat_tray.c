@@ -9,7 +9,8 @@
 
 static GtkStatusIcon* tray;
 static char tooltip_text[1024];
-static int old_rounded;
+static int old_rounded = -1;
+static int old_battery_state = -1;
 static int bat_num; // Shortcoming: we only detect one battery
 static char CHARGE_VALUE_PATH[1024];
 static char CHARGE_STATE_PATH[1024];
@@ -161,26 +162,35 @@ static gboolean update()
 {
 	char icon_file[1024];
 	int rounded = 0;
+	int battery_state = 0;
 
 	update_tooltip_cache();
 
-	/* if rounded hasn't changed, don't spend time changing icon */
+	/* if charge and status hasn't changed, don't spend time changing icon */
+	battery_state = get_battery_state();
 	rounded = get_bat_percent_rounded();
-	if (rounded == old_rounded) {
+	if (rounded == old_rounded && battery_state == old_battery_state) {
+		debug("Short-circuiting\n");
 		return true;
 	}
 
-	switch (get_battery_state())
+	old_rounded = rounded;
+	old_battery_state = battery_state;
+
+	switch (battery_state)
 	{
 		case STATE_DISCHARGING:
+			debug("discharging\n");
 			snprintf(icon_file, sizeof(icon_file), "%s/bat-%d.png", DEFAULT_THEME, rounded);
 			break;
 
 		case STATE_CHARGING:
+			debug("charging\n");
 			snprintf(icon_file, sizeof(icon_file), "%s/bat-%d-charging.png", DEFAULT_THEME, rounded);
 			break;
 
 		default:
+			debug("unknown/charged\n");
 			snprintf(icon_file, sizeof(icon_file), "%s/bat-charged.png", DEFAULT_THEME);
 			break;
 	}
@@ -209,10 +219,7 @@ void bat_tray_init()
 	gtk_status_icon_set_from_file(tray, icon_file);
 	gtk_status_icon_set_has_tooltip (tray, TRUE);
 	g_signal_connect(G_OBJECT(tray), "query-tooltip", G_CALLBACK(show_tooltip), NULL);
-	g_timeout_add(10000, update, NULL);
-
-	/* trigger icon refresh in update() below */
-	old_rounded = get_bat_percent_rounded() - 1;
+	g_timeout_add(BAT_TRAY_UPDATE_INTERVAL, update, NULL);
 
 	/* pre-load cached tooltip text */
 	update();
