@@ -1,12 +1,12 @@
 #include <stdbool.h>
 
-char* DEFAULT_GOV;
-char* DEFAULT_FREQ;
-char* DEFAULT_PROG;
-char* DEFAULT_BAT_GOV;
-char* DEFAULT_AC_GOV;
-bool  DEFAULT_SHOW_BATTERY;
-char  DEFAULT_THEME[1024];
+extern char* DEFAULT_GOV;
+extern char* DEFAULT_FREQ;
+extern char* DEFAULT_PROG;
+extern char* DEFAULT_BAT_GOV;
+extern char* DEFAULT_AC_GOV;
+extern bool  DEFAULT_SHOW_BATTERY;
+extern char  DEFAULT_THEME[1024];
 
 
 void defaults_init();
