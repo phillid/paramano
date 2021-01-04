@@ -12,10 +12,10 @@ int  get_int(const char* string);
 #define STR_LINE STRING(__LINE__)
 /* </ew> */
 
-#define info(format, ...)	printf("INFO : "__FILE__"@%s():"STR_LINE": "format, __func__ __VA_OPT__(,) __VA_ARGS__)
+#define info(format, ...)	printf("INFO : "__FILE__"@%s:"STR_LINE": "format, __func__, ##__VA_ARGS__)
 
 #ifdef DEBUG
-#define debug(format, ...)	fprintf(stderr, "DEBUG: "__FILE__"@%s():"STR_LINE": "format, __func__ __VA_OPT__(,) __VA_ARGS__)
+#define debug(format, ...)	fprintf(stderr, "DEBUG: "__FILE__"@%s:"STR_LINE": "format, __func__, ##__VA_ARGS__)
 #else
 #define debug(...)
 #endif
